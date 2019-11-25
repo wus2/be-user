@@ -8,6 +8,13 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+var server = require('http').Server(app);
+
+// start server
+const PORT = 8080;
+server.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
