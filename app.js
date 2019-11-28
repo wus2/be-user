@@ -6,14 +6,16 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var {initConfig, getPort} = require('./init')
 
 var app = express();
 var server = require('http').Server(app);
+initConfig();
 
 // start server
-const PORT = 8080;
-server.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+const port = getPort();
+server.listen(port, () => {
+  console.log(`Server is listening on port ${port}`);
 });
 
 // view engine setup

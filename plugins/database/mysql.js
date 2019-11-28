@@ -1,9 +1,8 @@
 var mysql = require('mysql');
-var toml = require('toml');
+var config = require('config')
 
 var createConn = () => {
-  var connStr = '';
-  return mysql.createConnection(connStr);
+  return mysql.createConnection(config.get('mysql'));
 };
 
 var conn = createConn();
