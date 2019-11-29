@@ -8,6 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var {initConfig, getPort} = require('./init')
 
+// require passport
+require('./plugins/middlewares/passport')
+
 var app = express();
 var server = require('http').Server(app);
 initConfig();

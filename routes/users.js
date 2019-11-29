@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var handler = require('../handler/users')
+var handler = require('../handler/users');
 
-router.get('/profile', function(req, res, next) {
+/* GET users listing. */
+router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
@@ -11,7 +12,11 @@ router.post('/login', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-  res.send('respond with a resource');
+  handler.register(req, res, next);
+});
+
+router.post('/update', function(req, res, next) {
+  handler.update(req, res, next);
 });
 
 module.exports = router;
