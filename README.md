@@ -5,7 +5,7 @@ Backend User Manage
   - Login: 
     + Path: /users/login
     + Method: POST
-    + Header: Content-Type: application/json
+    + Header: "Content-Type": "application/json"
     + Body: 
       {
       "username":"string",
@@ -14,7 +14,7 @@ Backend User Manage
   - Regiter:
     + Path: /users/register
     + Method: POST
-    + Header: Content-Type: application/json
+    + Header: "Content-Type": "application/json"
     + Body: 
       {
       "username":"string",
@@ -33,14 +33,14 @@ Backend User Manage
     + Path: /users/profile
     + Method: GET
     + Header: 
-      Content-Type: application/json
-      Authorization: Bearer ${JWT-TOKEN}
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
   - Update:
     + Path: /users/update
     + Method: POST
     + Header: 
-      Content-Type: application/json
-      Authorization: Bearer ${JWT-TOKEN}
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
     + Body: 
       {
       "id": int,
