@@ -17,4 +17,4 @@ CREATE TABLE `wus2_be_user`.`user` (
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC),
-  UNIQUE INDEX `cardID_UNIQUE` (`cardID` ASC));
+  UNIQUE INDEX `cardID_UNIQUE` (`card_id` ASC));

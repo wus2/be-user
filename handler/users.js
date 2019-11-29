@@ -10,7 +10,7 @@ module.exports = {
       if (err || !user) {
         return res.status(400).json({
           code: 400,
-          message: info ? info.message : "Login failed",
+          message: info ? info.message : "Login failed"
         });
       }
 
@@ -72,61 +72,85 @@ module.exports = {
         // log err
         return res.json({
           code: -1,
-          message: "Register failed" 
+          message: "Register failed"
         });
       });
   },
 
   profile: (req, res) => {
-    passport.authenticate("jwt", { session: false }, (err, user, info) => {
-      if (err || !user) {
-        return res.json({
-          code: -1,
-          message: err
+    passport.authenticate("jwt", { session: false }, payload => {
+      models
+        .getByID(payload.id)
+        .then(user => {
+          return res.status(200).json({
+            code: 1,
+            message: "OK",
+            data: user[0]
+          });
+        })
+        .catch(err => {
+          return res.json({
+            code: -1,
+            message: err
+          });
         });
-      }
-      if (info !== undefined) {
-        return res.json({
-          code: -1,
-          message: info.message
-        });
-      }
-
-      return res.status(200).json({
-        code: 1,
-        message: "OK",
-        data: user[0]
-      });
     })(req, res);
   },
 
-  update: (req, res) => {
-    var entity = {
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email,
-      address: req.body.address,
-      name: req.body.name,
-      phone: req.body.phone,
-      dob: req.body.dob,
-      card_id: req.body.cardID,
-      gender: req.body.gender,
-      avatar: req.body.avatar,
-      role: req.body.role
-    };
+  updateProfile: (req, res) => {
+    passport.authenticate("jwt", { session: false }, payload => {
+      var entity = {
+        id: payload.id,
+        address: req.body.address,
+        name: req.body.name,
+        phone: req.body.phone,
+        dob: req.body.dob,
+        gender: req.body.gender,
+        avatar: req.body.avatar
+      };
 
-    models.update(entity).then(data => {
-      return res.json({
-        code: 1,
-        message: "ok",
-        user: data
-      });
-    }).catch(err => {
-      // log err
-      return res.json({
-        code: -1,
-        message: "Update Error"
-      })
-    });
+      models
+        .update(entity)
+        .then(data => {
+          return res.status(200).json({
+            code: 1,
+            message: "OK",
+            data: data
+          });
+        })
+        .catch(err => {
+          // log err
+          return res.status(500).json({
+            code: -1,
+            message: "Update profile error"
+          });
+        });
+    })(req, res);
+  },
+
+  updatePassword: (req, res) => {
+    passport.authenticate("jwt", { session: false }, payload => {
+      var entity = {
+        id: payload.id,
+        password: req.body.password
+      };
+
+      models
+        .update(entity)
+        .then(data => {
+          return res.status(200).json({
+            code: 1,
+            message: "OK",
+            data: data
+          });
+        })
+        .catch(err => {
+          // log err
+          return res.status(500).json({
+            code: -1,
+            message: "Update password error"
+          });
+        });
+    })(req, res);
   }
 };

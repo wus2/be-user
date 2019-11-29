@@ -14,8 +14,12 @@ router.post('/register', function(req, res, next) {
   handler.register(req, res);
 });
 
-router.post('/update', function(req, res, next) {
-  handler.update(req, res);
+router.post('/updateProfile', function(req, res, next) {
+  handler.updateProfile(req, res);
+});
+
+router.post('/updatePassword', function(req, res, next) {
+  handler.updatePassword(req, res);
 });
 
 module.exports = router;

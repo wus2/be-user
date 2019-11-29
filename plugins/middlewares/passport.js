@@ -36,14 +36,7 @@ passport.use(
       secretOrKey: config.get('key_jwt')
     },
     async (jwtPayload, callback) => {
-      return userModel
-        .getByID(jwtPayload.id)
-        .then(user => {
-          return callback(null, user);
-        })
-        .catch(err => {
-          callback(err);
-        });
+      callback(jwtPayload)
     }
   )
 );
