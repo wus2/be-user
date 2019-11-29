@@ -3,20 +3,19 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var config = require('config')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var {initConfig, getPort} = require('./init')
 
 // require passport
 require('./plugins/middlewares/passport')
 
 var app = express();
 var server = require('http').Server(app);
-initConfig();
 
 // start server
-const port = getPort();
+var port = config.get('http_port')
 server.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });

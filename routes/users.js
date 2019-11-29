@@ -2,21 +2,20 @@ var express = require('express');
 var router = express.Router();
 var handler = require('../handler/users');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/profile', function(req, res, next) {
+  handler.profile(req, res)
 });
 
 router.post('/login', function(req, res, next) {
-  handler.login(req, res, next);
+  handler.login(req, res);
 });
 
 router.post('/register', function(req, res, next) {
-  handler.register(req, res, next);
+  handler.register(req, res);
 });
 
 router.post('/update', function(req, res, next) {
-  handler.update(req, res, next);
+  handler.update(req, res);
 });
 
 module.exports = router;

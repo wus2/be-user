@@ -6,8 +6,7 @@
       "password": "Hoangan2110",
       "database": "wus2_be_user"
     },
-    "Auth": {
-      "passphare": "blasters42Haiku40amerada"
-    }
+    "key_jwt": "blasters42Haiku40amerada",
+    "http_port": 55210
 }
   

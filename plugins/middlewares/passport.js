@@ -33,11 +33,11 @@ passport.use(
   new JWTStategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get('Auth.passphare')
+      secretOrKey: config.get('key_jwt')
     },
     async (jwtPayload, callback) => {
       return userModel
-        .getByUsername(jwtPayload.username)
+        .getByID(jwtPayload.id)
         .then(user => {
           return callback(null, user);
         })
