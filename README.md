@@ -29,28 +29,34 @@ Backend User Manage
       "avatar":"string",
       "role": int
       }
-  - Profile:
+  - Get Profile:
     + Path: /users/profile
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
-  - Update:
-    + Path: /users/update
+  - Update Profile:
+    + Path: /users/updateProfile
     + Method: POST
     + Header: 
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
     + Body: 
       {
-      "id": int,
-      "password":"string",
       "address":"string",
       "name":"string",
       "phone":"string",
       "dob":"yyy-mm-dd",
-      "cardID":"string",
       "gender":"string",
       "avatar":"string",
-      "role": int
+      }
+  - Update Password:
+    + Path: /users/updatePassword
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body: 
+      {
+      "password":"string"
       }
