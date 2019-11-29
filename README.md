@@ -43,7 +43,7 @@ Backend User Manage
       Authorization: Bearer ${JWT-TOKEN}
     + Body: 
       {
-      "id":"string",
+      "id": int,
       "password":"string",
       "address":"string",
       "name":"string",
