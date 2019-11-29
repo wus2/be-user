@@ -22,3 +22,5 @@ curl-update:
   	http://localhost:55210/users/update
 
 deploy:
+	git push heroku master
+	heroku restart

@@ -1,5 +1,5 @@
 {
-    "mysql": {
+    "mysql-local": {
       "host": "localhost",
       "port": 3306,
       "user": "root",
@@ -7,6 +7,13 @@
       "database": "wus2_be_user"
     },
     "key_jwt": "blasters42Haiku40amerada",
-    "http_port": 55210
+    "http_port": 55210,
+    "dev-mysql": {
+      "host": "remotemysql.com",
+      "port": 3306,
+      "user": "bVEtH8m4Ur",
+      "password": "KEWYT2ZMYS",
+      "database": "bVEtH8m4Ur"
+    }
 }
   

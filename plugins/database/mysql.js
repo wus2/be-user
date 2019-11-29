@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var config = require('config')
 
 var createConn = () => {
-  return mysql.createConnection(config.get('mysql'));
+  return mysql.createConnection(config.get('dev-mysql'));
 };
 
 var conn = createConn();
