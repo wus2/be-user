@@ -36,7 +36,7 @@ Backend User Manage
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
   - Update Profile:
-    + Path: /users/updateProfile
+    + Path: /users/updateprofile
     + Method: POST
     + Header: 
       "Content-Type": "application/json"
@@ -51,12 +51,13 @@ Backend User Manage
       "avatar":"string",
       }
   - Update Password:
-    + Path: /users/updatePassword
+    + Path: /users/updatepassword
     + Method: POST
     + Header: 
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
     + Body: 
       {
+      "email":"string",
       "password":"string"
       }
