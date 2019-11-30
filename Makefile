@@ -1,6 +1,6 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUwODYzMzd9.2KXt7t0L6BbrLfhqi3Buk0eIdqhu9zHnI3PBO8ezsb4"
-DOMAIN-HOST = "https://wusbeuser.herokuapp.com"
-DOMAIN = http://localhost:55210
+DOMAIN = "https://wusbeuser.herokuapp.com"
+DOMAIN-TMP = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -28,7 +28,7 @@ curl-update-profile:
 curl-update-password: 
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
-	--data '{"password":"1234", "email":"anvo.ht209@gmail.com"}' \
+	--data '{"password":"123456", "email":"anvo.ht209@gmail.com"}' \
    ${DOMAIN}/users/updatepassword
 
 curl: curl-register curl-login curl-profile curl-update-profile curl-update-password
