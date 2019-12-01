@@ -159,6 +159,45 @@ module.exports = {
       });
     })(req, res);
   },
+  updateAvatar: (req, res) => {
+    var payload = res.locals.payload
+    console.log(payload)
+    if (!payload) {
+      console.log("[updateAvatar][err] Is not authenticated")
+      return res.status(400).json({
+        code: -1,
+        message: "Authen failed"
+      })
+    }
+    var uri = res.locals.uri;
+    if (uri === undefined) {
+      console.log("[updateAvatar][err] image path is null")
+      return res.status(400).json({
+        code: -1,
+        message: "Update database failed"
+      })
+    }
+    var entity = {
+      id: payload.id,
+      avatar: uri
+    };
+    models
+      .update(entity)
+      .then(data => {
+        console.log("[uploadImage][data]", data);
+        return res.status(200).json({
+          code: 1,
+          message: "OK"
+        });
+      })
+      .catch(err => {
+        console.log("[uploadImage][error]", err);
+        return res.status(400).json({
+          code: -1,
+          message: "Update database failed"
+        });
+      });
+  },
   activateAccount: (req, res) => {
     var key = activePrefix + req.params.username;
     console.log("[activateAccount]", key);
@@ -169,6 +208,8 @@ module.exports = {
         message: "Active account expired"
       });
     }
+    cache.delete(key);
+
     models
       .add(value)
       .then(id => {
@@ -186,16 +227,17 @@ module.exports = {
       });
   },
   confirmChange: (req, res) => {
-    var key = confirmPrefix + req.params.id
+    var key = confirmPrefix + req.params.id;
     console.log("[confirmChange]", key);
-    var value = cache.get(key)
+    var value = cache.get(key);
     if (value == undefined) {
       return res.status(400).json({
         code: -1,
         message: "Confirm change expired"
-      })
+      });
     }
-    
+    cache.delete(key);
+
     models
       .update(value)
       .then(data => {
