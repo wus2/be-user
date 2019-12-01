@@ -1,16 +1,16 @@
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const passportJWT = require('passport-jwt');
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const passportJWT = require("passport-jwt");
 const JWTStategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-const config = require('config');
-const userModel = require('../database/users');
+const config = require("config");
+const userModel = require("../database/users");
 
 passport.use(
   new LocalStrategy(
     {
-      usernameField: 'username',
-      passwordField: 'password',
+      usernameField: "username",
+      passwordField: "password",
       session: false
     },
     async (username, password, callback) => {
@@ -18,9 +18,9 @@ passport.use(
         .get(username, password)
         .then(user => {
           if (!user) {
-            return callback(null, false, { message: 'Incorrect fields' });
+            return callback(null, false, { message: "Incorrect fields" });
           }
-          return callback(null, user, { message: 'Logged' });
+          return callback(null, user, { message: "Logged" });
         })
         .catch(err => {
           callback(err);
@@ -33,10 +33,10 @@ passport.use(
   new JWTStategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get('key_jwt')
+      secretOrKey: config.get("key_jwt")
     },
     async (jwtPayload, callback) => {
-      callback(jwtPayload)
+      callback(jwtPayload);
     }
   )
 );

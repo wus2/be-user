@@ -5,7 +5,7 @@ DOMAIN = http://localhost:55210
 curl-register:
 	curl --header "Content-Type: application/json" \
 	--request POST \
-  	--data '{"username":"anvh2","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
+  	--data '{"username":"anvh3","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
   	${DOMAIN}/users/register
 
 curl-login:
@@ -22,13 +22,13 @@ curl-profile:
 curl-update-profile: 
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
-	--data '{"address":"Nha Be - TPHCM","name":"An","phone":"123456","dob":"1998-10-21","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar"}' \
+	--data '{"address":"Nha Be - TPHCM","name":"Vo Hoang An","phone":"123456","dob":"1998-10-21","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar"}' \
    ${DOMAIN}/users/updateprofile
 
 curl-update-password: 
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
-	--data '{"password":"123456", "email":"anvo.ht209@gmail.com"}' \
+	--data '{"password":"123", "email":"anvo.ht209@gmail.com"}' \
    ${DOMAIN}/users/updatepassword
 
 curl-update-avatar:

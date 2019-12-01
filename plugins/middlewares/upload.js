@@ -30,15 +30,15 @@ module.exports = {
         callback(null, true);
       }
     });
-    
+
     upload.single("avatar")(req, res, err => {
       if (err) {
         console.log("[uploadImage][error]", err);
-        var message
+        var message;
         if (err === "Invalid file!") {
-          message = err
+          message = err;
         }
-        message = "Upload failed"
+        message = "Upload failed";
         return res.status(400).json({
           code: -1,
           message: message
