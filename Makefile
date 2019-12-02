@@ -1,11 +1,11 @@
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUwODYzMzd9.2KXt7t0L6BbrLfhqi3Buk0eIdqhu9zHnI3PBO8ezsb4"
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjEsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUzMDEwNTZ9.h8a5Y4sW9E10Sa42lhE2mLc8rxoCZidN5o5ExKPA5w8"
 DOMAIN-x = "https://wusbeuser.herokuapp.com"
 DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
 	--request POST \
-  	--data '{"username":"anvh3","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
+  	--data '{"username":"anvh2","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
   	${DOMAIN}/users/register
 
 curl-login:
@@ -40,9 +40,11 @@ curl: curl-register curl-login curl-profile curl-update-profile curl-update-pass
 
 deploy:
 	git push heroku master
-	heroku restart
 
 logs: 
 	heroku logs --tail
 	# log live: -t
 	# log n row: -n 1000
+
+restart:
+	heroku restart
