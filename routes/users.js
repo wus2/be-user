@@ -51,17 +51,20 @@ router.post(
 
 router.post(
   "/updateavatar",
-  (req, res, next) => {
-    auth.authen(req, res);
-    next();
-  },
+  // (req, res, next) => {
+  //   auth.authen(req, res);
+  //   next();
+  // },
   (req, res, next) => {
     upload.uploadImage(req, res);
     next();
   },
   (req, res) => {
     var payload = res.locals.payload;
-    handler.updateAvatar(req, res, payload);
+    // sleep to ensure filename is forwarded
+    setTimeout(() => {
+      handler.updateAvatar(req, res, payload);
+    }, 50);
   }
 );
 

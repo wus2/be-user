@@ -13,6 +13,9 @@ module.exports = {
       },
       filename: (req, file, callback) => {
         filename += file.originalname;
+        // store uri to update database
+        var uri = "/images/avatar/" + filename;
+        res.locals.uri = uri;
         callback(null, filename);
       }
     });
@@ -51,8 +54,5 @@ module.exports = {
         });
       }
     });
-    // store uri to update database
-    var uri = "/images/avatar/" + filename;
-    res.locals.uri = uri;
   }
 };
