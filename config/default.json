@@ -15,6 +15,11 @@
       "password": "KEWYT2ZMYS",
       "database": "bVEtH8m4Ur"
     },
-    "domain": "http://localhost:55210"
+    "domain": "http://localhost:55210",
+    "facebook":{
+      "client_id": "488317645361433",
+      "client_secret": "e666aa3808de4702091527a5b7934290",
+      "callback_url": "http://localhost:55210/users/loginviafb/callback"
+    }
 }
   

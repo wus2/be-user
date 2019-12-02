@@ -50,6 +50,8 @@ module.exports = {
     })(req, res);
   },
 
+  fbAuthenticate: (req, res, next) => {},
+
   register: (req, res) => {
     var entity = {
       username: req.body.username,
