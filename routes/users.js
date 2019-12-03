@@ -1,5 +1,6 @@
 var express = require("express");
 var router = express.Router();
+var passport = require("passport");
 
 var handler = require("../handler/users");
 var auth = require("../plugins/middlewares/auth");
@@ -64,7 +65,7 @@ router.post(
     // sleep to ensure filename is forwarded
     setTimeout(() => {
       handler.updateAvatar(req, res, payload);
-    }, 500);
+    }, 50);
   }
 );
 
@@ -75,5 +76,20 @@ router.get("/activeaccount/:username", (req, res) => {
 router.get("/confirmchange/:id", (req, res) => {
   handler.confirmChange(req, res);
 });
+
+router.get("/auth/facebook", passport.authenticate("facebook"));
+
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", payload => {
+    console.log("======CALLBACK PAYLOAD: ", payload);
+  }),
+  (req, res) => {
+    res.status(200).json({
+      code: 1,
+      message: "OK"
+    });
+  }
+);
 
 module.exports = router;

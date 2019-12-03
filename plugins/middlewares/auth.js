@@ -10,8 +10,14 @@ module.exports = {
         });
       }
 
-      // forward payload 
+      // forward payload
       res.locals.payload = payload;
+    })(req, res);
+  },
+
+  authenFB: (req, res) => {
+    passport.authenticate("facebook", profile => {
+      console.log("=======profile", profile);
     })(req, res);
   }
 };
