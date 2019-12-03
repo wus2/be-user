@@ -165,13 +165,12 @@ module.exports = {
       });
     }
     var entity = {
-      id: payload.id,
+      id: 22,
       avatar: uri
     };
     models
       .update(entity)
       .then(data => {
-        console.log("[uploadImage][data]", data);
         return res.status(200).json({
           code: 1,
           message: "OK"

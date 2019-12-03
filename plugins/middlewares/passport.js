@@ -3,7 +3,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const passportJWT = require("passport-jwt");
 const JWTStategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
-const FacebookStrategy = require("passport-facebook").Strategy;
+const passwordFB = require("passport-facebook");
+const FacebookStrategy = passwordFB.Strategy;
 const config = require("config");
 
 const userModel = require("../database/users");
@@ -43,27 +44,66 @@ passport.use(
   )
 );
 
-const fb = config.get("facebook");
+const fb = config.get("fb");
 
 passport.use(
   new FacebookStrategy(
     {
       clientID: fb.client_id,
       clientSecret: fb.client_secret,
-      callbackURL: fb.callback_url,
-      profileFields: ["email", "name"]
+      callbackURL: fb.callback_url
     },
-    (accessToken, refreshToken, profile, callback) => {
-      console.log("SOMETHING HERE")
-      const { email, first_name, last_name } = profile._json;
-      const entity = {
-        email,
-        name: first_name + " " + last_name
-      };
-
-      console.log(entity)
-      // userModel.add(entity);
-      callback(null, profile);
+    async (accessToken, refreshToken, profile, callback) => {
+      // Check whether the User exists or not using profile.id
+      if (!profile) {
+        userModel
+          .getByFBID(profile.id)
+          .then(data => {
+            console.log("There is no such user, adding now");
+            var entity = {
+              fb_id: profile.id,
+              username: profile.username ? profile.username : profile.id,
+              password: req.body.password,
+              email: req.body.email,
+              address: req.body.address,
+              name: profile.displayName,
+              phone: req.body.phone,
+              dob: req.body.dob,
+              card_id: req.body.cardID,
+              gender: req.body.gender
+            };
+            userModel.add(entity).then();
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        pool.query(
+          "SELECT * from user_info where user_id=" + profile.id,
+          (err, rows) => {
+            if (err) throw err;
+            if (rows && rows.length === 0) {
+              console.log("There is no such user, adding now");
+              pool.query(
+                "INSERT into user_info(user_id,user_name) VALUES('" +
+                  profile.id +
+                  "','" +
+                  profile.username +
+                  "')"
+              );
+            } else {
+              console.log("User already exists in database");
+            }
+          }
+        );
+        return callback(null, {
+          token: accessToken,
+          profile
+        });
+      }
+      return callback(null, {
+        token: accessToken,
+        profile
+      });
     }
   )
 );

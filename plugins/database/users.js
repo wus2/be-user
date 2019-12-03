@@ -1,4 +1,4 @@
-var db = require('./mysql');
+var db = require("./mysql");
 
 module.exports = {
   get: (username, password) => {
@@ -9,13 +9,16 @@ module.exports = {
   getByID: id => {
     return db.load(`select * from user where id = ${id}`);
   },
+  getByFBID: fbID => {
+    return db.load(`select * from user where fb_id = '${fbID}'`);
+  },
   getByUsername: username => {
     return db.load(`select * from user where username = '${username}'`);
   },
   add: entity => {
-    return db.add('user', entity);
+    return db.add("user", entity);
   },
   update: entity => {
-    return db.update('user', 'id', entity);
+    return db.update("user", "id", entity);
   }
 };
