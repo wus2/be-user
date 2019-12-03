@@ -2,12 +2,25 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 
-var handler = require("../handler/users");
+var handler = require("../handler");
 var auth = require("../plugins/middlewares/auth");
 var upload = require("../plugins/middlewares/upload");
 
 router.post("/login", (req, res) => {
   handler.login(req, res);
+});
+
+router.get(
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: "email" })
+);
+
+router.get("/auth/facebook/callback", (req, res, next) => {
+  handler.loginViaFB(req, res);
+});
+
+router.post("/register", (req, res) => {
+  handler.register(req, res);
 });
 
 router.get(
@@ -21,10 +34,6 @@ router.get(
     handler.profile(req, res, payload);
   }
 );
-
-router.post("/register", (req, res) => {
-  handler.register(req, res);
-});
 
 router.post(
   "/updateprofile",
@@ -79,15 +88,6 @@ router.get("/activeaccount/:username", (req, res) => {
 
 router.get("/confirmchange/:id", (req, res) => {
   handler.confirmChange(req, res);
-});
-
-router.get(
-  "/auth/facebook",
-  passport.authenticate("facebook", { scope: "email" })
-);
-
-router.get("/auth/facebook/callback", (req, res, next) => {
-  auth.authenFB(req, res);
 });
 
 module.exports = router;

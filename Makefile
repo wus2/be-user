@@ -1,6 +1,6 @@
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUwODYzMzd9.2KXt7t0L6BbrLfhqi3Buk0eIdqhu9zHnI3PBO8ezsb4"
-DOMAIN = "https://wusbeuser.herokuapp.com"
-DOMAIN-x = http://localhost:55210
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzQsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUzOTcyNzV9.wZS3UrOoyDRNPSGKfNYrYiZhrSqFAkN7EDGR2wG0Y_w"
+DOMAIN-x = "https://wusbeuser.herokuapp.com"
+DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
