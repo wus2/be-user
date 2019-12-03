@@ -194,6 +194,8 @@ module.exports = {
     }
     cache.delete(key);
 
+    console.log("VALUE", value);
+
     models
       .add(value)
       .then(id => {
@@ -203,7 +205,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        // log err
+        console.error("[activateAccount]", err)
         return res.status(400).json({
           code: -1,
           message: "Register failed"
