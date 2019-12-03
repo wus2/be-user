@@ -64,7 +64,7 @@ module.exports = {
       avatar: req.body.avatar,
       role: req.body.role
     };
-    if (entity.email === "" || entity.email === undefined) {
+    if (!entity.email) {
       console.log("Empty email");
       return res.status(400).json({
         code: -1,

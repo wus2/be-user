@@ -1,6 +1,6 @@
 var NodeCache = require("node-cache");
 
-const cache = new NodeCache({ stdTTL: 100, checkperiod: 120 });
+const cache = new NodeCache({ stdTTL: 15000});
 
 module.exports = {
   set: (key, value) => {
