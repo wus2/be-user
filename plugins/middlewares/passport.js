@@ -45,7 +45,6 @@ passport.use(
 );
 
 const fb = config.get("fb");
-
 passport.use(
   new FacebookStrategy(
     {
@@ -53,56 +52,14 @@ passport.use(
       clientSecret: fb.client_secret,
       callbackURL: fb.callback_url
     },
-    async (accessToken, refreshToken, profile, callback) => {
-      // Check whether the User exists or not using profile.id
-      if (!profile) {
-        userModel
-          .getByFBID(profile.id)
-          .then(data => {
-            console.log("There is no such user, adding now");
-            var entity = {
-              fb_id: profile.id,
-              username: profile.username ? profile.username : profile.id,
-              password: req.body.password,
-              email: req.body.email,
-              address: req.body.address,
-              name: profile.displayName,
-              phone: req.body.phone,
-              dob: req.body.dob,
-              card_id: req.body.cardID,
-              gender: req.body.gender
-            };
-            userModel.add(entity).then();
-          })
-          .catch(err => {
-            console.log(err);
-          });
-        pool.query(
-          "SELECT * from user_info where user_id=" + profile.id,
-          (err, rows) => {
-            if (err) throw err;
-            if (rows && rows.length === 0) {
-              console.log("There is no such user, adding now");
-              pool.query(
-                "INSERT into user_info(user_id,user_name) VALUES('" +
-                  profile.id +
-                  "','" +
-                  profile.username +
-                  "')"
-              );
-            } else {
-              console.log("User already exists in database");
-            }
-          }
-        );
-        return callback(null, {
-          token: accessToken,
-          profile
-        });
-      }
-      return callback(null, {
-        token: accessToken,
-        profile
+    async (accessToken, refreshToken, profile, done) => {
+      process.nextTick(() => {
+        if (!accessToken && !profile) {
+          return done(
+            new Error("Authenticate via facebook failed! Empty access token!")
+          );
+        }
+        return done(null, profile);
       });
     }
   )

@@ -6,20 +6,8 @@ var handler = require("../handler/users");
 var auth = require("../plugins/middlewares/auth");
 var upload = require("../plugins/middlewares/upload");
 
-router.get(
-  "/profile",
-  (req, res, next) => {
-    auth.authen(req, res);
-    next();
-  },
-  (req, res) => {
-    var payload = res.locals.payload;
-    handler.profile(req, res, payload);
-  }
-);
-
-router.get("/success", (req, res) => {
-  res.send("Success");
+router.post("/login", (req, res) => {
+  handler.login(req, res);
 });
 
 router.get(
@@ -29,7 +17,6 @@ router.get(
     next();
   },
   (req, res) => {
-    console.log(req.headers);
     var payload = res.locals.payload;
     handler.profile(req, res, payload);
   }
@@ -94,19 +81,13 @@ router.get("/confirmchange/:id", (req, res) => {
   handler.confirmChange(req, res);
 });
 
-router.get("/auth/facebook", passport.authenticate("facebook"));
-
 router.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", payload => {
-    console.log("======CALLBACK PAYLOAD: ", payload);
-  }),
-  (req, res) => {
-    res.status(200).json({
-      code: 1,
-      message: "OK"
-    });
-  }
+  "/auth/facebook",
+  passport.authenticate("facebook", { scope: "email" })
 );
+
+router.get("/auth/facebook/callback", (req, res, next) => {
+  auth.authenFB(req, res);
+});
 
 module.exports = router;

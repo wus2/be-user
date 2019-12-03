@@ -1,4 +1,5 @@
 const passport = require("passport");
+var handler = require("../../handler/users");
 
 module.exports = {
   authen: (req, res) => {
@@ -16,8 +17,21 @@ module.exports = {
   },
 
   authenFB: (req, res) => {
-    passport.authenticate("facebook", profile => {
-      console.log("=======profile", profile);
-    })(req, res);
+    passport.authenticate(
+      "facebook",
+      {
+        session: false
+      },
+      (err, user, info) => {
+        if (err || !user) {
+          console.log("[authenticate][facebook][callback] err", err, info);
+          err = {
+            code: -1,
+            message: "Authenticate via facebook failed!"
+          };
+        }
+        handler.loginViaFB(req, res, err, user);
+      }
+    )(req, res);
   }
 };

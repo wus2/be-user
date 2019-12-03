@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUwODYzMzd9.2KXt7t0L6BbrLfhqi3Buk0eIdqhu9zHnI3PBO8ezsb4"
-=======
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzUzMDIwNDV9.UrO4l2ZfUA_gmz2zWuyzy2nUN57HHEn1xxAdMSyBXvQ"
->>>>>>> master
-DOMAIN = "https://wusbeuser.herokuapp.com"
-DOMAIN-x = http://localhost:55210
+DOMAIN-x = "https://wusbeuser.herokuapp.com"
+DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -53,13 +49,8 @@ logs:
 restart:
 	heroku restart
 
-<<<<<<< HEAD
-config-mysql:
-	heroku config:add DATABASE_URL=remotemysql.com://bVEtH8m4Ur:KEWYT2ZMYS@3306/bVEtH8m4Ur --app wusbeuser
-=======
 config-mysql: 
 	heroku config:add DATABASE_URL=mysql://bVEtH8m4Ur:KEWYT2ZMYS@remotemysql.com/bVEtH8m4Ur?reconnect=true --app wusbeuser
 
 config-store-statis-file:
 	heroku config:set AWS_ACCESS_KEY_ID=AKIAIOORY2XBIUSD26KQ AWS_SECRET_ACCESS_KEY=G3POQ422LWK6R56AJ5EE6QFOV4MARC7R
->>>>>>> master
