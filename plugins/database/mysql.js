@@ -5,9 +5,31 @@ var createConn = () => {
   return mysql.createConnection(config.get('dev-mysql'));
 };
 
-var conn = createConn();
-conn.connect();
+var conn;
 
+function connect() {
+  conn = createConn();
+  conn.connect(err => {
+    if (err) {
+      console.log("[mysql]Error when connecting to mysql", err)
+      setTimeout(connect, 2000)
+    }
+  });
+  // If you're also serving http, display a 503 error.
+  conn.on('error', (err) => {
+    console.log('[mysq]Db error', err);
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      connect();
+    } else {
+      throw err;
+    }
+  });
+}
+
+connect();
+
+
+// release connection 
 process.on('exit', () => {
   console.log('shutdown mysql connection');
   conn.end();
