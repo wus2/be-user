@@ -24,7 +24,7 @@
     "gg": {
       "client_id": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
       "client_secret": "r3wapL7nrPU66EFf18cJcOSZ",
-      "callback_url": "http://localhost:55210/users/auth/google/callback"
+      "callback_url": "https://wusbeuser.herokuapp.com/users/auth/google/callback"
     }
 }
   
