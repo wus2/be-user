@@ -6,10 +6,6 @@ var createConn = () => {
 };
 
 var pool = createConn();
-pool.connect(err => {
-  console.log(err.code); // 'ECONNREFUSED'
-  console.log(err.fatal); // true
-});
 
 process.on('exit', () => {
   console.log('shutdown mysql connection');
