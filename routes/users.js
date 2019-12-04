@@ -19,6 +19,14 @@ router.get("/auth/facebook/callback", (req, res, next) => {
   handler.loginViaFB(req, res);
 });
 
+router.get("/auth/google",
+  passport.authenticate("google", { scope: "email" })
+);
+
+router.get("/auth/google/callback", (req, res, next) => {
+  handler.loginViaGG(req, res);
+});
+
 router.post("/register", (req, res) => {
   handler.register(req, res);
 });

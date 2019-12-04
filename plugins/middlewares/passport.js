@@ -5,6 +5,8 @@ const JWTStategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 const passwordFB = require("passport-facebook");
 const FacebookStrategy = passwordFB.Strategy;
+const passportGG = require('passport-google-oauth20');
+const GoogleStrategy = passportGG.Strategy;
 const config = require("config");
 
 const userModel = require("../database/users");
@@ -64,3 +66,23 @@ passport.use(
     }
   )
 );
+
+const gg = config.get('gg')
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: gg.client_id,
+      clientSecret: gg.client_secret,
+      callbackURL: gg.callback_url
+    },
+    async (accessToken, refreshToken, profile, done) => {
+      process.nextTick(() => {
+        if (!accessToken && !profile) {
+          return done(
+            new Error("Authenticate via facebook failed! Empty access token!")
+          );
+        }
+        return done(null, profile);
+      });
+    })
+)
