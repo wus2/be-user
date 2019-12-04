@@ -58,6 +58,7 @@ exports.loginViaGG = (req, res) => {
                                 message: "OK",
                                 user: {
                                     ...payload,
+                                    avatar: data[0].avatar,
                                     name: data[0].name,
                                     role: data[0].role
                                 },
@@ -107,6 +108,7 @@ exports.loginViaGG = (req, res) => {
                                         user: {
                                             ...payload,
                                             name: entity.name,
+                                            avatar: entity.avatar,
                                             role: entity.role
                                         },
                                         token

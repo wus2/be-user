@@ -37,6 +37,7 @@ exports.login = (req, res) => {
         message: "OK",
         user: {
           ...payload,
+          avatar: user[0].avatar,
           name: user[0].name,
           role: user[0].role
         },

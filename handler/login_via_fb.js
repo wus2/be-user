@@ -58,6 +58,7 @@ exports.loginViaFB = (req, res) => {
                 message: "OK",
                 user: {
                   ...payload,
+                  avatar: data[0].avatar,
                   name: data[0].name,
                   role: data[0].role
                 },
@@ -105,6 +106,7 @@ exports.loginViaFB = (req, res) => {
                     message: "OK",
                     user: {
                       ...payload,
+                      avatar: entity.avatar,
                       name: entity.name,
                       role: entity.role
                     },
