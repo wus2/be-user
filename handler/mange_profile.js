@@ -16,6 +16,7 @@ module.exports = {
         });
       })
       .catch(err => {
+        console.log("[profile][error]", err);
         return res.json({
           code: -1,
           message: err
@@ -44,7 +45,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        // log err
+        console.log("[updateProfile][error]", err);
         return res.status(500).json({
           code: -1,
           message: "Update profile error"

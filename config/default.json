@@ -9,6 +9,7 @@
     "key_jwt": "blasters42Haiku40amerada",
     "http_port": 55210,
     "dev-mysql": {
+      "connectionLimit": 10,
       "host": "remotemysql.com",
       "port": 3306,
       "user": "bVEtH8m4Ur",
