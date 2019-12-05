@@ -1,5 +1,5 @@
-var models = require("../plugins/database/users");
-var cache = require("../plugins/cache");
+var models = require("../../plugins/database/users");
+var cache = require("../../plugins/cache");
 
 const activePrefix = "active_account";
 const confirmPrefix = "confirm_change";

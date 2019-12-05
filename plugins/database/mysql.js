@@ -1,17 +1,37 @@
-var mysql = require('mysql');
-var config = require('config')
+var mysql = require("mysql");
+var config = require("config");
 
 var createConn = () => {
-  return mysql.createPool(config.get('dev-mysql'));
+  return mysql.createConnection(config.get("dev-mysql"));
 };
 
-var pool = createConn();
+var conn;
 
-process.on('exit', () => {
-  console.log('shutdown mysql connection');
-  pool.end(err => {
-    console.log("[mysql][end] err", err)
+function connect() {
+  conn = createConn();
+  conn.connect(err => {
+    if (err) {
+      console.log("[mysql]Error when connecting to mysql", err);
+      setTimeout(connect, 2000);
+    }
   });
+  // If you're also serving http, display a 503 error.
+  conn.on("error", err => {
+    console.log("[mysq]Db error", err);
+    if (err.code === "PROTOCOL_CONNECTION_LOST") {
+      connect();
+    } else {
+      throw err;
+    }
+  });
+}
+
+connect();
+
+// release connection
+process.on("exit", () => {
+  console.log("shutdown mysql connection");
+  conn.end();
 });
 
 module.exports = {
@@ -33,12 +53,36 @@ module.exports = {
       })
     });
   },
+  execute: sql => {
+    return new Promise((resolve, reject) => {
+      conn.query(sql, (err, results, fields) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve({ results, fields });
+        }
+      });
+    });
+  },
   add: (tableName, entity) => {
     return new Promise((resolve, reject) => {
       pool.getConnection((err, conn) => {
         if (err) {
-          console.log("[mysql][add] err", err)
-          return err
+          reject(err);
+        } else {
+          resolve(value);
+        }
+      });
+    });
+  },
+  addMultiple: (tableName, entities, fields) => {
+    return new Promise((resolve, reject) => {
+      var sql = `insert into ${tableName} (${fields}) values ?`
+      conn.query(sql, [entities], (err, value) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(value);
         }
         var sql = `insert into ${tableName} set ?`;
         conn.query(sql, entity, (err, value) => {

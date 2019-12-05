@@ -21,6 +21,11 @@
       "client_id": "488317645361433",
       "client_secret": "e666aa3808de4702091527a5b7934290",
       "callback_url": "https://wusbeuser.herokuapp.com/users/auth/facebook/callback"
+    },
+    "gg": {
+      "client_id": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
+      "client_secret": "r3wapL7nrPU66EFf18cJcOSZ",
+      "callback_url": "https://wusbeuser.herokuapp.com/users/auth/google/callback"
     }
 }
   
