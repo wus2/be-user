@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var passport = require("passport");
 
-var handler = require("../handler");
+var handler = require("../handler/user");
 var auth = require("../plugins/middlewares/auth");
 var upload = require("../plugins/middlewares/upload");
 
@@ -73,10 +73,6 @@ router.post(
   //   auth.authen(req, res);
   //   next();
   // },
-  (req, res, next) => {
-    auth.authen(req, res);
-    next();
-  },
   (req, res, next) => {
     upload.uploadImage(req, res);
     next();

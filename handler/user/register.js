@@ -1,5 +1,5 @@
-var mailer = require("../plugins/mailer");
-var cache = require("../plugins/cache");
+var mailer = require("../../plugins/mailer");
+var cache = require("../../plugins/cache");
 
 const activePrefix = "active_account";
 

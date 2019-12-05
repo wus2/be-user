@@ -2,7 +2,7 @@ var passport = require('passport')
 var jwt = require("jsonwebtoken");
 var config = require("config");
 
-var models = require("../plugins/database/users");
+var models = require("../../plugins/database/users");
 
 const usernamePrefix = "google_"
 

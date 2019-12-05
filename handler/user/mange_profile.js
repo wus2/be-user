@@ -1,6 +1,6 @@
-var models = require("../plugins/database/users");
-var mailer = require("../plugins/mailer");
-var cache = require("../plugins/cache");
+var models = require("../../plugins/database/users");
+var mailer = require("../../plugins/mailer");
+var cache = require("../../plugins/cache");
 
 const confirmPrefix = "confirm_change";
 

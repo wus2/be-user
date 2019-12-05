@@ -1,6 +1,6 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzU0MzkyMDV9.jZwoGWpkxYSu5YmCmiQ-O0TfRfguOAoVnBlYPLa9GgA"
-DOMAIN-x = "https://wusbeuser.herokuapp.com"
-DOMAIN = http://localhost:55210
+DOMAIN = "https://wusbeuser.herokuapp.com"
+DOMAIN-x = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
