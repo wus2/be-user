@@ -6,7 +6,7 @@ const table = "skill_tags";
 class SkillTags {
   constructor() {
     this.db = mysql;
-    this.memCache = new Map();
+    this.memCache = new Set();
   }
 
   // warm up memcache affter restart
@@ -16,8 +16,7 @@ class SkillTags {
       .then(data => {
         if (data) {
           data.forEach(skill => {
-            var key = prefix + skill.id;
-            this.memCache.set(key, skill.tag);
+            this.memCache.add(skill.tag);
           });
         }
       })
@@ -27,16 +26,12 @@ class SkillTags {
   }
 
   addSkills(skills) {
-    console.log("Update Skill tags");
     if (skills.length > 0) {
       this.db
         .addMultiple(table, skills, "tag")
         .then(data => {
-          var counter = data.insertId;
           skills.forEach(skill => {
-            var key = prefix + counter;
-            counter++;
-            this.memCache.set(key, skill[0]);
+            this.memCache.add(skill[0]);
           });
         })
         .catch(err => {
@@ -78,21 +73,8 @@ class SkillTags {
     }
   }
 
-  isExists(skill, callback) {
-    var sql = `select tag from ${table} where tag = ${skill}`;
-    this.db
-      .load(sql)
-      .then(data => {
-        if (data) {
-          callback(null, true);
-        } else {
-          callback(null, false);
-        }
-      })
-      .catch(err => {
-        console.log("[SkillTags][isExists][err]", err);
-        callback(null, err);
-      });
+  isExists(skill) {
+    
   }
 
   removeSkill(id, callback) {

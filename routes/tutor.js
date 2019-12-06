@@ -5,12 +5,21 @@ var handler = require("../handler/tutor");
 var auth = require("../plugins/middlewares/auth");
 
 router.post(
-  "/login",
-  (req, res, next) => {
+  "/updateskills",
+  (req, res, netx) => {
     auth.authen(req, res);
-    next();
+    netx();
   },
   (req, res) => {
+    var payload = req.locals.payload;
+    if (!payload) {
+      return res.status(500).json({
+        code: -1,
+        message: "Internal error"
+      });
+    }
     handler.updateSkills(req, res);
   }
 );
+
+module.exports = router;
