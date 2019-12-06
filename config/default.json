@@ -1,31 +1,37 @@
 {
-    "mysql-local": {
-      "host": "localhost",
-      "port": 3306,
-      "user": "root",
-      "password": "Hoangan2110",
-      "database": "wus2_be_user"
-    },
-    "key_jwt": "blasters42Haiku40amerada",
-    "http_port": 55210,
-    "dev-mysql": {
-      "connectionLimit": 10,
-      "host": "remotemysql.com",
-      "port": 3306,
-      "user": "bVEtH8m4Ur",
-      "password": "KEWYT2ZMYS",
-      "database": "bVEtH8m4Ur"
-    },
-    "domain": "https://wusbeuser.herokuapp.com",
-    "fb": {
-      "client_id": "488317645361433",
-      "client_secret": "e666aa3808de4702091527a5b7934290",
-      "callback_url": "https://wusbeuser.herokuapp.com/users/auth/facebook/callback"
-    },
-    "gg": {
-      "client_id": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
-      "client_secret": "r3wapL7nrPU66EFf18cJcOSZ",
-      "callback_url": "https://wusbeuser.herokuapp.com/users/auth/google/callback"
-    }
+  "mysql-server": {
+    "host": "112.197.2.178",
+    "port": 3306,
+    "user": "administrator",
+    "password": "5ctv@123",
+    "database": "wus2_be_user"
+  },
+  "mysql-local": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "Hoangan2110",
+    "database": "wus2_be_user"
+  },
+  "key_jwt": "blasters42Haiku40amerada",
+  "http_port": 55210,
+  "mysql-dev": {
+    "connectionLimit": 10,
+    "host": "remotemysql.com",
+    "port": 3306,
+    "user": "bVEtH8m4Ur",
+    "password": "KEWYT2ZMYS",
+    "database": "bVEtH8m4Ur"
+  },
+  "domain": "https://wusbeuser.herokuapp.com",
+  "fb": {
+    "client_id": "488317645361433",
+    "client_secret": "e666aa3808de4702091527a5b7934290",
+    "callback_url": "https://wusbeuser.herokuapp.com/users/auth/facebook/callback"
+  },
+  "gg": {
+    "client_id": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
+    "client_secret": "r3wapL7nrPU66EFf18cJcOSZ",
+    "callback_url": "https://wusbeuser.herokuapp.com/users/auth/google/callback"
+  }
 }
-  
