@@ -1,6 +1,6 @@
-var SkillTag = require("./handler/admin/update_skill_tags");
+var SkillTags = require("./update_skill_tags");
 
-const skill = new SkillTag();
+const skill = new SkillTags();
 
 module.exports = {
   getSkills: (req, res) => {
