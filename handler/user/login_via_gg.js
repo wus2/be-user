@@ -27,7 +27,7 @@ exports.loginViaGG = (req, res) => {
       }
       console.log("[loginViaGG] profile", user);
       models
-        .getByUsername(user.id)
+        .getByUsername(usernamePrefix + user.id)
         .then(data => {
           if (data[0]) {
             console.log("[passport][authenticate] success", data[0]);
