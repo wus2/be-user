@@ -18,6 +18,12 @@ router.post(
         message: "Internal error"
       });
     }
+    if (payload.role != 1) {
+      return res.status.json({
+        code: -1,
+        message: "Tutor only"
+      })
+    }
     handler.updateSkills(req, res);
   }
 );

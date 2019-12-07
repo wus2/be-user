@@ -9,7 +9,12 @@ class TutorSkill {
     this.skillManage = new SkillTags();
   }
 
-  // skills is array string
+  /**
+   * 
+   * @param {int} id 
+   * @param {array string} skills 
+   * @param {function} callback 
+   */
   updateSkill(id, skills, callback) {
     // TODO: check skills has or not in db
     var skillStr = JSON.stringify(skills);

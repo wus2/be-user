@@ -1,10 +1,10 @@
-var passport = require('passport')
+var passport = require("passport");
 var jwt = require("jsonwebtoken");
 var config = require("config");
 
 var models = require("../../plugins/database/users");
 
-const usernamePrefix = "facebook_"
+const usernamePrefix = "facebook_";
 
 exports.loginViaFB = (req, res) => {
   passport.authenticate(
@@ -71,11 +71,11 @@ exports.loginViaFB = (req, res) => {
               err
             );
             var entity = {
-              username: user.id,
+              username: usernamePrefix + user.id,
               email: user.emails,
               name: user.displayName,
               gender: user.gender,
-              role: 2
+              role: 0
             };
             models
               .add(entity)

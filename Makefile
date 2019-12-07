@@ -36,6 +36,11 @@ curl-update-avatar:
 	--request POST \
    ${DOMAIN}/users/updateavatar
 
+curl-update-skill:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request POST \
+   ${DOMAIN}/tutor/updateskill
+
 curl: curl-register curl-login curl-profile curl-update-profile curl-update-password
 
 deploy:

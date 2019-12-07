@@ -9,7 +9,9 @@ class SkillTags {
     this.memCache = new Set();
   }
 
-  // warm up memcache affter restart
+  /**
+   * warm up memcache affter restart
+   */
   warmup() {
     this.db
       .load(`select * from ${table} limit 100`)
@@ -25,6 +27,10 @@ class SkillTags {
       });
   }
 
+  /**
+   * 
+   * @param {array string} skills 
+   */
   addSkills(skills) {
     if (skills.length > 0) {
       this.db
@@ -40,6 +46,12 @@ class SkillTags {
     }
   }
 
+  /**
+   * 
+   * @param {int} offset 
+   * @param {int} limit 
+   * @param {function} callback 
+   */
   getSkills(offset, limit, callback) {
     if (offset < 0 || offset > limit || limit < 0) {
       callback(new Error("offset and limit is error"));
@@ -77,6 +89,11 @@ class SkillTags {
     
   }
 
+  /**
+   * 
+   * @param {int} id 
+   * @param {function} callback 
+   */
   removeSkill(id, callback) {
     if (!id) {
       callback(new Error("undefined skill"));
