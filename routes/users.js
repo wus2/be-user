@@ -82,7 +82,7 @@ router.post(
     // sleep to ensure filename is forwarded
     setTimeout(() => {
       handler.updateAvatar(req, res, payload);
-    }, 50);
+    }, 500);
   }
 );
 
