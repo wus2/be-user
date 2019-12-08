@@ -44,7 +44,8 @@ exports.loginViaFB = (req, res) => {
               var key = config.get("key_jwt");
               const payload = {
                 id: data[0].id,
-                username: data[0].username
+                username: data[0].username,
+                role: data[0].role
               };
               var token = jwt.sign(payload, key);
               if (!token) {
@@ -92,7 +93,8 @@ exports.loginViaFB = (req, res) => {
                   var key = config.get("key_jwt");
                   const payload = {
                     id: entity.id,
-                    username: entity.username
+                    username: entity.username,
+                    role: entity.role
                   };
                   var token = jwt.sign(payload, key);
                   if (!token) {

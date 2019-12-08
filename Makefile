@@ -1,4 +1,4 @@
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJpYXQiOjE1NzU0MzkyMDV9.jZwoGWpkxYSu5YmCmiQ-O0TfRfguOAoVnBlYPLa9GgA"
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzU4MjIxMzd9.hEgXTHLLJGQDs3gunDKPJhi9ogagWPZY2r68P8U5AAc"
 DOMAIN-x = "https://wusbeuser.herokuapp.com"
 DOMAIN = http://localhost:55210
 	
@@ -40,6 +40,21 @@ curl-update-skill:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
    ${DOMAIN}/tutor/updateskill
+
+curl-update-intro:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request POST \
+	--data '{"introDesc":"Toi day Toan, Anh va Hoa"}' \
+   ${DOMAIN}/tutor/updateintro
+
+curl-tutor-profile: 
+	curl -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request GET \
+	${DOMAIN}/tutor/getprofile/48
+
+
+curl-get-list-tutor:
+	curl ${DOMAIN}/tutor/getlist/offset=1&limit=2
 
 curl: curl-register curl-login curl-profile curl-update-profile curl-update-password
 

@@ -23,7 +23,8 @@ exports.login = (req, res) => {
       var key = config.get("key_jwt");
       const payload = {
         id: user[0].id,
-        username: user[0].username
+        username: user[0].username,
+        role: user[0].role
       };
       var token = jwt.sign(payload, key);
       if (!token) {
