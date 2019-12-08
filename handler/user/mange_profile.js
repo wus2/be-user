@@ -83,7 +83,7 @@ module.exports = {
       });
     }
     var entity = {
-      id: 22,
+      id: 35,
       avatar: uri
     };
     models
