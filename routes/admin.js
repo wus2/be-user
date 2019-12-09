@@ -5,7 +5,7 @@ var auth = require("../plugins/middlewares/auth");
 var handler = require("../handler/admin");
 
 router.get(
-  "/skills/:offset/:limit",
+  "/skills/offset/:offset/limit/:limit",
   (req, res, next) => {
     auth.authen(req, res);
     next();
@@ -43,3 +43,16 @@ router.delete(
     handler.removeSkill(req, res);
   }
 );
+
+router.get(
+  "/getusers/offset/:offset/limit/:limit",
+  (req, res, next) => {
+    auth.authen(req, res);
+    next();
+  },
+  (req, res) => {
+    handler.getUsers(req, res);
+  }
+);
+
+module.exports = router;

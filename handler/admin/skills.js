@@ -2,6 +2,7 @@ var mysql = require("../../plugins/database/mysql");
 
 const prefix = "skill_tags_";
 const table = "skill_tags";
+const userTable = "user";
 
 class SkillTags {
   constructor() {
@@ -28,32 +29,37 @@ class SkillTags {
   }
 
   /**
-   * 
-   * @param {array string} skills 
+   *
+   * @param {array string} skills
    */
-  addSkills(skills) {
+  addSkills(skills, callback) {
     if (skills.length > 0) {
       this.db
         .addMultiple(table, skills, "tag")
         .then(data => {
-          skills.forEach(skill => {
-            this.memCache.add(skill[0]);
-          });
+          if (data) {
+            skills.forEach(skill => {
+              this.memCache.add(skill[0]);
+            });
+            callback(null, data);
+          }
+          callback(new Error("Add failed"));
         })
         .catch(err => {
           console.log("[SkillTags][updateSkill][err]", err);
+          callback(new Error("Add failed"));
         });
     }
   }
 
   /**
-   * 
-   * @param {int} offset 
-   * @param {int} limit 
-   * @param {function} callback 
+   *
+   * @param {int} offset
+   * @param {int} limit
+   * @param {function} callback
    */
   getSkills(offset, limit, callback) {
-    if (offset < 0 || offset > limit || limit < 0) {
+    if (offset < 0 || limit < 0) {
       callback(new Error("offset and limit is error"));
     }
 
@@ -85,14 +91,61 @@ class SkillTags {
     }
   }
 
-  isExists(skill) {
-    
+  /**
+   *
+   * @param {int} id
+   * @param {string} skill
+   * @param {function} callback
+   */
+  updateSkill(id, skill, callback) {
+    if (!skill || !id) {
+      callback(new Error("Empty skill"));
+    }
+    var entity = {
+      id: id,
+      tag: skill
+    };
+    this.db
+      .update(table, "id", entity)
+      .then(data => {
+        if (data) {
+          callback(null, data);
+        }
+        callback(new Error("Update failed"));
+      })
+      .catch(err => {
+        console.log("[SkillTags][updateSkill][err]", err);
+        callback(new Error("Update failed"));
+      });
+  }
+
+  isExists(skill, callback) {
+    if (!skill) {
+      callback(false);
+    }
+    if (this.memCache.has(skill)) {
+      callback(true);
+    } else {
+      var sql = `select * from ${table} where tag = '${skill}'`;
+      this.db
+        .load(sql)
+        .then(data => {
+          if (data) {
+            callback(true);
+          }
+          callback(false);
+        })
+        .catch(err => {
+          console.log("[TutorSkill][isExists][err]", err);
+          callback(false);
+        });
+    }
   }
 
   /**
-   * 
-   * @param {int} id 
-   * @param {function} callback 
+   *
+   * @param {int} id
+   * @param {function} callback
    */
   removeSkill(id, callback) {
     if (!id) {

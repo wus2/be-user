@@ -1,10 +1,12 @@
 var mysql = require("../../plugins/database/mysql");
+var SkillTags = require('../admin/skills');
 
 const table = "user";
 
 class Tutor {
   constructor() {
     this.db = mysql;
+    this.skill = new SkillTags();
   }
 
   /**
@@ -61,20 +63,50 @@ class Tutor {
    */
   getProfile(id, callback) {
     if (!id) {
-      callback(new Error("Empty tutorID"));
+      return callback(new Error("Empty tutorID"));
     }
     var sql = `select * from ${table} where id = ${id}`;
     this.db
       .load(sql)
       .then(data => {
-        if (data.role != 1) {
-          callback(new Error("This ID is not a tutor"));
+        if (data[0].role != 1) {
+          return callback(new Error("This ID is not a tutor"));
         }
-        callback(null, data);
+        return callback(null, data[0]);
       })
       .catch(err => {
         console.log("[Tutor][getProfile][err]", err);
-        callback(new Error("Get failed"));
+        return callback(new Error("Get failed"));
+      });
+  }
+
+  /**
+   *
+   * @param {int} tutorID
+   * @param {array string} skills
+   * @param {function} callback
+   */
+  updateSkills(tutorID, skills, callback) {
+    skills.forEach(skill => {
+      this.skill.isExists(skill, ok => {
+        if (!ok) {
+          callback(new Error("Skill is incorrect", skill))
+        }
+      })
+    });
+    var skillStr = JSON.stringify(skills);
+    var entity = {
+      id: tutorID,
+      skill_tags: skillStr
+    };
+    this.db
+      .update(table, "id", entity)
+      .then(data => {
+        callback(data);
+      })
+      .catch(err => {
+        console.log("[update_skills][updateSkill][err]", err);
+        callback(err);
       });
   }
 }

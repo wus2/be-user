@@ -8,18 +8,18 @@ router.get("/", (req, res, next) => {
   res.send("Tutor router");
 });
 
-router.post(
+router.put(
   "/updateskills",
   (req, res, next) => {
     auth.authen(req, res);
     next();
   },
   (req, res) => {
-    var payload = req.locals.payload;
+    var payload = res.locals.payload;
     if (!payload) {
-      return res.status(500).json({
+      return res.status(401).json({
         code: -1,
-        message: "Internal error"
+        message: "Unauthentiacted"
       });
     }
     if (payload.role != 1) {
@@ -28,16 +28,15 @@ router.post(
         message: "Tutor only"
       });
     }
-    handler.updateSkills(req, res);
+    handler.updateSkills(req, res, payload);
   }
 );
 
-router.get("/getlist/:offset?/:limit?", (req, res) => {
-  console.log(req.params);
+router.get("/getlist/offset/:offset/limit/:limit", (req, res) => {
   handler.getList(req, res);
 });
 
-router.post(
+router.put(
   "/updateintro",
   (req, res, next) => {
     auth.authen(req, res);
@@ -48,15 +47,8 @@ router.post(
   }
 );
 
-router.get(
-  "/getprofile/:tutorID",
-  (req, res, next) => {
-    auth.authen(req, res);
-    next();
-  },
-  (req, res) => {
-    handler.getProfile(req, res);
-  }
-);
+router.get("/getprofile/:tutorID", (req, res) => {
+  handler.getProfile(req, res);
+});
 
 module.exports = router;

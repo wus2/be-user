@@ -1,7 +1,5 @@
-var TutorSkill = require("./update_skills");
 var Tutor = require("./tutors");
 
-const skill = new TutorSkill();
 const tutor = new Tutor();
 
 module.exports = {
@@ -13,8 +11,8 @@ module.exports = {
         message: "Field skills is incorrect"
       });
     }
-    skill.updateSkills(payload.id, skills, (err, data) => {
-      if (err || data < 0) {
+    tutor.updateSkills(payload.id, skills, (err, data) => {
+      if (err || !data) {
         return res.status(400).json({
           code: -1,
           message: "Update Skills failed"
@@ -36,15 +34,17 @@ module.exports = {
       });
     }
     tutor.getList(offset, limit, (err, data) => {
+      console.log(data);
       if (err || !data) {
         return res.status(400).json({
-          code: 1,
+          code: -1,
           message: err
         });
       }
       return res.status(200).json({
         code: 1,
-        message: "OK"
+        message: "OK",
+        data
       });
     });
   },
@@ -83,13 +83,6 @@ module.exports = {
     });
   },
   getProfile: (req, res) => {
-    var payload = res.locals.payload;
-    if (!payload) {
-      return res.status(400).json({
-        code: -1,
-        message: "Authen failed"
-      });
-    }
     var tutorID = req.params.tutorID;
     if (!tutorID) {
       return res.status(400).json({
@@ -99,9 +92,10 @@ module.exports = {
     }
     tutor.getProfile(tutorID, (err, data) => {
       if (err || !data) {
+        console.log("[getProfile][err]", err);
         return res.status(400).json({
           code: -1,
-          message: !data ? "Get failed" : err
+          message: "Get failed"
         });
       }
       return res.status(200).json({
