@@ -1,7 +1,7 @@
 Backend User Manage
 
 1. Domain: https://wusbeuser.herokuapp.com/
-2. API:
+2. API-USER:
   - Login: 
     + Path: /users/login
     + Method: POST
@@ -61,3 +61,51 @@ Backend User Manage
       "email":"string",
       "password":"string"
       }
+  - Update avatar:
+    + Fullpath: https://wusbeuser.herokuapp.com/users/updateavatar
+    + Method: POST
+    + Header: 
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Name input: <input name="avatar"/>
+3. API-TUTOR
+  - Update profile: user's feature
+  - Update avatar: user's feature
+  - Update tag skill:
+    + Path: /tutor/updateskills
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+      {
+      "skills":["tag1", "tag2"]
+      }
+  - Update tutor introduction:
+    + Path: /tutor/updateintro
+    + Method: PUT
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body: 
+      {
+      "introDesc":"string"
+      }
+4. API-USER:
+  - Get list tutors:
+    + Path: tutor/getlist/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+  - Get list tutors with filter:
+  
+  - Get tutor's profile:
+    + Path: /tutor/getprofile/:tutorID
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+5. API-ADMIN:
+  - Get list user:
+    + Path: /admin/getlist/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
