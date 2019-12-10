@@ -36,8 +36,7 @@ router.get(
     next();
   },
   (req, res) => {
-    var payload = res.locals.payload;
-    handler.profile(req, res, payload);
+    handler.profile(req, res);
   }
 );
 
@@ -48,8 +47,7 @@ router.post(
     next();
   },
   (req, res) => {
-    var payload = res.locals.payload;
-    handler.updateProfile(req, res, payload);
+    handler.updateProfile(req, res);
   }
 );
 
@@ -66,19 +64,18 @@ router.post(
 
 router.post(
   "/updateavatar",
-  // (req, res, next) => {
-  //   auth.authen(req, res);
-  //   next();
-  // },
+  (req, res, next) => {
+    auth.authen(req, res);
+    next();
+  },
   (req, res, next) => {
     upload.uploadImage(req, res);
     next();
   },
   (req, res) => {
-    var payload = res.locals.payload;
     // sleep to ensure filename is forwarded
     setTimeout(() => {
-      handler.updateAvatar(req, res, payload);
+      handler.updateAvatar(req, res);
     }, 500);
   }
 );

@@ -6,6 +6,13 @@ const confirmPrefix = "confirm_change";
 
 module.exports = {
   profile: (req, res, payload) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "Authenticate failed"
+      });
+    }
     models
       .getByID(payload.id)
       .then(user => {
@@ -24,7 +31,14 @@ module.exports = {
       });
   },
 
-  updateProfile: (req, res, payload) => {
+  updateProfile: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "Authenticate failed"
+      });
+    }
     var entity = {
       id: payload.id,
       address: req.body.address,
@@ -89,7 +103,14 @@ module.exports = {
       message: "OK"
     });
   },
-  updateAvatar: (req, res, payload) => {
+  updateAvatar: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "Authenticate failed"
+      });
+    }
     var uri = res.locals.uri;
     if (!uri) {
       console.log("[updateAvatar][err] image path is null");

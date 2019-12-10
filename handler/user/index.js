@@ -10,10 +10,10 @@ module.exports = {
   loginViaFB: (req, res) => fb.loginViaFB(req, res),
   loginViaGG: (req, res) => gg.loginViaGG(req, res),
   register: (req, res) => regis.register(req, res),
-  profile: (req, res, payload) => user.profile(req, res, payload),
-  updateProfile: (req, res, payload) => user.updateProfile(req, res, payload),
+  profile: (req, res) => user.profile(req, res),
+  updateProfile: (req, res) => user.updateProfile(req, res),
   updatePassword: (req, res) => user.updatePassword(req, res),
-  updateAvatar: (req, res, payload) => user.updateAvatar(req, res, payload),
+  updateAvatar: (req, res) => user.updateAvatar(req, res),
   activateAccount: (req, res) => cb.activateAccount(req, res),
   confirmChange: (req, res) => cb.confirmChange(req, res)
 };

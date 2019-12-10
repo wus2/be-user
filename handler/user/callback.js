@@ -22,9 +22,12 @@ exports.activateAccount = (req, res) => {
   models
     .add(value)
     .then(id => {
-      return res.status(200).json({
-        code: 1,
-        message: "OK"
+      if (id) {
+        return res.redirect(config.get("redirect"));
+      }
+      return res.json({
+        code: -1,
+        message: "Add to database failed"
       });
     })
     .catch(err => {
@@ -53,7 +56,7 @@ exports.confirmChange = (req, res) => {
     .update(value)
     .then(data => {
       console.log(data);
-      res.redirect(config.get("redirect"));
+      return res.redirect(config.get("redirect"));
     })
     .catch(err => {
       console.log("[ConfirmChange][err]", err);
