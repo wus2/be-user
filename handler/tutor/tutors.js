@@ -1,5 +1,5 @@
 var mysql = require("../../plugins/database/mysql");
-var SkillTags = require('../admin/skills');
+var SkillTags = require("../admin/skills");
 
 const table = "user";
 
@@ -90,9 +90,9 @@ class Tutor {
     skills.forEach(skill => {
       this.skill.isExists(skill, ok => {
         if (!ok) {
-          callback(new Error("Skill is incorrect", skill))
+          callback(new Error("Skill is incorrect", skill));
         }
-      })
+      });
     });
     var skillStr = JSON.stringify(skills);
     var entity = {
@@ -108,6 +108,25 @@ class Tutor {
         console.log("[update_skills][updateSkill][err]", err);
         callback(err);
       });
+  }
+
+  filterTutor(district, minPrice, maxPrice, skill, offset, limit) {
+    var sql = `select * from ${table} where role = 1`;
+    if (!district) {
+      sql += ` and district = ${district}`;
+    }
+    if (
+      !minPrice &&
+      !maxPrice &&
+      Number.isInteger(minPrice) &&
+      Number.isInteger(maxPrice) &&
+      minPrice <= maxPrice
+    ) {
+      sql += ` and price_per_hour >= ${minPrice} and price_per_hour <= ${maxPrice}`;
+    }
+    if (!skill) {
+      sql += ` and skill_tags like ${skill}`;
+    }
   }
 }
 

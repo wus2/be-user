@@ -46,7 +46,8 @@ module.exports = {
       name: req.body.name,
       phone: req.body.phone,
       dob: req.body.dob,
-      gender: req.body.gender
+      gender: req.body.gender,
+      price_per_hour: req.body.price
     };
 
     models
