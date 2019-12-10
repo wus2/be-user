@@ -121,7 +121,7 @@ module.exports = {
       });
     }
     var entity = {
-      id: 35,
+      id: payload.id,
       avatar: uri
     };
     models
