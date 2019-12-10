@@ -112,6 +112,7 @@ module.exports = {
       });
     }
     var uri = res.locals.uri;
+    console.log("[UpdateAvatar][uri]", uri);
     if (!uri) {
       console.log("[updateAvatar][err] image path is null");
       return res.json({
@@ -126,9 +127,16 @@ module.exports = {
     models
       .update(entity)
       .then(data => {
-        return res.status(200).json({
-          code: 1,
-          message: "OK"
+        console.log("[UpdateAvatar][data]", data);
+        if (data) {
+          return res.status(200).json({
+            code: 1,
+            message: "OK"
+          });
+        }
+        return res.json({
+          code: -1,
+          message: "Update database failed"
         });
       })
       .catch(err => {
