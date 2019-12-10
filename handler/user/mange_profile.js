@@ -53,11 +53,10 @@ module.exports = {
     models
       .update(entity)
       .then(data => {
-        if (data < 1) {
+        if (data > 0) {
           return res.status(200).json({
             code: 1,
-            message: "OK",
-            data: data
+            message: "OK"
           });
         }
         return res.status(200).json({
