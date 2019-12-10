@@ -51,6 +51,8 @@ router.get("/getprofile/:tutorID", (req, res) => {
   handler.getProfile(req, res);
 });
 
-router.get("/filtertutor/offset/:offset/limit/:limit", (req, res) => {});
+router.get("/filtertutor/offset/:offset/limit/:limit", (req, res) => {
+  handler.filterTutor(req, res);
+});
 
 module.exports = router;

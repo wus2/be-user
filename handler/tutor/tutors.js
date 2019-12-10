@@ -115,20 +115,20 @@ class Tutor {
       return callback(new Error("Offset or limit are incorrect"));
     }
     var sql = `select * from ${table} where role = 1`;
-    if (!district) {
-      sql += ` and district = ${district}`;
+    if (district) {
+      sql += ` and district = '${district}'`;
     }
     if (
-      !minPrice &&
-      !maxPrice &&
+      minPrice &&
+      maxPrice &&
       Number.isInteger(minPrice) &&
       Number.isInteger(maxPrice) &&
       minPrice <= maxPrice
     ) {
       sql += ` and price_per_hour >= ${minPrice} and price_per_hour <= ${maxPrice}`;
     }
-    if (!skill) {
-      sql += ` and skill_tags like ${skill}`;
+    if (skill) {
+      sql += ` and skill_tags like '${skill}'`;
     }
     sql += ` limit ${offset}, ${limit}`;
 

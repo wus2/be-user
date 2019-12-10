@@ -1,7 +1,7 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzU5MDY0MTV9.8eOwWllg2lGwzm0Ju8_XPy0ro2-vPDHRdsC3o9YMHs8"
 TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
-DOMAIN = "https://wusbeuser.herokuapp.com"
-DOMAIN-x = http://localhost:55210
+DOMAIN-x = "https://wusbeuser.herokuapp.com"
+DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -56,6 +56,12 @@ curl-tutor-profile:
 
 curl-tutor-getlist:
 	curl ${DOMAIN}/tutor/getlist/offset/1/limit/2
+
+curl-tutor-filter:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request GET \
+	--data '{"district":"Quận 8"}' \
+   ${DOMAIN}/tutor/filtertutor/offset/0/limit/2
 
 curl-admin-getusers:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \

@@ -115,5 +115,30 @@ module.exports = {
         message: "Offset or limit is incorrect"
       });
     }
+    var district = req.body.district;
+    var minPrice = req.body.minPrice;
+    var maxPrice = req.body.maxPrice;
+    var skill = req.body.skill;
+    tutor.filterTutor(
+      district,
+      minPrice,
+      maxPrice,
+      skill,
+      offset,
+      limit,
+      (err, data) => {
+        if (err || !data) {
+          return res.json({
+            code: -1,
+            message: errP
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data
+        });
+      }
+    );
   }
 };
