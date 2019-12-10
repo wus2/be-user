@@ -53,7 +53,14 @@ module.exports = {
       });
   },
 
-  updatePassword: (req, res, payload) => {
+  updatePassword: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(400).json({
+        code: -1,
+        message: "Authenticate failed"
+      });
+    }
     var entity = {
       id: payload.id,
       email: req.body.email,

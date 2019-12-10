@@ -39,6 +39,7 @@ exports.confirmChange = (req, res) => {
   var key = confirmPrefix + req.params.id;
   console.log("[confirmChange]", key);
   var value = cache.get(key);
+  console.log(value);
   if (value == undefined) {
     return res.status(400).json({
       code: -1,

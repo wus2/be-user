@@ -19,9 +19,7 @@ router.get("/auth/facebook/callback", (req, res, next) => {
   handler.loginViaFB(req, res);
 });
 
-router.get("/auth/google",
-  passport.authenticate("google", { scope: "email" })
-);
+router.get("/auth/google", passport.authenticate("google", { scope: "email" }));
 
 router.get("/auth/google/callback", (req, res, next) => {
   handler.loginViaGG(req, res);
@@ -62,8 +60,7 @@ router.post(
     next();
   },
   (req, res) => {
-    var payload = res.locals.payload;
-    handler.updatePassword(req, res, payload);
+    handler.updatePassword(req, res);
   }
 );
 
