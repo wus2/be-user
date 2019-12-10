@@ -52,13 +52,8 @@ exports.confirmChange = (req, res) => {
   models
     .update(value)
     .then(data => {
-      if (data) {
-        res.redirect(config.get("redirect"));
-      }
-      return res.status(400).json({
-        code: -1,
-        message: "Update failed"
-      });
+      console.log(data);
+      res.redirect(config.get("redirect"));
     })
     .catch(err => {
       console.log("[ConfirmChange][err]", err);
