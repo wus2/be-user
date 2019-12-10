@@ -16,14 +16,14 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
     }
     skill.getSkills(req.params.offset, req.params.limit, (err, data) => {
       if (err) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: err
         });
@@ -44,21 +44,21 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
     }
     var id = req.params.id;
     if (!id) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "ID is incorrect"
       });
     }
     skill.getSkill(id, (err, data) => {
       if (err || !data) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: err
         });
@@ -79,21 +79,21 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
     }
     var skillStr = req.body.skill;
     if (!skillStr) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Skill is empty!"
       });
     }
     skill.addSkill(skillStr, (err, data) => {
       if (err || !data) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: err
         });
@@ -113,7 +113,7 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
@@ -121,14 +121,14 @@ module.exports = {
     var id = req.body.skillID;
     var skillStr = req.body.skill;
     if (!id || !skillStr) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Skill ID or skill name is empty"
       });
     }
     skill.updateSkill(id, skillStr, (err, data) => {
       if (err || !data) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: !data ? "Update failed" : err
         });
@@ -148,21 +148,21 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
     }
     var skillID = req.params.id;
     if (!skillID) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Empty skill ID"
       });
     }
     skill.removeSkill(skillID, (err, ok) => {
       if (err || !ok) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: "Remove failed"
         });
@@ -182,7 +182,7 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
@@ -190,14 +190,14 @@ module.exports = {
     var offset = req.params.offset;
     var limit = req.params.limit;
     if (!offset || !limit) {
-      return res.status(400).json({
+      return res.json({
         code: 1,
         message: "Offset or limit is incorrect"
       });
     }
     user.getListUser(offset, limit, (err, data) => {
       if (err || !data) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: err
         });
@@ -218,21 +218,21 @@ module.exports = {
       });
     }
     if (payload.role != role) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Admin only"
       });
     }
     var id = req.params.id;
     if (!id) {
-      return res.status(400).json({
+      return res.json({
         code: 1,
         message: "User ID is incorrect"
       });
     }
     user.getUserProfile(id, (err, data) => {
       if (err || !data) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: err
         });

@@ -19,7 +19,7 @@ exports.register = (req, res) => {
   };
   if (!entity.email) {
     console.log("Empty email");
-    return res.status(400).json({
+    return res.json({
       code: -1,
       message: "Empty email"
     });
@@ -28,7 +28,7 @@ exports.register = (req, res) => {
   var key = activePrefix + entity.username;
   var ok = cache.set(key, entity);
   if (!ok) {
-    return res.status(400).json({
+    return res.json({
       code: -1,
       message: "System error"
     });

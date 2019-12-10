@@ -4,7 +4,7 @@ module.exports = {
   authen: (req, res) => {
     passport.authenticate("jwt", { session: false }, payload => {
       if (!payload) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: "Unauthenticated!"
         });

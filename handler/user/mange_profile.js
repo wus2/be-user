@@ -56,7 +56,8 @@ module.exports = {
   updatePassword: (req, res) => {
     var payload = res.locals.payload;
     if (!payload) {
-      return res.status(400).json({
+      console.log("[updatePassword][err] authenticate failed");
+      return res.json({
         code: -1,
         message: "Authenticate failed"
       });
@@ -64,7 +65,7 @@ module.exports = {
     var email = req.body.email;
     var password = req.body.password;
     if (!email || !password) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Email or password is incorrect"
       });
@@ -78,7 +79,7 @@ module.exports = {
     var key = confirmPrefix + entity.id;
     var ok = cache.set(key, entity);
     if (!ok) {
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "System error"
       });
@@ -92,7 +93,7 @@ module.exports = {
     var uri = res.locals.uri;
     if (!uri) {
       console.log("[updateAvatar][err] image path is null");
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Update database failed"
       });
@@ -111,7 +112,7 @@ module.exports = {
       })
       .catch(err => {
         console.log("[uploadImage][error]", err);
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: "Update database failed"
         });

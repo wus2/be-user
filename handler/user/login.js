@@ -5,7 +5,7 @@ var config = require("config");
 exports.login = (req, res) => {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
-      return res.status(400).json({
+      return res.json({
         code: 400,
         message: info ? info.message : "Login failed"
       });

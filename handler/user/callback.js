@@ -10,7 +10,7 @@ exports.activateAccount = (req, res) => {
   console.log("[activateAccount]", key);
   var value = cache.get(key);
   if (value == undefined) {
-    return res.status(400).json({
+    return res.json({
       code: -1,
       message: "Active account expired"
     });
@@ -29,7 +29,7 @@ exports.activateAccount = (req, res) => {
     })
     .catch(err => {
       console.error("[activateAccount]", err);
-      return res.status(400).json({
+      return res.json({
         code: -1,
         message: "Register failed"
       });
@@ -42,7 +42,7 @@ exports.confirmChange = (req, res) => {
   var value = cache.get(key);
   console.log(value);
   if (value == undefined) {
-    return res.status(400).json({
+    return res.json({
       code: -1,
       message: "Confirm change expired"
     });

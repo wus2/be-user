@@ -42,13 +42,13 @@ module.exports = {
           message = err;
         }
         message = "Upload failed";
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: message
         });
       }
       if (!req.file) {
-        return res.status(400).json({
+        return res.json({
           code: -1,
           message: "Empty file"
         });
