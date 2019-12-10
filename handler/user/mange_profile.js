@@ -63,10 +63,18 @@ module.exports = {
         message: "Authenticate failed"
       });
     }
+    var email = req.body.email;
+    var password = req.body.password;
+    if (!email || !password) {
+      return res.status(400).json({
+        code: -1,
+        message: "Email or password is incorrect"
+      });
+    }
     var entity = {
       id: payload.id,
-      email: req.body.email,
-      password: req.body.password
+      email: email,
+      password: password
     };
     mailer.forgotPass(entity.email, entity.id);
     var key = confirmPrefix + entity.id;
