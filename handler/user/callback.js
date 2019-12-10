@@ -1,5 +1,6 @@
 var models = require("../../plugins/database/users");
 var cache = require("../../plugins/cache");
+var config = require("config");
 
 const activePrefix = "active_account";
 const confirmPrefix = "confirm_change";
@@ -51,14 +52,16 @@ exports.confirmChange = (req, res) => {
   models
     .update(value)
     .then(data => {
-      return res.status(200).json({
-        code: 1,
-        message: "OK",
-        data: data
+      if (data) {
+        res.redirect(config.get("redirect"));
+      }
+      return res.status(400).json({
+        code: -1,
+        message: "Update failed"
       });
     })
     .catch(err => {
-      // log err
+      console.log("[ConfirmChange][err]", err);
       return res.status(500).json({
         code: -1,
         message: "Update password error"
