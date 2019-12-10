@@ -110,7 +110,10 @@ class Tutor {
       });
   }
 
-  filterTutor(district, minPrice, maxPrice, skill, offset, limit) {
+  filterTutor(district, minPrice, maxPrice, skill, offset, limit, callback) {
+    if (offset < 0 || limit < 0) {
+      return callback();
+    }
     var sql = `select * from ${table} where role = 1`;
     if (!district) {
       sql += ` and district = ${district}`;
