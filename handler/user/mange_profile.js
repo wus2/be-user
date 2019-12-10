@@ -1,3 +1,5 @@
+var config = require("config");
+
 var models = require("../../plugins/database/users");
 var mailer = require("../../plugins/mailer");
 var cache = require("../../plugins/cache");
@@ -75,10 +77,7 @@ module.exports = {
         message: "System error"
       });
     }
-    return res.status(200).json({
-      code: 1,
-      message: "OK"
-    });
+    return res.redirect(config.get("redirect"));
   },
   updateAvatar: (req, res, payload) => {
     var uri = res.locals.uri;
