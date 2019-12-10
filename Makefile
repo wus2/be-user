@@ -1,5 +1,5 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzU5MDY0MTV9.8eOwWllg2lGwzm0Ju8_XPy0ro2-vPDHRdsC3o9YMHs8"
-TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDQsInVzZXJuYW1lIjoiZmFjZWJvb2tfMTEyNjc1MzA5NDE4NzAwNyIsImlhdCI6MTU3NTkxMTA4Mn0.jqip_3aWe8QsVFbHF7jp-d-hTwQunlSX8jjvqDnyw4g"
+TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
 DOMAIN-x = "https://wusbeuser.herokuapp.com"
 DOMAIN = http://localhost:55210
 	
@@ -61,7 +61,32 @@ curl-admin-getusers:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	${DOMAIN}/admin/getusers/offset/1/limit/2
 
-curl: curl-register curl-login curl-profile curl-update-profile curl-update-password
+curl-admin-userprofile:
+	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	${DOMAIN}/admin/user/35
+
+curl-admin-getskill:
+	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	${DOMAIN}/admin/getskill/7
+
+curl-admin-addskill:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request POST \
+	--data '{"skill":"IT"}' \
+	${DOMAIN}/admin/addskill
+
+curl-admin-updateskill:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request PUT \
+	--data '{"skillID": 8, "skill": "English"}' \
+	${DOMAIN}/admin/updateskill
+
+curl-admin-removeskill:
+	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request DELETE \
+	${DOMAIN}/admin/removeskill/7
+
+
 
 deploy:
 	git push heroku master

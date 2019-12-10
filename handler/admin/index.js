@@ -8,6 +8,19 @@ const role = 2110;
 
 module.exports = {
   getSkills: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
+      return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
     skill.getSkills(req.params.offset, req.params.limit, (err, data) => {
       if (err) {
         return res.status(400).json({
@@ -22,36 +35,132 @@ module.exports = {
       });
     });
   },
-  addSkill: (req, res) => {
-    skill.addSkills(req.params.skills, (err, data) => {
+  getSkill: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
+      return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
+    var id = req.params.id;
+    if (!id) {
+      return res.status(400).json({
+        code: -1,
+        message: "ID is incorrect"
+      });
+    }
+    skill.getSkill(id, (err, data) => {
       if (err || !data) {
         return res.status(400).json({
           code: -1,
-          message: !data ? "Add failed" : err
+          message: err
         });
       }
+      return res.status(200).json({
+        code: 1,
+        message: "OK",
+        data: data[0]
+      });
+    });
+  },
+  addSkill: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
       return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
+    var skillStr = req.body.skill;
+    if (!skillStr) {
+      return res.status(400).json({
+        code: -1,
+        message: "Skill is empty!"
+      });
+    }
+    skill.addSkill(skillStr, (err, data) => {
+      if (err || !data) {
+        return res.status(400).json({
+          code: -1,
+          message: err
+        });
+      }
+      return res.status(200).json({
         code: 1,
         message: "OK"
       });
     });
   },
   updateSkill: (req, res) => {
-    skill.updateSkill(req.body.id, req.body.skill, (err, data) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
+      return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
+    var id = req.body.skillID;
+    var skillStr = req.body.skill;
+    if (!id || !skillStr) {
+      return res.status(400).json({
+        code: -1,
+        message: "Skill ID or skill name is empty"
+      });
+    }
+    skill.updateSkill(id, skillStr, (err, data) => {
       if (err || !data) {
         return res.status(400).json({
           code: -1,
           message: !data ? "Update failed" : err
         });
       }
-      return res.status(400).json({
+      return res.status(200).json({
         code: 1,
         message: "OK"
       });
     });
   },
   removeSkill: (req, res) => {
-    skill.removeSkill(req.params.id, (err, ok) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
+      return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
+    var skillID = req.params.id;
+    if (!skillID) {
+      return res.status(400).json({
+        code: -1,
+        message: "Empty skill ID"
+      });
+    }
+    skill.removeSkill(skillID, (err, ok) => {
       if (err || !ok) {
         return res.status(400).json({
           code: -1,
@@ -87,6 +196,41 @@ module.exports = {
       });
     }
     user.getListUser(offset, limit, (err, data) => {
+      if (err || !data) {
+        return res.status(400).json({
+          code: -1,
+          message: err
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK",
+        data
+      });
+    });
+  },
+  getUserProfile: (req, res) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.status(401).json({
+        code: -1,
+        message: "Unauthenticated"
+      });
+    }
+    if (payload.role != role) {
+      return res.status(400).json({
+        code: -1,
+        message: "Admin only"
+      });
+    }
+    var id = req.params.id;
+    if (!id) {
+      return res.status(400).json({
+        code: 1,
+        message: "User ID is incorrect"
+      });
+    }
+    user.getUserProfile(id, (err, data) => {
       if (err || !data) {
         return res.status(400).json({
           code: -1,

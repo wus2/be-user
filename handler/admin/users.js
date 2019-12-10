@@ -25,20 +25,17 @@ class ManageUser {
 
   getUserProfile(userID, callback) {
     if (!userID) {
-      callback(new Error("Empty userID"));
+      return callback(new Error("Empty userID"));
     }
     var sql = `select * from ${userTable} where id = ${userID}`;
     this.db
       .load(sql)
       .then(data => {
-        if (data) {
-          callback(null, data);
-        }
-        callback(new Error("get user profile failed"));
+        return callback(null, data);
       })
       .catch(err => {
         console.log("[ManageUser][getUserProfile][err]", err);
-        callback(new Error("get user profile failed"));
+        return callback(new Error("get user profile failed"));
       });
   }
 }

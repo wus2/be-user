@@ -52,6 +52,27 @@ class SkillTags {
     }
   }
 
+  addSkill(skill, callback) {
+    if (!skill) {
+      return callback(new Error("Skill is empty!"));
+    }
+    var entity = {
+      tag: skill
+    };
+    this.db
+      .add(table, entity)
+      .then(data => {
+        if (data) {
+          this.memCache.add(data);
+        }
+        return callback(null, data);
+      })
+      .catch(err => {
+        console.log("[SkillTags][updateSkill][err]", err);
+        return callback(new Error("Add failed"));
+      });
+  }
+
   /**
    *
    * @param {int} offset
@@ -94,12 +115,34 @@ class SkillTags {
   /**
    *
    * @param {int} id
+   * @param {function} callback
+   */
+  getSkill(id, callback) {
+    if (id < 0) {
+      return callback(new Error("ID is incorrect"));
+    }
+
+    var sql = `select * from ${table} where id = ${id}`;
+    this.db
+      .load(sql)
+      .then(data => {
+        return callback(null, data);
+      })
+      .catch(err => {
+        console.log("[SkillTags][getSkills][err]", err);
+        return callback(new Error("load from db error"));
+      });
+  }
+
+  /**
+   *
+   * @param {int} id
    * @param {string} skill
    * @param {function} callback
    */
   updateSkill(id, skill, callback) {
     if (!skill || !id) {
-      callback(new Error("Empty skill"));
+      return callback(new Error("Empty skill"));
     }
     var entity = {
       id: id,
@@ -109,13 +152,13 @@ class SkillTags {
       .update(table, "id", entity)
       .then(data => {
         if (data) {
-          callback(null, data);
+          return callback(null, data);
         }
-        callback(new Error("Update failed"));
+        return callback(new Error("Update failed"));
       })
       .catch(err => {
         console.log("[SkillTags][updateSkill][err]", err);
-        callback(new Error("Update failed"));
+        return callback(new Error("Update failed"));
       });
   }
 
@@ -149,16 +192,19 @@ class SkillTags {
    */
   removeSkill(id, callback) {
     if (!id) {
-      callback(new Error("undefined skill"));
+      return callback(new Error("undefined skill"));
     }
     this.db
       .delete(table, "id", id)
       .then(data => {
-        callback(null, true);
+        if (data < 1) {
+          return callback(null, false);
+        }
+        return callback(null, true);
       })
       .catch(err => {
         console.log("[SkillTags][removeSkill][err]", err);
-        callback(err);
+        return callback(err);
       });
   }
 }

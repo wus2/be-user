@@ -15,26 +15,41 @@ router.get(
   }
 );
 
+router.get(
+  "/getskill/:id",
+  (req, res, next) => {
+    auth.authen(req, res);
+    next();
+  },
+  (req, res) => {
+    handler.getSkill(req, res);
+  }
+);
+
 router.post(
   "/addskill",
   (req, res, next) => {
     auth.authen(req, res);
     next();
   },
-  (req, res) => {}
+  (req, res) => {
+    handler.addSkill(req, res);
+  }
 );
 
-router.post(
+router.put(
   "/updateskill",
   (req, res, next) => {
     auth.authen(req, res);
     next();
   },
-  (req, res) => {}
+  (req, res) => {
+    handler.updateSkill(req, res);
+  }
 );
 
 router.delete(
-  "/remove/:id",
+  "/removeskill/:id",
   (req, res, next) => {
     auth.authen(req, res);
     next();
@@ -52,6 +67,17 @@ router.get(
   },
   (req, res) => {
     handler.getUsers(req, res);
+  }
+);
+
+router.get(
+  "/user/:id",
+  (req, res, next) => {
+    auth.authen(req, res);
+    next();
+  },
+  (req, res) => {
+    handler.getUserProfile(req, res);
   }
 );
 
