@@ -42,11 +42,11 @@ module.exports = {
     var entity = {
       id: payload.id,
       address: req.body.address,
+      district: req.body.district,
       name: req.body.name,
       phone: req.body.phone,
       dob: req.body.dob,
-      gender: req.body.gender,
-      avatar: req.body.avatar
+      gender: req.body.gender
     };
 
     models

@@ -9,6 +9,7 @@ exports.register = (req, res) => {
     password: req.body.password,
     email: req.body.email,
     address: req.body.address,
+    district: req.body.district,
     name: req.body.name,
     phone: req.body.phone,
     dob: req.body.dob,
