@@ -104,5 +104,16 @@ module.exports = {
         data
       });
     });
+  },
+
+  filterTutor: (req, res) => {
+    var offset = req.params.offset;
+    var limit = req.params.limit;
+    if (!offset || !limit) {
+      return res.json({
+        code: -1,
+        message: "Offset or limit is incorrect"
+      });
+    }
   }
 };

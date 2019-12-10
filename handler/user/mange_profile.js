@@ -39,6 +39,7 @@ module.exports = {
         message: "Authenticate failed"
       });
     }
+    console.log("============DATA", req.body.district, req.body.price);
     var entity = {
       id: payload.id,
       address: req.body.address,

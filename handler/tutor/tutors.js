@@ -112,7 +112,7 @@ class Tutor {
 
   filterTutor(district, minPrice, maxPrice, skill, offset, limit, callback) {
     if (offset < 0 || limit < 0) {
-      return callback();
+      return callback(new Error("Offset or limit are incorrect"));
     }
     var sql = `select * from ${table} where role = 1`;
     if (!district) {
@@ -130,6 +130,17 @@ class Tutor {
     if (!skill) {
       sql += ` and skill_tags like ${skill}`;
     }
+    sql += ` limit ${offset}, ${limit}`;
+
+    this.db
+      .load(sql)
+      .then(data => {
+        return callback(null, data);
+      })
+      .catch(err => {
+        console.log("[filterTutor][err]", err);
+        return callback(new Error("Get failed"));
+      });
   }
 }
 
