@@ -104,8 +104,58 @@ Backend User Manage
     + Header: 
       'Accept: application/json'
 5. API-ADMIN:
+  - Get list skills:
+    + Path: /admin/skills/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+  - Get skill:
+    + Path: /admin/getskill/:skillID
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Get add skill:
+    + Path: /admin/addskill
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+    + Body: 
+      {
+      "skill":"string",
+      "desc":"string",
+      "image":"string"
+      }
+- Get update skill:
+    + Path: /admin/updateskill
+    + Method: PUT
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+    + Body: 
+      {
+      "skillID":int,
+      "skill":"string",
+      "desc":"string",
+      "image":"string"
+      }
+- Get add skill:
+    + Path: /admin/removeskill/:skillID
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
   - Get list user:
     + Path: /admin/getlist/offset/:offset/limit/:limit
     + Method: GET
     + Header: 
       'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Get user profile:
+    + Path: /admin/user/:uid
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
