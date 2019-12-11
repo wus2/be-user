@@ -71,6 +71,10 @@ curl-admin-userprofile:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	${DOMAIN}/admin/user/35
 
+curl-admin-skills:
+	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	${DOMAIN}/admin/skills/offset/0/limit/4
+
 curl-admin-getskill:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	${DOMAIN}/admin/getskill/7

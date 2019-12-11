@@ -81,14 +81,15 @@ class SkillTags {
    */
   getSkills(offset, limit, callback) {
     if (offset < 0 || limit < 0) {
-      callback(new Error("offset and limit is error"));
+      return callback(new Error("offset and limit is error"));
     }
 
     var skills = [];
     var isMiss = false;
+    var isCallback = false
     for (var i = offset; i < offset + limit; i++) {
-      var key = prefix + i;
-      var skill = this.memCache.get(key);
+      // TODO: get in cache first
+      var skill
       if (!skill) {
         isMiss = true; // ensure data return from database
         var sql = `select * from ${table} limit ${offset}, ${limit}`;
@@ -96,11 +97,16 @@ class SkillTags {
           .load(sql)
           .then(data => {
             // TODO: this will callback n = limit - offset times
-            callback(null, data);
+            // this temporary solution to resolve this issue
+            if (isCallback) {
+              return
+            }
+            isCallback = true
+            return callback(null, data);
           })
           .catch(err => {
             console.log("[SkillTags][getSkills][err]", err);
-            callback(new Error("load from db error"));
+            return callback(new Error("load from db error"));
           });
       }
       if (!isMiss) {
@@ -108,7 +114,7 @@ class SkillTags {
       }
     }
     if (!isMiss) {
-      callback(null, skills);
+      return callback(null, skills);
     }
   }
 
