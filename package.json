@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "mocha -r ts-node/register src/**/test.ts"
   },
   "dependencies": {
     "config": "^3.2.4",
@@ -26,5 +27,15 @@
     "passport-local": "^1.0.0",
     "passport-oauth2": "^1.5.0",
     "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/config": "0.0.36",
+    "@types/mocha": "^5.2.7",
+    "@types/mysql": "^2.15.8",
+    "chai": "^4.2.0",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.3"
   }
 }
