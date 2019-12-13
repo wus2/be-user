@@ -9,6 +9,7 @@ var config = require("config");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var tutorRouter = require("./routes/tutor");
+var tuteeRouter = require("./routes/tutee");
 var adminRouter = require("./routes/admin");
 
 // require passport middleware
@@ -36,6 +37,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/tutor", tutorRouter);
+app.use("/tutee", tuteeRouter);
 app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler

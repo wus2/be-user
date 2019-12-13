@@ -1,4 +1,4 @@
-var mysql = require("../../plugins/database/mysql");
+var mysql = require("../../plugins/database/mysql_ex");
 
 const prefix = "skill_tags_";
 const table = "skill_tags";

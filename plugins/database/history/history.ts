@@ -1,42 +1,49 @@
-// import mysql, { IMysql } from "../mysql";
+import mysql, { IMysql } from "../mysql";
 
-// export interface Model {
-//   id?: number;
-//   uid?: number;
-//   desc?: string;
-//   start_time?: number;
-//   amount?: number;
-// }
+export interface Model {
+  id?: number;
+  uid?: number;
+  desc?: string;
+  start_time?: number;
+  amount?: number;
+}
 
-// export class HistoryDB {
-//   db: IMysql;
-//   tableName: string;
-//   constructor() {
-//     this.db =  mysql;
-//     this.tableName = "history";
-//   }
+export interface IHistoryDB {
+  db: IMysql;
+  tableName: string;
+  setHistory(history: Model, callback: Function): void;
+  getHistory(hisID: number, callback: Function): void;
+}
 
-//   setHistory(history: Model, callback: Function) {
-//     this.db
-//       .add(this.tableName, history)
-//       .then(data => {
-//         callback(null, data);
-//       })
-//       .catch(err => {
-//         console.log("[HistoryDB][setHistory][err]", err);
-//         callback(new Error("Set history failed"));
-//       });
-//   }
+export class HistoryDB implements IHistoryDB {
+  db: IMysql;
+  tableName: string;
+  constructor() {
+    this.db = mysql;
+    this.tableName = "history";
+  }
 
-//   getHistory(hisID: number, callback: Function) {
-//     this.db
-//       .get(this.tableName, "id", hisID)
-//       .then(data => {
-//         callback(null, data);
-//       })
-//       .catch(err => {
-//         console.log("[HistoryDB][getHistory][err]", err);
-//         callback(new Error("Set history failed"));
-//       });
-//   }
-// }
+  setHistory(history: Model, callback: Function) {
+    this.db
+      .add(this.tableName, history)
+      .then(data => {
+        callback(null, data);
+      })
+      .catch(err => {
+        console.log("[HistoryDB][setHistory][err]", err);
+        callback(new Error("Set history failed"));
+      });
+  }
+
+  getHistory(hisID: number, callback: Function) {
+    this.db
+      .get(this.tableName, "id", hisID)
+      .then(data => {
+        callback(null, data);
+      })
+      .catch(err => {
+        console.log("[HistoryDB][getHistory][err]", err);
+        callback(new Error("Set history failed"));
+      });
+  }
+}

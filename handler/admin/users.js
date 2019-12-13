@@ -1,4 +1,4 @@
-var mysql = require("../../plugins/database/mysql");
+var mysql = require("../../plugins/database/mysql_ex");
 
 var userTable = "user";
 

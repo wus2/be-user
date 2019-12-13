@@ -4,6 +4,7 @@ import config from "config";
 export interface IMysql {
   pool: mysql.Pool;
 
+  ping(): string;
   load(sql: string): Promise<Function>;
   add(tableName: string, entity: any): Promise<Function>;
   get(tableName: string, idField: string, id: number): Promise<Function>;
@@ -11,11 +12,15 @@ export interface IMysql {
   delete(tableName: string, idField: string, id: number): Promise<Function>;
 }
 
-export default class Mysql implements IMysql {
+class Mysql implements IMysql {
   pool: mysql.Pool;
 
   constructor() {
     this.pool = mysql.createPool(config.get("mysql-dev"));
+  }
+
+  ping(): string {
+    return "Success";
   }
 
   load(sql: string): Promise<Function> {
@@ -145,3 +150,5 @@ export default class Mysql implements IMysql {
     });
   }
 }
+
+export default new Mysql();

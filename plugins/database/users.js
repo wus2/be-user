@@ -1,4 +1,4 @@
-var db = require("./mysql");
+var db = require("./mysql_ex");
 
 module.exports = {
   get: (username, password) => {
