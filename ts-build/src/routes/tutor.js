@@ -39,6 +39,11 @@ var TutorRoute = /** @class */ (function () {
         router.get("/getprofile/:tutorID", function (req, res) {
             _this.handler.getProfile(req, res);
         });
+        router.get("/getallskills", function (req, res, next) {
+            authen_1.default.forTutor(req, res, next);
+        }, function (req, res) {
+            _this.handler.getAllSkill(req, res);
+        });
         router.get("/filtertutor/offset/:offset/limit/:limit", function (req, res) {
             _this.handler.filterTutor(req, res);
         });

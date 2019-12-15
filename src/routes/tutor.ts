@@ -49,6 +49,16 @@ export class TutorRoute {
       this.handler.getProfile(req, res);
     });
 
+    router.get(
+      "/getallskills",
+      (req, res, next) => {
+        Authenticate.forTutor(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getAllSkill(req, res);
+      }
+    );
+
     router.get("/filtertutor/offset/:offset/limit/:limit", (req, res) => {
       this.handler.filterTutor(req, res);
     });

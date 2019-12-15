@@ -28,10 +28,14 @@ export default class SkillDB implements ISkillDB {
   }
 
   warmUp(limit: number, callback: Function) {
+    var sql = `select * from ${this.tableName}`;
+    if (limit != Infinity) {
+      sql += ` limit ${limit}`;
+    }
     this.db
-      .load(`select * from ${this.tableName} limit ${limit}`)
+      .load(sql)
       .then((data: any) => {
-        if (data) {
+        if (data && data.length > 0) {
           return callback(null, data);
         }
         return callback(new Error("Skill is empty"));

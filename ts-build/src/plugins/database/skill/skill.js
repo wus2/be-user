@@ -10,10 +10,14 @@ var SkillDB = /** @class */ (function () {
         this.tableName = "skill_tags";
     }
     SkillDB.prototype.warmUp = function (limit, callback) {
+        var sql = "select * from " + this.tableName;
+        if (limit != Infinity) {
+            sql += " limit " + limit;
+        }
         this.db
-            .load("select * from " + this.tableName + " limit " + limit)
+            .load(sql)
             .then(function (data) {
-            if (data) {
+            if (data && data.length > 0) {
                 return callback(null, data);
             }
             return callback(new Error("Skill is empty"));

@@ -1,7 +1,7 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzYzMzk2Mjl9.xP4iB5gMxGuUWIxfaSEt6glzytIFxeGPqUk7SPJy3e4"
 TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
-DOMAIN = https://wusbeuser.herokuapp.com
-DOMAIN-x = http://localhost:55210
+DOMAIN-x = https://wusbeuser.herokuapp.com
+DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -57,6 +57,11 @@ curl-tutor-profile:
 curl-tutor-getlist:
 	curl ${DOMAIN}/tutor/getlist/offset/1/limit/2
 
+curl-tutor-getallskills:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request GET \
+   ${DOMAIN}/tutor/getallskills
+
 curl-tutor-filter:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request GET \
@@ -99,8 +104,13 @@ curl-admin-removeskill:
 build:
 	tsc
 
-deploy:
+sync: 
+	git add .
+	git commit -m"compile to js"
 	git push heroku master
+
+deploy:
+	build sync
 
 logs: 
 	heroku logs --tail

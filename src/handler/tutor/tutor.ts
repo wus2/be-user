@@ -1,13 +1,14 @@
 import { Request, Response, NextFunction } from "express";
 import TutorDB, { Model, ITutorDB } from "../../plugins/database/tutor/tutor";
+import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
 
 export interface ITutorHandler {
   updateSkills(req: Request, res: Response): void;
   getListTutors(req: Request, res: Response): void;
   updateIntro(req: Request, res: Response): void;
   getProfile(req: Request, res: Response): void;
+  getAllSkill(req: Request, res: Response): void;
   filterTutor(req: Request, res: Response): void;
-  getListHistory(req: Request, res: Response): void;
   getListHistory(req: Request, res: Response): void;
   chat(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
@@ -15,9 +16,13 @@ export interface ITutorHandler {
 
 export class TutorHandler implements ITutorHandler {
   tutorDB: ITutorDB;
+  skillDB: ISkillDB;
+  memCache: Map<string, any>;
 
   constructor() {
     this.tutorDB = new TutorDB();
+    this.skillDB = new SkillDB();
+    this.memCache = new Map<string, any>();
   }
 
   updateSkills(req: Request, res: Response) {
@@ -99,6 +104,25 @@ export class TutorHandler implements ITutorHandler {
       });
     }
     this.tutorDB.getProfile(tutorID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      if (data[0].skill_tags) {
+        data[0].skill_tags = JSON.parse(data[0].skill_tags)
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK",
+        data: data[0]
+      });
+    });
+  }
+
+  getAllSkill(req: Request, res: Response) {
+    this.skillDB.warmUp(Infinity, (err: Error, data: any) => {
       if (err) {
         return res.json({
           code: -1,
