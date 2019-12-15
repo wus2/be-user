@@ -1,5 +1,12 @@
 import mysql, { IMysql } from "../mysql";
 
+export enum Role {
+  User = 0,
+  Tutor = 1,
+  Tutee = 2,
+  Admin = 3
+}
+
 export interface Model {
   id?: number;
   username?: string;

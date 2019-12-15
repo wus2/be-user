@@ -1,6 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import TutorDB, { Model, ITutorDB } from "../../plugins/database/tutor/tutor";
 import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
+import {
+  IContractDB,
+  ContractDB,
+  ContractModel,
+  Status
+} from "../../plugins/database/contract/contract";
 
 export interface ITutorHandler {
   updateSkills(req: Request, res: Response): void;
@@ -12,16 +18,19 @@ export interface ITutorHandler {
   getListHistory(req: Request, res: Response): void;
   chat(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
+  approveContract(req: Request, res: Response): void;
 }
 
 export class TutorHandler implements ITutorHandler {
   tutorDB: ITutorDB;
   skillDB: ISkillDB;
+  contractDB: IContractDB;
   memCache: Map<string, any>;
 
   constructor() {
     this.tutorDB = new TutorDB();
     this.skillDB = new SkillDB();
+    this.contractDB = new ContractDB();
     this.memCache = new Map<string, any>();
   }
 
@@ -188,4 +197,81 @@ export class TutorHandler implements ITutorHandler {
   chat(req: Request, res: Response) {}
 
   renevueStatics(req: Request, res: Response) {}
+
+  getDetailContract(req: Request, res: Response) {
+    var contractID = Number(req.params.contractID);
+    if (contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK",
+        data: data[0]
+      });
+    });
+  }
+
+  approveContract(req: Request, res: Response) {
+    var contractID = Number(req.params.contractID);
+    if (contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      var contract = data[0] as ContractModel;
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is undefined"
+        });
+      }
+      if (contract.tutor_id && payload.id != contract.tutor_id) {
+        return res.json({
+          code: -1,
+          message: "This is not your contract"
+        });
+      }
+      var now = new Date().getTime();
+      if (contract.create_time && now > contract.create_time + 864e5) {
+        // 864e5 is 2 date in timestamp
+        return res.json({
+          code: -1,
+          message: "Contract is expired"
+        });
+      }
+      contract.contract_status = Status.Approved;
+      this.contractDB.updateContract(contract, (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        // TODO: notify to tutee and set to history
+        return res.status(200).json({
+          code: 1,
+          message: "OK"
+        });
+      });
+    });
+  }
 }
