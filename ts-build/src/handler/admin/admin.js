@@ -48,6 +48,9 @@ var AdminHandler = /** @class */ (function () {
                     message: err.toString()
                 });
             }
+            if (data[0].skill_tags) {
+                data[0].skill_tags = JSON.parse(data[0].skill_tags);
+            }
             return res.status(200).json({
                 code: 1,
                 message: "OK",

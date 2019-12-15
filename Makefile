@@ -109,8 +109,7 @@ sync:
 	git commit -m"compile to js"
 	git push heroku master
 
-deploy:
-	build sync
+deploy: build sync
 
 logs: 
 	heroku logs --tail
