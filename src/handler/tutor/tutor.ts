@@ -64,6 +64,11 @@ export class TutorHandler implements ITutorHandler {
           message: err.toString()
         });
       }
+      data.forEach((tutor: any) => {
+        if (tutor.skill_tags) {
+          tutor.skill_tags = JSON.parse(tutor.skill_tags);
+        }
+      });
       return res.status(200).json({
         code: 1,
         message: "OK",
@@ -111,7 +116,7 @@ export class TutorHandler implements ITutorHandler {
         });
       }
       if (data[0].skill_tags) {
-        data[0].skill_tags = JSON.parse(data[0].skill_tags)
+        data[0].skill_tags = JSON.parse(data[0].skill_tags);
       }
       return res.status(200).json({
         code: 1,
@@ -164,6 +169,11 @@ export class TutorHandler implements ITutorHandler {
             message: err.toString()
           });
         }
+        data.forEach((tutor: any) => {
+          if (tutor.skill_tags) {
+            tutor.skill_tags = JSON.parse(tutor.skill_tags);
+          }
+        });
         return res.status(200).json({
           code: 1,
           message: "OK",
