@@ -49,6 +49,11 @@ var TutorHandler = /** @class */ (function () {
                     message: err.toString()
                 });
             }
+            data.forEach(function (tutor) {
+                if (tutor.skill_tags) {
+                    tutor.skill_tags = JSON.parse(tutor.skill_tags);
+                }
+            });
             return res.status(200).json({
                 code: 1,
                 message: "OK",
@@ -138,6 +143,11 @@ var TutorHandler = /** @class */ (function () {
                     message: err.toString()
                 });
             }
+            data.forEach(function (tutor) {
+                if (tutor.skill_tags) {
+                    tutor.skill_tags = JSON.parse(tutor.skill_tags);
+                }
+            });
             return res.status(200).json({
                 code: 1,
                 message: "OK",
