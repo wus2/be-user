@@ -1,4 +1,4 @@
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzU5MDY0MTV9.8eOwWllg2lGwzm0Ju8_XPy0ro2-vPDHRdsC3o9YMHs8"
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzYzMzk2Mjl9.xP4iB5gMxGuUWIxfaSEt6glzytIFxeGPqUk7SPJy3e4"
 TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
 DOMAIN-x = "https://wusbeuser.herokuapp.com"
 DOMAIN = http://localhost:55210
@@ -6,47 +6,47 @@ DOMAIN = http://localhost:55210
 curl-register:
 	curl --header "Content-Type: application/json" \
 	--request POST \
-  	--data '{"username":"anvh2","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
-  	${DOMAIN}/users/register
+  	--data '{"username":"anvh4","password":"123", "email":"anvo.ht209@gmail.com","address":"TPHCM","name":"An","phone":"123456","dob":"1998-10-21","cardID":"1234567","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar","role":"1"}' \
+  	${DOMAIN}/user/register
 
 curl-login:
 	curl --header "Content-Type: application/json" \
 	--request POST \
   	--data '{"username":"anvh2","password":"123"}' \
-  	${DOMAIN}/users/login
+  	${DOMAIN}/user/login
 
 curl-profile:
 	curl -H 'Accept: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request GET \
-	${DOMAIN}/users/profile
+	${DOMAIN}/user/profile
 
 curl-update-profile: 
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
 	--data '{"address":"Nha Be - TPHCM","name":"Vo Hoang An","phone":"123456","dob":"1998-10-21","gender":"Nam","avatar":"http://localhost:55210/public/default-avatar"}' \
-   ${DOMAIN}/users/updateprofile
+   ${DOMAIN}/user/updateprofile
 
 curl-update-password: 
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
 	--data '{"password":"123", "email":"anvo.ht209@gmail.com"}' \
-   ${DOMAIN}/users/updatepassword
+   ${DOMAIN}/user/updatepassword
 
 curl-update-avatar:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request POST \
-   ${DOMAIN}/users/updateavatar
+   ${DOMAIN}/user/updateavatar
 
 curl-tutor-update-skill:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request PUT \
-	--data '{"skills":["english", "math"]}' \
+	--data '{"skills":["IT"]}' \
    ${DOMAIN}/tutor/updateskills
 
 curl-tutor-update-intro:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request PUT \
-	--data '{"introDesc":"Toi day Toan, Anh, Ly va Hoa"}' \
+	--data '{"introDesc":"Toi day Toan va Hoa"}' \
    ${DOMAIN}/tutor/updateintro
 
 curl-tutor-profile: 
@@ -63,7 +63,7 @@ curl-tutor-filter:
 	--data '{"district":"Quận 8"}' \
    ${DOMAIN}/tutor/filtertutor/offset/0/limit/2
 
-curl-admin-getusers:
+curl-admin-getuser:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	${DOMAIN}/admin/getusers/offset/1/limit/2
 
@@ -77,18 +77,18 @@ curl-admin-skills:
 
 curl-admin-getskill:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
-	${DOMAIN}/admin/getskill/7
+	${DOMAIN}/admin/getskill/8
 
 curl-admin-addskill:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	--request POST \
-	--data '{"skill":"IT"}' \
+	--data '{"skill":"Chemistry"}' \
 	${DOMAIN}/admin/addskill
 
 curl-admin-updateskill:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
 	--request PUT \
-	--data '{"skillID": 8, "skill": "English"}' \
+	--data '{"skillID": 22, "skill": "France"}' \
 	${DOMAIN}/admin/updateskill
 
 curl-admin-removeskill:

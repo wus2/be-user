@@ -1,1 +1,0 @@
-const tableUser = "user";

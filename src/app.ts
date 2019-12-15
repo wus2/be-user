@@ -5,6 +5,11 @@ import logger from "morgan";
 import * as path from "path";
 import errorHandler = require("errorhandler");
 import methodOverride from "method-override";
+import cors from "cors";
+
+import { UserRoute } from "./routes/user";
+import { AdminRoute } from "./routes/admin";
+import { TutorRoute } from "./routes/tutor";
 
 /**
  * The server.
@@ -33,16 +38,8 @@ export class Server {
    * @constructor
    */
   constructor() {
-    //create expressjs application
     this.app = express();
-
-    //configure application
     this.config();
-
-    //add routes
-    this.routes();
-
-    //add api
     this.api();
   }
 
@@ -59,7 +56,16 @@ export class Server {
    * @method api
    */
   public api() {
-    //empty for now
+    let userRouter = express.Router();
+    new UserRoute().create(userRouter);
+    let adminRouter = express.Router();
+    new AdminRoute().create(adminRouter);
+    let tutorRoute = express.Router();
+    new TutorRoute().create(tutorRoute);
+
+    this.app.use("/user", userRouter);
+    this.app.use("/admin", adminRouter);
+    this.app.use("/tutor", tutorRoute);
   }
 
   /**
@@ -69,31 +75,18 @@ export class Server {
    * @method config
    */
   public config() {
-    //add static paths
     this.app.use(express.static(path.join(__dirname, "public")));
-
-    //configure pug
-    this.app.set("views", path.join(__dirname, "views"));
-    this.app.set("view engine", "pug");
-
-    //use logger middlware
     this.app.use(logger("dev"));
-
-    //use json form parser middlware
     this.app.use(bodyParser.json());
-
-    //use query string parser middlware
     this.app.use(
       bodyParser.urlencoded({
         extended: true
       })
     );
-
-    //use cookie parser middleware
     this.app.use(cookieParser("SECRET_GOES_HERE"));
-
-    //use override middlware
     this.app.use(methodOverride());
+    this.app.use(cors());
+    require("./plugins/middlewares/passport");
 
     //catch 404 and forward to error handler
     this.app.use(function(
@@ -105,23 +98,6 @@ export class Server {
       err.status = 404;
       next(err);
     });
-
-    //error handling
     this.app.use(errorHandler());
   }
-
-  /**
-   * Create router
-   *
-   * @class Server
-   * @method api
-   */
-  public routes() {
-    //empty for now
-    this.app.get("/", (req, res, next) => {
-      res.send("OK");
-    });
-  }
 }
-
-new Server().Run(8080);
