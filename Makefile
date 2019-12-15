@@ -1,7 +1,7 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzYzMzk2Mjl9.xP4iB5gMxGuUWIxfaSEt6glzytIFxeGPqUk7SPJy3e4"
 TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
-DOMAIN-x = "https://wusbeuser.herokuapp.com"
-DOMAIN = http://localhost:55210
+DOMAIN = https://wusbeuser.herokuapp.com
+DOMAIN-x = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -96,7 +96,8 @@ curl-admin-removeskill:
 	--request DELETE \
 	${DOMAIN}/admin/removeskill/7
 
-
+build:
+	tsc
 
 deploy:
 	git push heroku master
