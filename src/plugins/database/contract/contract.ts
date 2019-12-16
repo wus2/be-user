@@ -1,11 +1,13 @@
 import mysql, { IMysql } from "../mysql";
+import { Role } from "../user/user";
 
-export enum Status {
+export enum ContractStatus {
   Draft = 0,
   Pending = 1,
   Approved = 2,
   Closed = 3,
-  Expired = 4
+  Expired = 4,
+  Finished = 5
 }
 
 export interface ContractModel {
@@ -18,6 +20,7 @@ export interface ContractModel {
   rent_price?: number;
   create_time?: number;
   contract_status?: number;
+  stars?: number;
 }
 
 export interface IContractDB {
@@ -26,6 +29,13 @@ export interface IContractDB {
   setContract(Contract: ContractModel, callback: Function): void;
   getContract(conID: number, callback: Function): void;
   updateContract(contract: ContractModel, callback: Function): void;
+  getListContract(
+    userID: number,
+    role: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -80,4 +90,45 @@ export class ContractDB implements IContractDB {
         return callback(new Error("Update database failed"));
       });
   }
+
+  getListContract(
+    userID: number,
+    role: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ) {
+    if (offset < 0 || limit < 0) {
+      return callback(new Error("Offset or limit is incorrect"));
+    }
+    if (userID < 0 || !isValidRole(role)) {
+      return callback(new Error("UserID or role is invalid"));
+    }
+    var sql = `select * from ${this.tableName}`;
+    if (role == Role.Tutor) {
+      sql += ` where tutor_id = ${userID}`;
+    } else if (role == Role.Tutor) {
+      sql += ` where tutee_id = ${userID}`;
+    }
+    sql += ` limit ${offset}, ${limit}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (!data) {
+          return callback(new Error("Get list contract is in correct"));
+        }
+        if (data.lenght < 0) {
+          return callback(new Error("List contract is empty"));
+        }
+        return callback(null, data);
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getListContract][err]", err);
+        return callback(new Error("Get list contract is incorrect"));
+      });
+  }
+}
+
+function isValidRole(role: number) {
+  return !(role != Role.Tutee && role != Role.Tutor);
 }

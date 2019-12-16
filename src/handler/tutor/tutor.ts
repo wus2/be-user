@@ -5,7 +5,7 @@ import {
   IContractDB,
   ContractDB,
   ContractModel,
-  Status
+  ContractStatus
 } from "../../plugins/database/contract/contract";
 
 export interface ITutorHandler {
@@ -15,7 +15,7 @@ export interface ITutorHandler {
   getProfile(req: Request, res: Response): void;
   getAllSkill(req: Request, res: Response): void;
   filterTutor(req: Request, res: Response): void;
-  getListHistory(req: Request, res: Response): void;
+  getLisContracttHistory(req: Request, res: Response): void;
   chat(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
   approveContract(req: Request, res: Response): void;
@@ -192,7 +192,42 @@ export class TutorHandler implements ITutorHandler {
     );
   }
 
-  getListHistory(req: Request, res: Response) {}
+  getLisContracttHistory(req: Request, res: Response) {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "User payload is invalid"
+      });
+    }
+    var offset = Number(req.params.offset);
+    var limit = Number(req.params.limit);
+    if (offset < 0 || limit < 0) {
+      return res.json({
+        code: -1,
+        message: "Offset or limit is incorrect"
+      });
+    }
+    this.contractDB.getListContract(
+      payload.id,
+      payload.role,
+      offset,
+      limit,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data
+        });
+      }
+    );
+  }
 
   chat(req: Request, res: Response) {}
 
@@ -258,7 +293,7 @@ export class TutorHandler implements ITutorHandler {
           message: "Contract is expired"
         });
       }
-      contract.contract_status = Status.Approved;
+      contract.contract_status = ContractStatus.Approved;
       this.contractDB.updateContract(contract, (err: Error, data: any) => {
         if (err) {
           return res.json({
