@@ -3,8 +3,14 @@ import passport from "passport";
 import jwt, { Secret } from "jsonwebtoken";
 import config from "config";
 import { UserHandler } from "./user";
+import { UserModel, AccountStatus } from "../../plugins/database/user/user";
 
-export function Login(this: UserHandler, req: Request, res: Response, next: NextFunction) {
+export function Login(
+  this: UserHandler,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   passport.authenticate(
     "local",
     { session: false },
@@ -13,6 +19,19 @@ export function Login(this: UserHandler, req: Request, res: Response, next: Next
         return res.json({
           code: 400,
           message: info ? info.message : "Login failed"
+        });
+      }
+      var data = user[0] as UserModel;
+      if (!user) {
+        return res.json({
+          code: -1,
+          message: "User is incorrect"
+        });
+      }
+      if (data.account_status == AccountStatus.Block) {
+        return res.json({
+          code: -1,
+          message: "Account is blocked"
         });
       }
       req.login(user, { session: false }, (err: Error) => {
@@ -26,9 +45,9 @@ export function Login(this: UserHandler, req: Request, res: Response, next: Next
 
         var key = config.get("key_jwt");
         const payload = {
-          id: user[0].id,
-          username: user[0].username,
-          role: user[0].role
+          id: data.id,
+          username: data.username,
+          role: data.role
         };
         var token = jwt.sign(payload, key as Secret);
         if (!token) {
@@ -42,9 +61,9 @@ export function Login(this: UserHandler, req: Request, res: Response, next: Next
           message: "OK",
           user: {
             ...payload,
-            avatar: user[0].avatar,
-            name: user[0].name,
-            role: user[0].role
+            avatar:data.avatar,
+            name: data.name,
+            role: data.role
           },
           token
         });

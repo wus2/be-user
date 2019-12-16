@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserHandler } from "./user";
-import { Model } from "../../plugins/database/user/user";
+import { UserModel } from "../../plugins/database/user/user";
 
 import config from "config";
 
@@ -23,7 +23,7 @@ export function ActivateAccount(
   }
   this.cache.delete(key);
 
-  var model = value as Model;
+  var model = value as UserModel;
   if (!model) {
     console.log("[ActivateAccount][err] cast to model error", value);
     return res.json({
@@ -56,7 +56,7 @@ export function ConfirmChange(this: UserHandler, req: Request, res: Response) {
   }
   this.cache.delete(key);
 
-  var model = value as Model;
+  var model = value as UserModel;
   if (!model) {
     console.log("[ConfirmChange][err] cast to model error", value);
     return res.json({

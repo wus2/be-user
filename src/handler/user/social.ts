@@ -9,7 +9,7 @@ import passport from "passport";
 import jwt, { Secret } from "jsonwebtoken";
 import config from "config";
 import { UserHandler } from "./user";
-import { Model } from "../../plugins/database/user/user";
+import { UserModel } from "../../plugins/database/user/user";
 
 const usernameFBPrefix = "facebook_";
 
@@ -43,7 +43,7 @@ export function LoginViaFB(this: UserHandler, req: Request, res: Response) {
               name: user.displayName,
               gender: user.gender,
               role: 0
-            } as Model;
+            } as UserModel;
             this.userDB.setUser(entity, (err: Error, data: any) => {
               if (err) {
                 console.log("[passport][authenticate] err", err);
@@ -93,7 +93,7 @@ export function LoginViaGG(this: UserHandler, req: Request, res: Response) {
               name: user.displayName,
               gender: user.gender,
               role: 0
-            } as Model;
+            } as UserModel;
             this.userDB.setUser(entity, (err: Error, data: any) => {
               if (err) {
                 console.log("[passport][authenticate] err", err);

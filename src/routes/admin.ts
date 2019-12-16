@@ -90,5 +90,25 @@ export class AdminRoute {
         this.handler.getUserProfile(req, res);
       }
     );
+
+    router.put(
+      "/blockuser/:userID",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.lockUser(req, res);
+      }
+    );
+
+    router.put(
+      "/unblockuser/:userID",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.unlockUser(req, res);
+      }
+    );
   }
 }

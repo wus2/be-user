@@ -7,7 +7,12 @@ export enum Role {
   Admin = 3
 }
 
-export interface Model {
+export enum AccountStatus {
+  Active = 1,
+  Block = 2,
+}
+
+export interface UserModel {
   id?: number;
   username?: string;
   password?: string;
@@ -21,17 +26,18 @@ export interface Model {
   gender?: string;
   avatar?: string;
   role?: number;
+  account_status?: number;
 }
 
 export interface IUserDB {
   db: IMysql;
   tableName: string;
-  setUser(user: Model, callback: Function): void;
+  setUser(user: UserModel, callback: Function): void;
   getByID(userID: number, callback: Function): void;
   getValidUser(username: string, password: string, callback: Function): void;
   getByUsername(username: string, callback: Function): void;
   getListUsers(offset: number, limit: number, callback: Function): void;
-  updateUser(user: Model, callback: Function): void;
+  updateUser(user: UserModel, callback: Function): void;
 }
 
 export default class UserDB implements IUserDB {
@@ -42,7 +48,7 @@ export default class UserDB implements IUserDB {
     this.tableName = "user";
   }
 
-  setUser(user: Model, callback: Function) {
+  setUser(user: UserModel, callback: Function) {
     this.db
       .add(this.tableName, user)
       .then((data: any) => {
@@ -124,7 +130,7 @@ export default class UserDB implements IUserDB {
       });
   }
 
-  updateUser(user: Model, callback: Function) {
+  updateUser(user: UserModel, callback: Function) {
     this.db
       .update(this.tableName, "id", user)
       .then((data: any) => {

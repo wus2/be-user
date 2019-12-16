@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { UserHandler } from "./user";
 
-import { Model } from "../../plugins/database/user/user";
+import { UserModel, AccountStatus } from "../../plugins/database/user/user";
 
 export function Register(this: UserHandler, req: Request, res: Response) {
   var username = req.body.username;
@@ -18,7 +18,8 @@ export function Register(this: UserHandler, req: Request, res: Response) {
     gender: req.body.gender,
     avatar: req.body.avatar,
     role: req.body.role,
-  } as Model;
+    account_status: AccountStatus.Active,
+  } as UserModel;
   if (!entity) {
     return res.json({
       code: -1,

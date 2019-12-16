@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import UserDB, { IUserDB } from "../../plugins/database/user/user";
+import UserDB, {
+  IUserDB,
+  UserModel,
+  AccountStatus
+} from "../../plugins/database/user/user";
 import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
 import { Model } from "../../plugins/database/skill/skill";
 
@@ -11,6 +15,8 @@ export interface IAdminHandler {
   addSkill(req: Request, res: Response): void;
   updateSkill(req: Request, res: Response): void;
   removeSkill(req: Request, res: Response): void;
+  lockUser(req: Request, res: Response): void
+  unlockUser(req: Request, res: Response): void
 }
 
 export class AdminHandler implements IAdminHandler {
@@ -62,7 +68,7 @@ export class AdminHandler implements IAdminHandler {
         });
       }
       if (data[0].skill_tags) {
-        data[0].skill_tags = JSON.parse(data[0].skill_tags)
+        data[0].skill_tags = JSON.parse(data[0].skill_tags);
       }
       return res.status(200).json({
         code: 1,
@@ -129,7 +135,7 @@ export class AdminHandler implements IAdminHandler {
     }
     var entity = {
       tag: skillStr
-    } as Model
+    } as Model;
     this.skillDB.addSkill(entity, (err: Error, data: any) => {
       if (err) {
         return res.json({
@@ -199,5 +205,55 @@ export class AdminHandler implements IAdminHandler {
     });
   }
 
-  lockOrUnlockUser(req: Request, res: Response) {}
+  lockUser(req: Request, res: Response) {
+    var userID = Number(req.params.userID);
+    if (userID < 0) {
+      return res.json({
+        cpde: -1,
+        message: "User ID is incorrect"
+      });
+    }
+    var entity = {
+      id: userID,
+      account_status: AccountStatus.Block
+    } as UserModel;
+    this.userDB.updateUser(entity, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK"
+      });
+    });
+  }
+
+  unlockUser(req: Request, res: Response) {
+    var userID = Number(req.params.userID);
+    if (userID < 0) {
+      return res.json({
+        cpde: -1,
+        message: "User ID is incorrect"
+      });
+    }
+    var entity = {
+      id: userID,
+      account_status: AccountStatus.Active
+    } as UserModel;
+    this.userDB.updateUser(entity, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK"
+      });
+    });
+  }
 }
