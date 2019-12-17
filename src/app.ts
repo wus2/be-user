@@ -10,6 +10,7 @@ import cors from "cors";
 import { UserRoute } from "./routes/user";
 import { AdminRoute } from "./routes/admin";
 import { TutorRoute } from "./routes/tutor";
+import { TuteeRoute } from "./routes/tutee";
 
 /**
  * The server.
@@ -62,10 +63,13 @@ export class Server {
     new AdminRoute().create(adminRouter);
     let tutorRoute = express.Router();
     new TutorRoute().create(tutorRoute);
+    let tuteeRoute = express.Router();
+    new TuteeRoute().create(tuteeRoute);
 
     this.app.use("/user", userRouter);
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
+    this.app.use("/tutee", tutorRoute);
   }
 
   /**

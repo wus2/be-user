@@ -1,5 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import TutorDB, { Model, ITutorDB } from "../../plugins/database/tutor/tutor";
+import TutorDB, {
+  TutorModel,
+  ITutorDB
+} from "../../plugins/database/tutor/tutor";
 import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
 import {
   IContractDB,
@@ -293,7 +296,7 @@ export class TutorHandler implements ITutorHandler {
           message: "Contract is expired"
         });
       }
-      contract.contract_status = ContractStatus.Approved;
+      contract.status = ContractStatus.Approved;
       this.contractDB.updateContract(contract, (err: Error, data: any) => {
         if (err) {
           return res.json({

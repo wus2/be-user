@@ -5,9 +5,11 @@ export enum ContractStatus {
   Draft = 0,
   Pending = 1,
   Approved = 2,
-  Closed = 3,
-  Expired = 4,
-  Finished = 5
+  Paid = 3,
+  Closed = 4,
+  Refund = 5,
+  Expired = 6,
+  Finished = 7
 }
 
 export interface ContractModel {
@@ -19,8 +21,9 @@ export interface ContractModel {
   rent_time?: number;
   rent_price?: number;
   create_time?: number;
-  contract_status?: number;
+  status?: number;
   stars?: number;
+  comment?: string;
 }
 
 export interface IContractDB {

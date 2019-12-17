@@ -5,8 +5,9 @@ import {
   ContractModel,
   ContractStatus
 } from "../../plugins/database/contract/contract";
+import TutorDB, { ITutorDB } from "../../plugins/database/tutor/tutor";
 
-export interface ITutorHandler {
+export interface ITuteeHandler {
   rentTutor(req: Request, res: Response): void;
   getListContractHistory(req: Request, res: Response): void;
   getDetailContractHistory(req: Request, res: Response): void;
@@ -17,11 +18,13 @@ export interface ITutorHandler {
   chat(req: Request, res: Response): void;
 }
 
-export class TutorHandler implements ITutorHandler {
+export class TuteeHandler implements ITuteeHandler {
   contractDB: IContractDB;
+  tutorDB: ITutorDB;
 
   constructor() {
     this.contractDB = new ContractDB();
+    this.tutorDB = new TutorDB();
   }
 
   rentTutor(req: Request, res: Response) {
@@ -141,7 +144,7 @@ export class TutorHandler implements ITutorHandler {
   }
 
   evaluateRateForTutor(req: Request, res: Response) {
-    var stars = Number(req.params.stars);
+    var stars = Number(req.body.stars);
     if (stars < 0 || stars > 5) {
       return res.json({
         code: -1,
@@ -169,7 +172,26 @@ export class TutorHandler implements ITutorHandler {
           message: "Contract model in database is incorrect"
         });
       }
-      if (contract.contract_status != ContractStatus.Finished) {
+      if (!contract.tutor_id) {
+        return res.json({
+          code: -1,
+          message: "Tutor ID is empty"
+        });
+      }
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is invalid"
+        });
+      }
+      if (contract.tutee_id != payload.id) {
+        return res.json({
+          code: -1,
+          message: "Permission denied"
+        });
+      }
+      if (contract.status != ContractStatus.Finished) {
         return res.json({
           code: -1,
           message: "Contract is not finished"
@@ -177,7 +199,7 @@ export class TutorHandler implements ITutorHandler {
       }
       console.log("[Tutee][evaluateContract][data]", contract.stars);
       if (!contract.stars || contract.stars != null) {
-        res.json({
+        return res.json({
           code: -1,
           message: "Contract is evaluated"
         });
@@ -193,6 +215,102 @@ export class TutorHandler implements ITutorHandler {
             message: "Update stars to database failed"
           });
         }
+        if (contract.tutor_id) {
+          this.tutorDB.updateRate(
+            contract.tutor_id,
+            stars,
+            (err: Error, data: any) => {
+              if (err) {
+                return res.json({
+                  code: -1,
+                  message: err.toString()
+                });
+              }
+              // TODO: notify to tutor
+              return res.status(200).json({
+                code: 1,
+                message: "OK"
+              });
+            }
+          );
+        }
+      });
+    });
+  }
+
+  evaluateCommentForTutor(req: Request, res: Response) {
+    var comment = req.body.comment;
+    if (!comment) {
+      return res.json({
+        code: -1,
+        message: "Comment is empty"
+      });
+    }
+    var contractID = Number(req.params.contractID);
+    if (contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: "Get contract is incorrect"
+        });
+      }
+      var contract = data[0] as ContractModel;
+      if (!contract) {
+        return res.json({
+          code: -1,
+          message: "Contract model in database is incorrect"
+        });
+      }
+      if (!contract.tutor_id) {
+        return res.json({
+          code: -1,
+          message: "Tutor ID is empty"
+        });
+      }
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is invalid"
+        });
+      }
+      if (contract.tutee_id != payload.id) {
+        return res.json({
+          code: -1,
+          message: "Permission denied"
+        });
+      }
+      if (contract.status != ContractStatus.Finished) {
+        return res.json({
+          code: -1,
+          message: "Contract is not finished"
+        });
+      }
+      console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
+      if (!contract.comment) {
+        return res.json({
+          code: -1,
+          message: "Contract is evaluated"
+        });
+      }
+      var entity = {
+        id: contractID,
+        comment: comment
+      };
+      this.contractDB.updateContract(entity, (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: "Update stars to database failed"
+          });
+        }
+        // TODO: notify to tutor
         return res.status(200).json({
           code: 1,
           message: "OK"
@@ -201,11 +319,70 @@ export class TutorHandler implements ITutorHandler {
     });
   }
 
-  evaluateCommentForTutor(req: Request, res: Response) {}
+  payContract(req: Request, res: Response) {
+    var contractID = Number(req.params.contractID);
+    if (contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "ContractID is invalid"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: "Get contract failed"
+        });
+      }
+      var contract = data[0] as ContractModel;
+      if (!contract) {
+        return res.json({
+          code: -1,
+          message: "Contract model is incorrect"
+        });
+      }
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is incorrect"
+        });
+      }
+      if (contract.tutee_id != payload.id) {
+        return res.json({
+          code: 1,
+          message: "Permission denied"
+        });
+      }
+      if (contract.status != ContractStatus.Approved) {
+        return res.json({
+          code: -1,
+          message: "Contract is not approved"
+        });
+      }
+      // check amount and pay if ok
+      var entity = {
+        id: contract.id,
+        status: ContractStatus.Paid
+      } as ContractModel;
+      this.contractDB.updateContract(entity, (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK"
+        });
+      });
+    });
+  }
 
-  payContract(req: Request, res: Response) {}
-
-  complainContract(req: Request, res: Response) {}
+  complainContract(req: Request, res: Response) {
+    this.evaluateCommentForTutor(req, res)
+  }
 
   chat(req: Request, res: Response) {}
 }

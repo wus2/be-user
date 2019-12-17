@@ -4,14 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mysql_1 = __importDefault(require("../mysql"));
-var Status;
-(function (Status) {
-    Status[Status["Draft"] = 0] = "Draft";
-    Status[Status["Pending"] = 1] = "Pending";
-    Status[Status["Approved"] = 2] = "Approved";
-    Status[Status["Closed"] = 3] = "Closed";
-    Status[Status["Expired"] = 4] = "Expired";
-})(Status = exports.Status || (exports.Status = {}));
+var user_1 = require("../user/user");
+var ContractStatus;
+(function (ContractStatus) {
+    ContractStatus[ContractStatus["Draft"] = 0] = "Draft";
+    ContractStatus[ContractStatus["Pending"] = 1] = "Pending";
+    ContractStatus[ContractStatus["Approved"] = 2] = "Approved";
+    ContractStatus[ContractStatus["Paid"] = 3] = "Paid";
+    ContractStatus[ContractStatus["Closed"] = 4] = "Closed";
+    ContractStatus[ContractStatus["Refund"] = 5] = "Refund";
+    ContractStatus[ContractStatus["Expired"] = 6] = "Expired";
+    ContractStatus[ContractStatus["Finished"] = 7] = "Finished";
+})(ContractStatus = exports.ContractStatus || (exports.ContractStatus = {}));
 var ContractDB = /** @class */ (function () {
     function ContractDB() {
         this.db = mysql_1.default;
@@ -59,6 +63,40 @@ var ContractDB = /** @class */ (function () {
             return callback(new Error("Update database failed"));
         });
     };
+    ContractDB.prototype.getListContract = function (userID, role, offset, limit, callback) {
+        if (offset < 0 || limit < 0) {
+            return callback(new Error("Offset or limit is incorrect"));
+        }
+        if (userID < 0 || !isValidRole(role)) {
+            return callback(new Error("UserID or role is invalid"));
+        }
+        var sql = "select * from " + this.tableName;
+        if (role == user_1.Role.Tutor) {
+            sql += " where tutor_id = " + userID;
+        }
+        else if (role == user_1.Role.Tutor) {
+            sql += " where tutee_id = " + userID;
+        }
+        sql += " limit " + offset + ", " + limit;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (!data) {
+                return callback(new Error("Get list contract is in correct"));
+            }
+            if (data.lenght < 0) {
+                return callback(new Error("List contract is empty"));
+            }
+            return callback(null, data);
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getListContract][err]", err);
+            return callback(new Error("Get list contract is incorrect"));
+        });
+    };
     return ContractDB;
 }());
 exports.ContractDB = ContractDB;
+function isValidRole(role) {
+    return !(role != user_1.Role.Tutee && role != user_1.Role.Tutor);
+}

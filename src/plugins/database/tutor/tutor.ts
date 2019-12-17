@@ -3,12 +3,14 @@ import SkillDB, { ISkillDB } from "../skill/skill";
 
 const Role_Tutor = 1;
 
-export interface Model {
+export interface TutorModel {
   id?: number;
   username?: string;
   intro_desc?: string;
   skill_tags?: string;
   role?: number;
+  num_stars?: number;
+  num_rate?: number;
 }
 
 export interface ITutorDB {
@@ -29,6 +31,7 @@ export interface ITutorDB {
     limit: number,
     callback: Function
   ): void;
+  updateRate(tutorID: number, stars: number, callback: Function): void;
 }
 
 export default class TutorDB implements ITutorDB {
@@ -65,7 +68,7 @@ export default class TutorDB implements ITutorDB {
     var entity = {
       id: tutorID,
       intro_desc: desc
-    } as Model;
+    } as TutorModel;
     this.db
       .update(this.tableName, "id", entity)
       .then(data => {
@@ -168,5 +171,41 @@ export default class TutorDB implements ITutorDB {
       });
   }
 
-  getHistory(req: Request, res: Response) {}
+  getHistory() {}
+
+  updateRate(tutorID: number, stars: number, callback: Function) {
+    if (tutorID < 0 || stars < 0) {
+      return callback(new Error("TutorID or stars is incorrect"));
+    }
+    var sql = `select num_stars, num_rate from ${this.tableName} where id = ${tutorID}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (!data) {
+          return callback(new Error("Get rate failed"));
+        }
+        var user = data[0] as TutorModel;
+        if (!user.num_stars || !user.num_rate) {
+          return callback(new Error("Tutor model is incorrect"));
+        }
+        user.num_stars += stars;
+        user.num_rate++;
+        this.db
+          .update(this.tableName, "id", user)
+          .then((data: any) => {
+            if (!data) {
+              return callback(new Error("Update rate to database failed"));
+            }
+            return callback();
+          })
+          .catch((err: Error) => {
+            console.log("[TutorDB][updateRate][err]", err);
+            return callback(new Error("Update rate to database failed"));
+          });
+      })
+      .catch((err: Error) => {
+        console.log("[TutorDB][updateRate][err]", err);
+        return callback(new Error("Get rate from database failed"));
+      });
+  }
 }

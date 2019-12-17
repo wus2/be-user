@@ -122,7 +122,43 @@ var TutorDB = /** @class */ (function () {
             return callback(new Error("Filter failed"));
         });
     };
-    TutorDB.prototype.getHistory = function (req, res) { };
+    TutorDB.prototype.getHistory = function () { };
+    TutorDB.prototype.updateRate = function (tutorID, stars, callback) {
+        var _this = this;
+        if (tutorID < 0 || stars < 0) {
+            return callback(new Error("TutorID or stars is incorrect"));
+        }
+        var sql = "select num_stars, num_rate from " + this.tableName + " where id = " + tutorID;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (!data) {
+                return callback(new Error("Get rate failed"));
+            }
+            var user = data[0];
+            if (!user.num_stars || !user.num_rate) {
+                return callback(new Error("Tutor model is incorrect"));
+            }
+            user.num_stars += stars;
+            user.num_rate++;
+            _this.db
+                .update(_this.tableName, "id", user)
+                .then(function (data) {
+                if (!data) {
+                    return callback(new Error("Update rate to database failed"));
+                }
+                return callback();
+            })
+                .catch(function (err) {
+                console.log("[TutorDB][updateRate][err]", err);
+                return callback(new Error("Update rate to database failed"));
+            });
+        })
+            .catch(function (err) {
+            console.log("[TutorDB][updateRate][err]", err);
+            return callback(new Error("Get rate from database failed"));
+        });
+    };
     return TutorDB;
 }());
 exports.default = TutorDB;

@@ -21,6 +21,7 @@ var cors_1 = __importDefault(require("cors"));
 var user_1 = require("./routes/user");
 var admin_1 = require("./routes/admin");
 var tutor_1 = require("./routes/tutor");
+var tutee_1 = require("./routes/tutee");
 /**
  * The server.
  *
@@ -67,9 +68,12 @@ var Server = /** @class */ (function () {
         new admin_1.AdminRoute().create(adminRouter);
         var tutorRoute = express_1.default.Router();
         new tutor_1.TutorRoute().create(tutorRoute);
+        var tuteeRoute = express_1.default.Router();
+        new tutee_1.TuteeRoute().create(tuteeRoute);
         this.app.use("/user", userRouter);
         this.app.use("/admin", adminRouter);
         this.app.use("/tutor", tutorRoute);
+        this.app.use("/tutee", tutorRoute);
     };
     /**
      * Configure application

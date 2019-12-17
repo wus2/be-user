@@ -157,7 +157,36 @@ var TutorHandler = /** @class */ (function () {
             });
         });
     };
-    TutorHandler.prototype.getListHistory = function (req, res) { };
+    TutorHandler.prototype.getLisContracttHistory = function (req, res) {
+        var payload = res.locals.payload;
+        if (!payload) {
+            return res.json({
+                code: -1,
+                message: "User payload is invalid"
+            });
+        }
+        var offset = Number(req.params.offset);
+        var limit = Number(req.params.limit);
+        if (offset < 0 || limit < 0) {
+            return res.json({
+                code: -1,
+                message: "Offset or limit is incorrect"
+            });
+        }
+        this.contractDB.getListContract(payload.id, payload.role, offset, limit, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
     TutorHandler.prototype.chat = function (req, res) { };
     TutorHandler.prototype.renevueStatics = function (req, res) { };
     TutorHandler.prototype.getDetailContract = function (req, res) {
@@ -220,7 +249,7 @@ var TutorHandler = /** @class */ (function () {
                     message: "Contract is expired"
                 });
             }
-            contract.contract_status = contract_1.Status.Approved;
+            contract.status = contract_1.ContractStatus.Approved;
             _this.contractDB.updateContract(contract, function (err, data) {
                 if (err) {
                     return res.json({
