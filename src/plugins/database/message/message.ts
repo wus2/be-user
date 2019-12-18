@@ -1,4 +1,5 @@
 import mysql, { IMysql } from "../mysql";
+import { loadavg } from "os";
 
 export interface MessageModel {
   id?: number;
@@ -19,7 +20,7 @@ export interface IMessageDB {
     limit: number,
     callback: Function
   ): void;
-  getRoom(senderID: string, receiverID: string): string
+  getRoom(senderID: string, receiverID: string, callback: Function): string;
   checkRoomExists(senderID: string, receiverID: string): boolean;
   generateRoom(senderID: string, receiverID: string): string;
 }
@@ -77,8 +78,26 @@ export class MessageDB implements IMessageDB {
       });
   }
 
-  getRoom(senderID: string, receiverID: string) {
-      return ""
+  getRoom(senderID: string, receiverID: string, callback: Function) {
+    if (!senderID || !receiverID) {
+      return callback(new Error("SenderID or receiverID is incorrect"));
+    }
+    var room = senderID + receiverID;
+    var sql = `select * from ${this.tableName} where room = ${room}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data[0]) {
+          return callback(null, "");
+        }
+        return callback(new Error("Room is not exists"));
+      })
+      .catch((err: Error) => {
+        console.log("[MessageDB][getRoom][err]", err);
+        return callback(new Error("Get database is failed"));
+      });
+
+    return "";
   }
 
   checkRoomExists(senderID: string, receiverID: string) {

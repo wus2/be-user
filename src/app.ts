@@ -11,6 +11,7 @@ import { UserRoute } from "./routes/user";
 import { AdminRoute } from "./routes/admin";
 import { TutorRoute } from "./routes/tutor";
 import { TuteeRoute } from "./routes/tutee";
+import { SSE } from "./plugins/sse/sse";
 
 /**
  * The server.
@@ -70,6 +71,14 @@ export class Server {
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
     this.app.use("/tutee", tutorRoute);
+
+    this.app.use("/event/username/:username/topic/:topic", (req, res, next) => {
+      SSE.EventsHandler(req, res, next);
+    });
+
+    setInterval(()=> {
+      SSE.SendMessage("anvh", "test", "OK")
+    }, 2000)
   }
 
   /**

@@ -17,16 +17,20 @@ export interface ISocket {}
 
 export class Socket implements ISocket {
   io: SocketIO.Server;
-  currentUsers: Map<string, io.Socket>;
+  currConn: Map<string, io.Socket>;
   messageDB: IMessageDB;
 
   constructor(server: http.Server) {
     this.io = io(server);
-    this.currentUsers = new Map<string, io.Socket>();
+    this.currConn = new Map<string, io.Socket>();
     this.messageDB = new MessageDB();
   }
 
   public Start() {
+    this.onConnect();
+  }
+
+  onConnect() {
     this.io.on("connection", socket => {
       socket.on(Event.Matching, (data, callback) => {
         data = data as SocketData;
@@ -36,33 +40,11 @@ export class Socket implements ISocket {
             message: "User data is incorrect"
           });
         }
-        if (!data.room) {
-          var room = this.messageDB.getRoom(data.senderID, data.receiverID);
-          if (!room) {
-            room = this.messageDB.generateRoom(data.senderID, data.receiverID);
-            // TODO: return room for user
-          }
-        }
-        if (this.currentUsers.has(data.senderID)) {
-          return;
-        }
-
-        var receiver = this.currentUsers.get(data.receiverID);
-        if (receiver) {
-        }
-
-        this.currentUsers.set(data.senderID, socket);
-        callback({
-          code: 1,
-          message: "Connected"
-        });
       });
 
       this.onDisconnect(socket);
     });
   }
-
-  onConnect() {}
 
   onListening(sender: io.Socket, receiver: io.Socket, room: string) {
     sender.on(`${room}`, message => {
@@ -75,10 +57,15 @@ export class Socket implements ISocket {
     receiver.to(`${room}`).emit(`${message}`);
   }
 
-  onDisconnect(socket: io.Socket) {
-    socket.on(Event.Disconnected, () => {
-      console.log(socket.id, "is disconnected");
-      console.log(this.currentUsers);
+  onDisconnect(disSocket: io.Socket) {
+    disSocket.on(Event.Disconnected, () => {
+      console.log(disSocket.id, "is disconnected");
+      this.currConn.forEach((socket: io.Socket, key: string) => {
+        if (socket.id === disSocket.id) {
+          this.currConn.delete(key);
+        }
+      });
+      console.log(this.currConn);
     });
   }
 }

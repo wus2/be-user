@@ -6,6 +6,7 @@ import {
   ContractStatus
 } from "../../plugins/database/contract/contract";
 import TutorDB, { ITutorDB } from "../../plugins/database/tutor/tutor";
+import { SSE } from "../../plugins/sse/sse";
 
 export interface ITuteeHandler {
   rentTutor(req: Request, res: Response): void;
@@ -75,6 +76,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       // TODO: notify to tutor
+      SSE.SendMessage(tutorID.toString() , "Rent_tutor", JSON.stringify(entity))
       // TODO: send to worker check expired
       return res.status(200).json({
         code: 1,
