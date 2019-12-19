@@ -9,7 +9,7 @@ export enum Role {
 
 export enum AccountStatus {
   Active = 1,
-  Block = 2,
+  Block = 2
 }
 
 export interface UserModel {
@@ -36,6 +36,7 @@ export interface IUserDB {
   getByID(userID: number, callback: Function): void;
   getValidUser(username: string, password: string, callback: Function): void;
   getByUsername(username: string, callback: Function): void;
+  getByEmail(email: string, callback: Function): void;
   getListUsers(offset: number, limit: number, callback: Function): void;
   updateUser(user: UserModel, callback: Function): void;
 }
@@ -107,6 +108,22 @@ export default class UserDB implements IUserDB {
       })
       .catch((err: Error) => {
         console.log("[UserDB][getByUsername][err]", err);
+        return callback(new Error("Get database failed"));
+      });
+  }
+
+  getByEmail(email: string, callback: Function) {
+    var sql = `select * from ${this.tableName} where email = ${email}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data) {
+          return callback(null, data);
+        }
+        return callback(new Error("Email is not exists"));
+      })
+      .catch((err: Error) => {
+        console.log("[UserDB][getByEmail][err]", err);
         return callback(new Error("Get database failed"));
       });
   }

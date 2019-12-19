@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserHandler } from "./user";
+import { UserModel } from "../../plugins/database/user/user";
 
 const confirmPrefix = "confirm_change";
 
@@ -13,7 +14,7 @@ export function GetProfile(this: UserHandler, req: Request, res: Response) {
       });
     }
     if (data[0].skill_tags) {
-      data[0].skill_tags = JSON.parse(data[0].skill_tags)
+      data[0].skill_tags = JSON.parse(data[0].skill_tags);
     }
     return res.status(200).json({
       code: 1,
@@ -80,11 +81,54 @@ export function UpdatePassword(this: UserHandler, req: Request, res: Response) {
   });
 }
 
-export function ForgotPassword(
-  this: UserHandler,
-  req: Request,
-  res: Response
-) {}
+export function ForgotPassword(this: UserHandler, req: Request, res: Response) {
+  var email = req.body.email;
+  if (!email) {
+    return res.json({
+      code: -1,
+      message: "Email or password is incorrect"
+    });
+  }
+  this.userDB.getByEmail(email, (err: Error, data: any) => {
+    if (err) {
+      return res.json({
+        code: -1,
+        message: err.toString()
+      });
+    }
+    var user = data[0] as UserModel;
+    if (!user) {
+      return res.json({
+        code: -1,
+        message: "Data is not user model"
+      });
+    }
+    if (!user.id) {
+      return res.json({
+        code: -1,
+        message: "User is not correct"
+      });
+    }
+    var entity = {
+      id: user.id,
+      email: email,
+      password: "123456"
+    };
+    this.mailer.forgotPass(email, user.id);
+    var key = confirmPrefix + user.id;
+    var ok = this.cache.set(key, entity);
+    if (!ok) {
+      return res.json({
+        code: -1,
+        message: "System error"
+      });
+    }
+    return res.status(200).json({
+      code: 1,
+      message: "OK"
+    });
+  });
+}
 
 export function UpdateAvatar(this: UserHandler, req: Request, res: Response) {
   var payload = res.locals.payload;

@@ -72,13 +72,9 @@ export class Server {
     this.app.use("/tutor", tutorRoute);
     this.app.use("/tutee", tutorRoute);
 
-    this.app.use("/event/username/:username/topic/:topic", (req, res, next) => {
+    this.app.use("/event/:username", (req, res, next) => {
       SSE.EventsHandler(req, res, next);
     });
-
-    setInterval(()=> {
-      SSE.SendMessage("anvh", "test", "OK")
-    }, 2000)
   }
 
   /**

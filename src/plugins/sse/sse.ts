@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 
 export interface Client {
-  topic: string;
+  topic: string[];
   res: Response;
 }
 
@@ -11,7 +11,7 @@ export class SSE implements ISSE {
   static clients = new Map<string, Client>();
   constructor() {}
 
-  public static SendMessage(id: string, topic: string, data: any) {
+  public static SendMessage(id: string, data: any) {
     var client = this.clients.get(id);
     if (!client) {
       return "Client is not connect";
@@ -33,12 +33,10 @@ export class SSE implements ISSE {
     res.writeHead(200, headers);
 
     var id = req.params.username;
-    var topic = req.params.topic;
-    if (!topic || !id) {
+    if ( !id) {
       return;
     }
     var client = {
-      topic: topic,
       res: res
     } as Client;
     this.clients.set(id, client);

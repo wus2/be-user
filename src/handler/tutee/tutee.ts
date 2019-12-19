@@ -7,6 +7,15 @@ import {
 } from "../../plugins/database/contract/contract";
 import TutorDB, { ITutorDB } from "../../plugins/database/tutor/tutor";
 import { SSE } from "../../plugins/sse/sse";
+import {
+  NotifyModel,
+  GetContractDescription,
+  ContractTopic,
+  RateTopic,
+  GetRateDescription
+} from "../../plugins/sse/notification";
+import UserDB, { IUserDB, UserModel } from "../../plugins/database/user/user";
+import { resolve } from "dns";
 
 export interface ITuteeHandler {
   rentTutor(req: Request, res: Response): void;
@@ -22,10 +31,12 @@ export interface ITuteeHandler {
 export class TuteeHandler implements ITuteeHandler {
   contractDB: IContractDB;
   tutorDB: ITutorDB;
+  userDB: IUserDB;
 
   constructor() {
     this.contractDB = new ContractDB();
     this.tutorDB = new TutorDB();
+    this.userDB = new UserDB();
   }
 
   rentTutor(req: Request, res: Response) {
@@ -44,6 +55,7 @@ export class TuteeHandler implements ITuteeHandler {
       });
     }
     var tutorID = Number(req.body.tutorID);
+    var tutorUsername = req.body.tutor;
     var rentTime = Number(req.body.rentTime);
     var rentPrice = Number(req.body.rentPrice);
     if (tutorID < 0 || rentTime < 0 || rentPrice < 0) {
@@ -75,9 +87,40 @@ export class TuteeHandler implements ITuteeHandler {
           message: err.toString()
         });
       }
-      // TODO: notify to tutor
-      SSE.SendMessage(tutorID.toString() , "Rent_tutor", JSON.stringify(entity))
-      // TODO: send to worker check expired
+      // notify to tutor
+      // TODO: convert to async
+      this.userDB.getByID(payload.id, (err: Error, data: any) => {
+        if (err) {
+          console.log("[TuteeHandler][rentTutor][err]", err);
+          return;
+        }
+        var tutee = data[0] as UserModel;
+        if (!tutee) {
+          console.log(
+            "[TuteeHandler][rentTutor][notify][err] Data is not user model"
+          );
+          return;
+        }
+        var contractID = data[0].id;
+        if (!contractID) {
+          console.log(
+            "[TuteeHandler][rentTutor][notify[err] ContractID is not found"
+          );
+          return;
+        }
+        if (!tutee.name) {
+          console.log(
+            "[TuteeHandler][rentTutor][notify[err] Tutee name invalid"
+          );
+          return;
+        }
+        var notification = {
+          contractID: contractID,
+          topic: ContractTopic,
+          description: GetContractDescription(tutee.name)
+        } as NotifyModel;
+        SSE.SendMessage(tutorUsername, notification);
+      });
       return res.status(200).json({
         code: 1,
         meesage: "OK"
@@ -228,7 +271,28 @@ export class TuteeHandler implements ITuteeHandler {
                   message: err.toString()
                 });
               }
-              // TODO: notify to tutor
+              // notify to tutor
+              var handle = function() {
+                return new Promise(resolve => {
+                  var notification = {
+                    contractID: contract.id,
+                    topic: RateTopic,
+                    description: GetRateDescription("")
+                  } as NotifyModel;
+                  SSE.SendMessage("", entity);
+                });
+              };
+              var notify = async function() {
+                console.log(
+                  "[TuteeHandler][evaluateRateForTutor] start notify"
+                );
+                var result = await handle();
+                console.log(
+                  "[TuteeHandler][evaluateRateForTutor] finish notify"
+                );
+              };
+              notify();
+
               return res.status(200).json({
                 code: 1,
                 message: "OK"
@@ -383,7 +447,7 @@ export class TuteeHandler implements ITuteeHandler {
   }
 
   complainContract(req: Request, res: Response) {
-    this.evaluateCommentForTutor(req, res)
+    this.evaluateCommentForTutor(req, res);
   }
 
   chat(req: Request, res: Response) {}

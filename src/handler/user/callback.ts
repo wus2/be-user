@@ -13,7 +13,7 @@ export function ActivateAccount(
   res: Response
 ) {
   var key = activePrefix + req.params.username;
-  console.log("[activateAccount]", key);
+  console.log("[ActivateAccount]", key);
   var value = this.cache.get(key);
   if (value == undefined) {
     return res.json({
@@ -45,7 +45,7 @@ export function ActivateAccount(
 
 export function ConfirmChange(this: UserHandler, req: Request, res: Response) {
   var key = confirmPrefix + req.params.id;
-  console.log("[confirmChange]", key);
+  console.log("[ConfirmChange]", key);
   var value = this.cache.get(key);
   console.log(value);
   if (value == undefined) {
@@ -77,5 +77,34 @@ export function ConfirmChange(this: UserHandler, req: Request, res: Response) {
 }
 
 export function ReclaimPassword(this: UserHandler, req: Request, res: Response) {
-  
+  var key = confirmPrefix + req.params.id;
+  console.log("[ReclaimPassword]", key);
+  var value = this.cache.get(key);
+  console.log(value);
+  if (value == undefined) {
+    return res.json({
+      code: -1,
+      message: "Reclaim password expired"
+    });
+  }
+  this.cache.delete(key);
+
+  var model = value as UserModel;
+  if (!model) {
+    console.log("[ReclaimPassword][err] cast to model error", value);
+    return res.json({
+      code: -1,
+      message: "Reclaim password failed"
+    });
+  }
+  this.userDB.updateUser(model, (err: Error, data: any) => {
+    if (err) {
+      console.error("[ReclaimPassword]", err);
+      return res.json({
+        code: -1,
+        message: "Reclaim password failed"
+      });
+    }
+    return res.redirect(config.get("redirect"));
+  });
 }
