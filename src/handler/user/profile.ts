@@ -86,7 +86,7 @@ export function ForgotPassword(this: UserHandler, req: Request, res: Response) {
   if (!email) {
     return res.json({
       code: -1,
-      message: "Email or password is incorrect"
+      message: "Email is incorrect"
     });
   }
   this.userDB.getByEmail(email, (err: Error, data: any) => {

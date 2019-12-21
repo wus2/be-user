@@ -62,7 +62,7 @@ export class AdminRoute {
     );
 
     router.delete(
-      "/removeskill/:id",
+      "/removeskill/:skillID",
       (req, res, next) => {
         Authenticate.forAdmin(req, res, next);
       },

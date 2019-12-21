@@ -1,9 +1,3 @@
-// var passport = require("passport");
-// var jwt = require("jsonwebtoken");
-// var config = require("config");
-
-// var models = require("../../plugins/database/users");
-
 import { Request, Response } from "express";
 import passport from "passport";
 import jwt, { Secret } from "jsonwebtoken";

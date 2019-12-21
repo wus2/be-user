@@ -1,29 +1,38 @@
 import http from "http";
 import io from "socket.io";
-import { IMessageDB, MessageDB } from "../database/message/message";
+import socketJWT, { JwtAuthOptions } from "socketio-jwt";
+import config from "config";
+import {
+  IMessageDB,
+  MessageDB,
+  MessageModel
+} from "../database/message/message";
 
 export enum Event {
-  Matching = "matching",
-  Disconnected = "disconnected"
+  CHAT = "chat",
+  DISCONNECT = "disconnect"
 }
 
 export interface SocketData {
   senderID?: number;
   receiverID?: number;
   room?: string;
+  message?: string;
 }
 
-export interface ISocket {}
+export interface ISocketServer {}
 
-export class Socket implements ISocket {
+export class SocketServer implements ISocketServer {
   io: SocketIO.Server;
-  currConn: Map<string, io.Socket>;
+  clients: Map<string, io.Socket>;
   messageDB: IMessageDB;
+  secretKey: string;
 
   constructor(server: http.Server) {
     this.io = io(server);
-    this.currConn = new Map<string, io.Socket>();
+    this.clients = new Map<string, io.Socket>();
     this.messageDB = new MessageDB();
+    this.secretKey = config.get("key_jwt");
   }
 
   public Start() {
@@ -32,17 +41,37 @@ export class Socket implements ISocket {
 
   onConnect() {
     this.io.on("connection", socket => {
-      socket.on(Event.Matching, (data, callback) => {
-        data = data as SocketData;
-        if (!data.senderID || !data.receiverID) {
-          callback({
-            code: -1,
-            message: "User data is incorrect"
-          });
-        }
-      });
+      console.log("Client connected", socket.id);
+      this.clients.set(socket.id, socket);
 
+      this.onChat(socket);
       this.onDisconnect(socket);
+    });
+  }
+
+  onChat(socket: io.Socket) {
+    socket.on(Event.CHAT, (data: any) => {
+      data = data as SocketData;
+      if (!data.senderID || !data.receiverID || !data.room) {
+        return;
+      }
+      console.log(data);
+
+      // send message
+
+      // storage message
+      var entity = {
+        room: data.room,
+        sender_id: data.senderID,
+        receiver_id: data.receiverID,
+        message: data.message
+      } as MessageModel;
+      this.messageDB.setMessage(entity, (err: Error, data: any) => {
+        if (err) {
+          console.log("[SocketServer][StorageMessage][err]", err);
+        }
+        console.log("[SocketServer[StorageMessage] OK");
+      });
     });
   }
 
@@ -58,14 +87,10 @@ export class Socket implements ISocket {
   }
 
   onDisconnect(disSocket: io.Socket) {
-    disSocket.on(Event.Disconnected, () => {
+    disSocket.on(Event.DISCONNECT, () => {
       console.log(disSocket.id, "is disconnected");
-      this.currConn.forEach((socket: io.Socket, key: string) => {
-        if (socket.id === disSocket.id) {
-          this.currConn.delete(key);
-        }
-      });
-      console.log(this.currConn);
+      this.clients.delete(disSocket.id);
+      console.log(this.clients);
     });
   }
 }

@@ -113,7 +113,7 @@ export default class UserDB implements IUserDB {
   }
 
   getByEmail(email: string, callback: Function) {
-    var sql = `select * from ${this.tableName} where email = ${email}`;
+    var sql = `select * from ${this.tableName} where email = '${email}'`;
     this.db
       .load(sql)
       .then((data: any) => {

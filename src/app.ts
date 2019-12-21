@@ -7,10 +7,10 @@ import errorHandler = require("errorhandler");
 import methodOverride from "method-override";
 import cors from "cors";
 
-import { UserRoute } from "./routes/user";
-import { AdminRoute } from "./routes/admin";
-import { TutorRoute } from "./routes/tutor";
-import { TuteeRoute } from "./routes/tutee";
+import { UserRoute } from "./api/user";
+import { AdminRoute } from "./api/admin";
+import { TutorRoute } from "./api/tutor";
+import { TuteeRoute } from "./api/tutee";
 import { SSE } from "./plugins/sse/sse";
 
 /**
@@ -19,7 +19,7 @@ import { SSE } from "./plugins/sse/sse";
  * @class Server
  */
 export class Server {
-  private app: express.Application;
+  public app: express.Application;
 
   /**
    * Bootstrap the application.
@@ -70,7 +70,7 @@ export class Server {
     this.app.use("/user", userRouter);
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
-    this.app.use("/tutee", tutorRoute);
+    this.app.use("/tutee", tuteeRoute);
 
     this.app.use("/event/:username", (req, res, next) => {
       SSE.EventsHandler(req, res, next);

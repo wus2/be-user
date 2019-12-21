@@ -3,4 +3,4 @@ bin
 npm-debug.log
 # public
 test
-# ts-build
+ts-build

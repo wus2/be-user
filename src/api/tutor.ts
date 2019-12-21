@@ -62,5 +62,35 @@ export class TutorRoute {
     router.get("/filtertutor/offset/:offset/limit/:limit", (req, res) => {
       this.handler.filterTutor(req, res);
     });
+
+    router.get(
+      "/contract/:contractID",
+      (req, res, next) => {
+        Authenticate.forTutor(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getDetailContract(req, res);
+      }
+    );
+
+    router.get(
+      "/contracthistory/offset/:offset/limit/:limit",
+      (req, res, next) => {
+        Authenticate.forTutor(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getListContracttHistory(req, res);
+      }
+    );
+
+    router.post(
+      "/approvecontract/:contractID",
+      (req, res, next) => {
+        Authenticate.forTutor(req, res, next);
+      },
+      (req, res) => {
+        this.handler.approveContract(req, res);
+      }
+    );
   }
 }

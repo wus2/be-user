@@ -18,8 +18,8 @@ export interface ITutorHandler {
   getProfile(req: Request, res: Response): void;
   getAllSkill(req: Request, res: Response): void;
   filterTutor(req: Request, res: Response): void;
-  getLisContracttHistory(req: Request, res: Response): void;
-  chat(req: Request, res: Response): void;
+  getListContracttHistory(req: Request, res: Response): void;
+  getDetailContract(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
   approveContract(req: Request, res: Response): void;
 }
@@ -195,7 +195,7 @@ export class TutorHandler implements ITutorHandler {
     );
   }
 
-  getLisContracttHistory(req: Request, res: Response) {
+  getListContracttHistory(req: Request, res: Response) {
     var payload = res.locals.payload;
     if (!payload) {
       return res.json({
@@ -232,8 +232,6 @@ export class TutorHandler implements ITutorHandler {
     );
   }
 
-  chat(req: Request, res: Response) {}
-
   renevueStatics(req: Request, res: Response) {}
 
   getDetailContract(req: Request, res: Response) {
@@ -249,6 +247,20 @@ export class TutorHandler implements ITutorHandler {
         return res.json({
           code: -1,
           message: err.toString()
+        });
+      }
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is empty"
+        });
+      }
+      var contract = data[0] as ContractModel;
+      if (contract.tutor_id != payload.id) {
+        return res.json({
+          code: -1,
+          message: "Permission denied"
         });
       }
       return res.status(200).json({
@@ -288,14 +300,20 @@ export class TutorHandler implements ITutorHandler {
           message: "This is not your contract"
         });
       }
-      var now = new Date().getTime();
+      var now = ~~(new Date().getTime() / 1000);
+      console.log("[TutorHandler][approveContract][now]", now);
       if (contract.create_time && now > contract.create_time + 864e5) {
         // 864e5 is 2 date in timestamp
+        console.log(
+          "[TutorHandler][approveContract][expired time]",
+          contract.create_time + 864e5
+        );
         return res.json({
           code: -1,
           message: "Contract is expired"
         });
       }
+      console.log("[TutorHandler][approveContract][contract]", contract);
       contract.status = ContractStatus.Approved;
       this.contractDB.updateContract(contract, (err: Error, data: any) => {
         if (err) {

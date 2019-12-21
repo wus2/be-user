@@ -23,16 +23,16 @@
     "password": "KEWYT2ZMYS",
     "database": "bVEtH8m4Ur"
   },
-  "domain": "https://wusbeuser.herokuapp.com",
+  "domain": "http://localhost:55210",
   "fb": {
     "clientID": "488317645361433",
     "clientSecret": "e666aa3808de4702091527a5b7934290",
-    "callbackURL": "https://wusbeuser.herokuapp.com/users/auth/facebook/callback"
+    "callbackURL": "http://localhost:55210/users/auth/facebook/callback"
   },
   "gg": {
     "clientID": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
     "clientSecret": "r3wapL7nrPU66EFf18cJcOSZ",
-    "callbackURL": "https://wusbeuser.herokuapp.com/users/auth/google/callback"
+    "callbackURL": "http://localhost:55210/users/auth/google/callback"
   },
   "redirect": "http://localhost:3000"
 }

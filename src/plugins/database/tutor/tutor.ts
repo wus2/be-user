@@ -185,14 +185,19 @@ export default class TutorDB implements ITutorDB {
           return callback(new Error("Get rate failed"));
         }
         var user = data[0] as TutorModel;
-        if (!user.num_stars || !user.num_rate) {
-          return callback(new Error("Tutor model is incorrect"));
+        console.log("[TutorDB][updateRate][user]", user);
+        if (!user.num_stars || user.num_rate == undefined) {
+          user.num_stars = 0;
+          user.num_rate = 0;
         }
+        user.id = tutorID;
         user.num_stars += stars;
         user.num_rate++;
+        console.log(user);
         this.db
           .update(this.tableName, "id", user)
           .then((data: any) => {
+            console.log("====", data);
             if (!data) {
               return callback(new Error("Update rate to database failed"));
             }

@@ -25,7 +25,6 @@ export interface ITuteeHandler {
   evaluateCommentForTutor(req: Request, res: Response): void;
   payContract(req: Request, res: Response): void;
   complainContract(req: Request, res: Response): void;
-  chat(req: Request, res: Response): void;
 }
 
 export class TuteeHandler implements ITuteeHandler {
@@ -47,7 +46,7 @@ export class TuteeHandler implements ITuteeHandler {
         message: "User payload is undefined"
       });
     }
-    var startTime = Date.parse(req.body.startTime);
+    var startTime = ~~(Date.parse(req.body.startTime) / 1000);
     if (!startTime) {
       return res.json({
         code: -1,
@@ -68,11 +67,11 @@ export class TuteeHandler implements ITuteeHandler {
       tutor_id: tutorID,
       tutee_id: payload.id,
       desc: req.body.description,
-      start_time: startTime / 1000,
+      start_time: startTime,
       rent_time: rentTime,
       rent_price: rentPrice,
-      create_time: Date.now(),
-      contract_status: ContractStatus.Pending
+      create_time: ~~(Date.now() / 1000),
+      status: ContractStatus.Pending
     } as ContractModel;
     if (!entity) {
       return res.json({
@@ -211,6 +210,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       var contract = data[0] as ContractModel;
+      console.log("[Tutee][evaluateContract][contract]", contract);
       if (!contract) {
         return res.json({
           code: -1,
@@ -242,8 +242,8 @@ export class TuteeHandler implements ITuteeHandler {
           message: "Contract is not finished"
         });
       }
-      console.log("[Tutee][evaluateContract][data]", contract.stars);
-      if (!contract.stars || contract.stars != null) {
+      console.log("[Tutee][evaluateContract][stars]", contract.stars);
+      if (contract.stars != null) {
         return res.json({
           code: -1,
           message: "Contract is evaluated"
@@ -359,7 +359,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
-      if (!contract.comment) {
+      if (contract.comment != null) {
         return res.json({
           code: -1,
           message: "Contract is evaluated"
@@ -449,6 +449,4 @@ export class TuteeHandler implements ITuteeHandler {
   complainContract(req: Request, res: Response) {
     this.evaluateCommentForTutor(req, res);
   }
-
-  chat(req: Request, res: Response) {}
 }
