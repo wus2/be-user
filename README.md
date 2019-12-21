@@ -90,19 +90,97 @@ Backend User Manage
       {
       "introDesc":"string"
       }
-4. API-USER:
-  - Get list tutors:
-    + Path: tutor/getlist/offset/:offset/limit/:limit
+- Get all skills:
+    + Path: /tutor/getallskills
     + Method: GET
     + Header: 
-      'Accept: application/json'
-  - Get list tutors with filter:
-  
-  - Get tutor's profile:
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+- Get tutor profile:
     + Path: /tutor/getprofile/:tutorID
     + Method: GET
     + Header: 
-      'Accept: application/json'
+      "Content-Type": "application/json"
+- Get list tutor:
+    + Path: /tutor/getlist/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+- Filter tutor:
+    + Path: /tutor/filtertutor/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+    + Body:
+    {
+      "district":"string",
+      "minPrice":int,
+      "maxPrice":int,
+      "skill":"string"
+      }
+- Get detail contract:
+    + Path: /tutor/contract/:contractID
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+- Get contract history:
+    + Path: /tutor/contracthistory/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+- Approve contract:
+    + Path: /tutor/approvecontract/:contractID
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+4. API-Tutee:
+- Rent tutor:
+    + Path: /tutee/renttutor
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {"startTime": "March 21, 2019", "tutorID": int, "tutorUsername":"string", "rentTime":int,"rentPrice":int,"description":"string"}
+- Get contract history:
+    + Path: /tutee/contracthistory/offset/:offset/limit/:limit
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+- Get detail contract:
+    + Path: /tutee/contract/:contractID
+    + Method: GET
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+- Evaluate tutor's stars:
+    + Path: /tutee/evaluaterate/:contractID
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {"stars": int}
+- Evaluate tutor's comment:
+    + Path: /tutee/envaluatecomment/:contractID
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {"comment":"string"}
+- Payment for contract:
+    + Path: /tutee/paycontract/:contractID
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {}
 5. API-ADMIN:
   - Get list skills:
     + Path: /admin/skills/offset/:offset/limit/:limit
@@ -116,7 +194,7 @@ Backend User Manage
     + Header: 
       'Accept: application/json'
       "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
-- Get add skill:
+- Add skill:
     + Path: /admin/addskill
     + Method: GET
     + Header: 
@@ -128,7 +206,7 @@ Backend User Manage
       "desc":"string",
       "image":"string"
       }
-- Get update skill:
+- Update skill:
     + Path: /admin/updateskill
     + Method: PUT
     + Header: 
@@ -141,13 +219,13 @@ Backend User Manage
       "desc":"string",
       "image":"string"
       }
-- Get add skill:
+- Get skill:
     + Path: /admin/removeskill/:skillID
     + Method: GET
     + Header: 
       'Accept: application/json'
       "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
-  - Get list user:
+- Get list user:
     + Path: /admin/getlist/offset/:offset/limit/:limit
     + Method: GET
     + Header: 
@@ -156,6 +234,18 @@ Backend User Manage
 - Get user profile:
     + Path: /admin/user/:uid
     + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Lock user:
+    + Path: /admin/blockuser/:uid
+    + Method: PUT
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Unlock user:
+    + Path: /admin/unblockuser/:uid
+    + Method: PUT
     + Header: 
       'Accept: application/json'
       "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
