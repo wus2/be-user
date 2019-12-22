@@ -24,7 +24,7 @@ export default class SkillDB implements ISkillDB {
 
   constructor() {
     this.db = mysql;
-    this.tableName = "skill_tags";
+    this.tableName = "skill";
   }
 
   warmUp(limit: number, callback: Function) {

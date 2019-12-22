@@ -13,6 +13,7 @@ import { TutorRoute } from "./api/tutor";
 import { TuteeRoute } from "./api/tutee";
 import { SSE } from "./plugins/sse/sse";
 import { APIRoute } from "./api/api";
+import { NotifyRoute } from "./api/notify";
 
 /**
  * The server.
@@ -69,12 +70,15 @@ export class Server {
     new TuteeRoute().create(tuteeRoute);
     let apiRoute = express.Router();
     new APIRoute().create(apiRoute);
+    let notiRoute = express.Router();
+    new NotifyRoute().create(notiRoute);
 
     this.app.use("/user", userRouter);
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
     this.app.use("/tutee", tuteeRoute);
     this.app.use("/api", apiRoute);
+    this.app.use("/noti", notiRoute);
 
     this.app.use("/event/:username", (req, res, next) => {
       SSE.EventsHandler(req, res, next);

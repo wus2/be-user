@@ -89,6 +89,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       // notify to tutor
+      
       // TODO: convert to async
       this.userDB.getByID(payload.id, (err: Error, data: any) => {
         if (err) {

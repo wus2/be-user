@@ -173,6 +173,27 @@ curl-validate-password:
 	--data '{"password":"1234"}' \
 	${DOMAIN}/user/validatepassword
 
+curl-noti-add:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request POST \
+	--data '{"description":"Em muon dang ky hoc"}' \
+	${DOMAIN}/noti/add
+
+curl-noti-list:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request GET \
+	${DOMAIN}/noti/list/page/1/limit/12
+
+curl-noti:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request GET \
+	${DOMAIN}/noti/1
+
+curl-noti-seen:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
+	--request POST \
+	${DOMAIN}/noti/seen/1
+
 build:
 	tsc
 

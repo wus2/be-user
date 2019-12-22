@@ -1,5 +1,4 @@
 import mysql, { IMysql } from "../mysql";
-import { loadavg } from "os";
 
 export interface MessageModel {
   id?: number;
