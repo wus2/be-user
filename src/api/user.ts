@@ -99,14 +99,18 @@ export class UserRoute {
       }
     );
 
-    router.post("/isexists/:username", (req, res) => {});
+    router.post("/validateusername/:username", (req, res) => {
+      this.handler.validateUsername(req, res);
+    });
 
     router.post(
-      "/validpassword",
+      "/validatepassword",
       (req, res, next) => {
         Authenticate.forUser(req, res, next);
       },
-      (req, res) => {}
+      (req, res) => {
+        this.handler.validatePassword(req, res);
+      }
     );
 
     router.get("/activeaccount/:username", (req, res) => {

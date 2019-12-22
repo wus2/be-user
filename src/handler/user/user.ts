@@ -13,6 +13,7 @@ import {
   ForgotPassword,
   UpdateAvatar
 } from "./profile";
+import { ValidateUsername, ValidatePassword } from "./validate";
 import { ActivateAccount, ConfirmChange, ReclaimPassword } from "./callback";
 
 export interface IUserHandler {
@@ -25,6 +26,8 @@ export interface IUserHandler {
   updatePassword(req: Request, res: Response): void;
   forgotPassword(req: Request, res: Response): void;
   updateAvatar(req: Request, res: Response): void;
+  validateUsername(req: Request, res: Response): void;
+  validatePassword(req: Request, res: Response): void;
   activateAccount(req: Request, res: Response): void;
   confirmChange(req: Request, res: Response): void;
   reclaimPassword(req: Request, res: Response): void;
@@ -52,6 +55,8 @@ export class UserHandler implements IUserHandler {
   public updatePassword = UpdatePassword.bind(this);
   public forgotPassword = ForgotPassword.bind(this);
   public updateAvatar = UpdateAvatar.bind(this);
+  public validateUsername = ValidateUsername.bind(this);
+  public validatePassword = ValidatePassword.bind(this);
   public activateAccount = ActivateAccount.bind(this);
   public confirmChange = ConfirmChange.bind(this);
   public reclaimPassword = ReclaimPassword.bind(this);

@@ -39,6 +39,7 @@ export interface IUserDB {
   getByEmail(email: string, callback: Function): void;
   getListUsers(offset: number, limit: number, callback: Function): void;
   updateUser(user: UserModel, callback: Function): void;
+  validateUsername(username: string, callback: Function): void;
 }
 
 export default class UserDB implements IUserDB {
@@ -97,7 +98,7 @@ export default class UserDB implements IUserDB {
   }
 
   getByUsername(username: string, callback: Function) {
-    var sql = `select * from user where username = '${username}`;
+    var sql = `select * from user where username = '${username}'`;
     this.db
       .load(sql)
       .then((data: any) => {
@@ -159,6 +160,22 @@ export default class UserDB implements IUserDB {
       .catch((err: Error) => {
         console.log("[UserDB][updateUser][err]", err);
         return callback(new Error("Set user failed"));
+      });
+  }
+
+  validateUsername(username: string, callback: Function) {
+    var sql = `select * from ${this.tableName} where username = '${username}'`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data.length > 0 && data[0].username === username) {
+          return callback(null, true);
+        }
+        return callback(null, false);
+      })
+      .catch((err: Error) => {
+        console.log("[UserDB][validateUsername][err]", err);
+        return callback(new Error("Get database failed"));
       });
   }
 }
