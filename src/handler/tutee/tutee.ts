@@ -71,7 +71,7 @@ export class TuteeHandler implements ITuteeHandler {
       desc: req.body.description,
       start_time: startTime,
       rent_time: rentTime,
-      rent_price: rentPrice,
+      rent_price: rentPrice * rentTime,
       create_time: ~~(Date.now() / 1000),
       status: ContractStatus.Pending
     } as ContractModel;
