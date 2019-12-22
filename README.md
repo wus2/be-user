@@ -12,7 +12,7 @@ Backend User Manage
       "password":"string"
       }
   - Regiter:
-    + Path: /users/register
+    + Path: /user/register
     + Method: POST
     + Header: "Content-Type": "application/json"
     + Body: 
@@ -30,13 +30,13 @@ Backend User Manage
       "role": int
       }
   - Get Profile:
-    + Path: /users/profile
+    + Path: /user/profile
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
   - Update Profile:
-    + Path: /users/updateprofile
+    + Path: /user/updateprofile
     + Method: POST
     + Header: 
       "Content-Type": "application/json"
@@ -51,7 +51,7 @@ Backend User Manage
       "avatar":"string",
       }
   - Update Password:
-    + Path: /users/updatepassword
+    + Path: /user/updatepassword
     + Method: POST
     + Header: 
       "Content-Type": "application/json"
@@ -67,6 +67,21 @@ Backend User Manage
     + Header: 
       "Authorization": "Bearer ${JWT-TOKEN}"
     + Name input: <input name="avatar"/>
+  - Validate username:
+    + Path: /user/validateusername
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+  - Validate password:
+    + Path: /user/validatepassword
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body: 
+      {
+      "password":"string"
+      }
 3. API-TUTOR
   - Update profile: user's feature
   - Update avatar: user's feature
