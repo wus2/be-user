@@ -65,13 +65,13 @@ export class TutorHandler implements ITutorHandler {
   getListTutors(req: Request, res: Response) {
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page < 0 || limit < 0) {
+    if (page <= 0 || limit < 0) {
       return res.json({
         code: -1,
-        message: "Offset or limit is incorrect"
+        message: "Page or limit is incorrect"
       });
     }
-    var offset = page * Pagination;
+    var offset = (page - 1) * Pagination;
     this.tutorDB.getList(offset, limit, (err: Error, data: any) => {
       if (err) {
         return res.json({
@@ -160,13 +160,13 @@ export class TutorHandler implements ITutorHandler {
   filterTutor(req: Request, res: Response) {
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page < 0 || limit < 0) {
+    if (page <= 0 || limit < 0) {
       return res.json({
         code: -1,
-        message: "Offset or limit is incorrect"
+        message: "Page or limit is incorrect"
       });
     }
-    var offset = page * Pagination;
+    var offset = (page - 1) * Pagination;
     var district = req.body.district;
     var minPrice = req.body.minPrice;
     var maxPrice = req.body.maxPrice;
@@ -209,13 +209,13 @@ export class TutorHandler implements ITutorHandler {
     }
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page < 0 || limit < 0) {
+    if (page <= 0 || limit < 0) {
       return res.json({
         code: -1,
-        message: "Offset or limit is incorrect"
+        message: "Page or limit is incorrect"
       });
     }
-    var offset = page * Pagination;
+    var offset = (page - 1) * Pagination;
     this.contractDB.getListContract(
       payload.id,
       payload.role,

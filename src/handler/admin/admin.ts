@@ -33,13 +33,13 @@ export class AdminHandler implements IAdminHandler {
   getListUser(req: Request, res: Response) {
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page < 0 || limit < 0) {
+    if (page <= 0 || limit < 0) {
       return res.json({
         code: -1,
-        message: "Offset or limit is incorrect"
+        message: "Page or limit is incorrect"
       });
     }
-    var offset = page * Pagination;
+    var offset = (page - 1) * Pagination;
     this.userDB.getListUsers(offset, limit, (err: Error, data: any) => {
       if (err) {
         return res.json({
@@ -84,13 +84,13 @@ export class AdminHandler implements IAdminHandler {
   getListSkill(req: Request, res: Response) {
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page < 0 || limit < 0) {
+    if (page <= 0 || limit < 0) {
       return res.json({
         code: -1,
-        message: "Offset or limit is incorrect"
+        message: "Page or limit is incorrect"
       });
     }
-    var offset = page * Pagination;
+    var offset = (page - 1) * Pagination;
     this.skillDB.getSkills(offset, limit, (err: Error, data: any) => {
       if (err) {
         return res.json({

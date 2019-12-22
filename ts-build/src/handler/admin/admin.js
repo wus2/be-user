@@ -21,13 +21,13 @@ var AdminHandler = /** @class */ (function () {
     AdminHandler.prototype.getListUser = function (req, res) {
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
-        if (page < 0 || limit < 0) {
+        if (page <= 0 || limit < 0) {
             return res.json({
                 code: -1,
-                message: "Offset or limit is incorrect"
+                message: "Page or limit is incorrect"
             });
         }
-        var offset = page * Pagination;
+        var offset = (page - 1) * Pagination;
         this.userDB.getListUsers(offset, limit, function (err, data) {
             if (err) {
                 return res.json({
@@ -70,13 +70,13 @@ var AdminHandler = /** @class */ (function () {
     AdminHandler.prototype.getListSkill = function (req, res) {
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
-        if (page < 0 || limit < 0) {
+        if (page <= 0 || limit < 0) {
             return res.json({
                 code: -1,
-                message: "Offset or limit is incorrect"
+                message: "Page or limit is incorrect"
             });
         }
-        var offset = page * Pagination;
+        var offset = (page - 1) * Pagination;
         this.skillDB.getSkills(offset, limit, function (err, data) {
             if (err) {
                 return res.json({
