@@ -33,7 +33,7 @@ export class TuteeRoute {
     );
 
     router.get(
-      "/contracthistory/offset/:offset/limit/:limit",
+      "/contracthistory/page/:page/limit/:limit",
       (req, res, next) => {
         Authenticate.forTutee(req, res, next);
       },

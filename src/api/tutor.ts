@@ -31,7 +31,7 @@ export class TutorRoute {
       }
     );
 
-    router.get("/getlist/offset/:offset/limit/:limit", (req, res) => {
+    router.get("/getlist/page/:page/limit/:limit", (req, res) => {
       this.handler.getListTutors(req, res);
     });
 
@@ -59,7 +59,7 @@ export class TutorRoute {
       }
     );
 
-    router.get("/filtertutor/offset/:offset/limit/:limit", (req, res) => {
+    router.get("/filtertutor/page/:page/limit/:limit", (req, res) => {
       this.handler.filterTutor(req, res);
     });
 
@@ -74,7 +74,7 @@ export class TutorRoute {
     );
 
     router.get(
-      "/contracthistory/offset/:offset/limit/:limit",
+      "/contracthistory/page/:page/limit/:limit",
       (req, res, next) => {
         Authenticate.forTutor(req, res, next);
       },

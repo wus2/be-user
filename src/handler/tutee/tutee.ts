@@ -17,6 +17,8 @@ import {
 import UserDB, { IUserDB, UserModel } from "../../plugins/database/user/user";
 import { resolve } from "dns";
 
+const Pagination = 12;
+
 export interface ITuteeHandler {
   rentTutor(req: Request, res: Response): void;
   getListContractHistory(req: Request, res: Response): void;
@@ -135,14 +137,15 @@ export class TuteeHandler implements ITuteeHandler {
         message: "User payload is invalid"
       });
     }
-    var offset = Number(req.params.offset);
+    var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (offset < 0 || limit < 0) {
+    if (page < 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Offset or limit is incorrect"
       });
     }
+    var offset = page * Pagination;
     this.contractDB.getListContract(
       payload.id,
       payload.role,

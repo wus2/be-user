@@ -7,6 +7,8 @@ import UserDB, {
 import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
 import { Model } from "../../plugins/database/skill/skill";
 
+const Pagination = 12;
+
 export interface IAdminHandler {
   getListUser(req: Request, res: Response): void;
   getUserProfile(req: Request, res: Response): void;
@@ -15,8 +17,8 @@ export interface IAdminHandler {
   addSkill(req: Request, res: Response): void;
   updateSkill(req: Request, res: Response): void;
   removeSkill(req: Request, res: Response): void;
-  lockUser(req: Request, res: Response): void
-  unlockUser(req: Request, res: Response): void
+  lockUser(req: Request, res: Response): void;
+  unlockUser(req: Request, res: Response): void;
 }
 
 export class AdminHandler implements IAdminHandler {
@@ -29,14 +31,15 @@ export class AdminHandler implements IAdminHandler {
   }
 
   getListUser(req: Request, res: Response) {
-    var offset = Number(req.params.offset);
+    var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (offset < 0 || limit < 0) {
+    if (page < 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Offset or limit is incorrect"
       });
     }
+    var offset = page * Pagination;
     this.userDB.getListUsers(offset, limit, (err: Error, data: any) => {
       if (err) {
         return res.json({
@@ -79,14 +82,15 @@ export class AdminHandler implements IAdminHandler {
   }
 
   getListSkill(req: Request, res: Response) {
-    var offset = Number(req.params.offset);
+    var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (offset < 0 || limit < 0) {
+    if (page < 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Offset or limit is incorrect"
       });
     }
+    var offset = page * Pagination;
     this.skillDB.getSkills(offset, limit, (err: Error, data: any) => {
       if (err) {
         return res.json({

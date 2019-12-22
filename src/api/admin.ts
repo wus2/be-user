@@ -22,7 +22,7 @@ export class AdminRoute {
    */
   public create(router: Router) {
     router.get(
-      "/skills/offset/:offset/limit/:limit",
+      "/skills/page/:page/limit/:limit",
       (req, res, next) => {
         Authenticate.forAdmin(req, res, next);
       },
@@ -72,7 +72,7 @@ export class AdminRoute {
     );
 
     router.get(
-      "/getusers/offset/:offset/limit/:limit",
+      "/getusers/page/:page/limit/:limit",
       (req, res, next) => {
         Authenticate.forAdmin(req, res, next);
       },

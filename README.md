@@ -102,12 +102,12 @@ Backend User Manage
     + Header: 
       "Content-Type": "application/json"
 - Get list tutor:
-    + Path: /tutor/getlist/offset/:offset/limit/:limit
+    + Path: /tutor/getlist/page/:page/limit/:limit
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
 - Filter tutor:
-    + Path: /tutor/filtertutor/offset/:offset/limit/:limit
+    + Path: /tutor/filtertutor/page/:page/limit/:limit
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
@@ -125,7 +125,7 @@ Backend User Manage
       "Content-Type": "application/json"
       "Authorization": "Bearer ${JWT-TOKEN}"
 - Get contract history:
-    + Path: /tutor/contracthistory/offset/:offset/limit/:limit
+    + Path: /tutor/contracthistory/page/:page/limit/:limit
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
@@ -146,7 +146,7 @@ Backend User Manage
     + Body:
     {"startTime": "March 21, 2019", "tutorID": int, "tutorUsername":"string", "rentTime":int,"rentPrice":int,"description":"string"}
 - Get contract history:
-    + Path: /tutee/contracthistory/offset/:offset/limit/:limit
+    + Path: /tutee/contracthistory/page/:page/limit/:limit
     + Method: GET
     + Header: 
       "Content-Type": "application/json"
@@ -183,7 +183,7 @@ Backend User Manage
     {}
 5. API-ADMIN:
   - Get list skills:
-    + Path: /admin/skills/offset/:offset/limit/:limit
+    + Path: /admin/skills/page/:page/limit/:limit
     + Method: GET
     + Header: 
       'Accept: application/json'
@@ -226,7 +226,7 @@ Backend User Manage
       'Accept: application/json'
       "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
 - Get list user:
-    + Path: /admin/getlist/offset/:offset/limit/:limit
+    + Path: /admin/getlist/page/:page/limit/:limit
     + Method: GET
     + Header: 
       'Accept: application/json'
