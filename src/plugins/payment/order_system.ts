@@ -10,9 +10,30 @@ export interface Order {
   embeddata?: any;
   item?: any;
   mac?: string;
+  zptransid?: string;
+  description?: string;
+  timestamp?: number;
+  mrefundid?: number;
+  userip?: string;
+  paymentcode?: string;
 }
 
-export default class OrderSystem {
+export interface IOrderSystem {
+  CreateOrder(order: Order): string;
+  QuickPay(order: Order, paymentcodeRaw: number): string;
+  Refund(
+    appid: number,
+    zptransid: string,
+    amount: number,
+    description: string,
+    timestamp: number
+  ): string;
+  GetOrderStatus(appid: number, apptransid: string): string;
+  GetRefundStatus(appid: number, mrefundid: number, timestamp: number): string;
+  GetBankList(appid: number, reqtime: number): string;
+}
+
+export default class OrderSystem implements IOrderSystem {
   Compute(data: any) {
     return CryptoJS.HmacSHA256(data, config.get("zalopay.key1")).toString();
   }
@@ -39,47 +60,41 @@ export default class OrderSystem {
     return this.Compute(this._createOrderMacData(order));
   }
 
-  QuickPay(order: Order, paymentcodeRaw: any) {
+  QuickPay(order: Order, paymentcodeRaw: number) {
     return this.Compute(this._createOrderMacData(order) + "|" + paymentcodeRaw);
   }
 
-  Refund(params: {
-    appid: string;
-    zptransid: string;
-    amount: string;
-    description: string;
-    timestamp: string;
-  }) {
+  Refund(
+    appid: number,
+    zptransid: string,
+    amount: number,
+    description: string,
+    timestamp: number
+  ) {
     return this.Compute(
-      params.appid +
+      appid +
         "|" +
-        params.zptransid +
+        zptransid +
         "|" +
-        params.amount +
+        amount +
         "|" +
-        params.description +
+        description +
         "|" +
-        params.timestamp
+        timestamp
     );
   }
 
-  GetOrderStatus(params: { appid: string; apptransid: string }) {
+  GetOrderStatus(appid: number, apptransid: string) {
     return this.Compute(
-      params.appid + "|" + params.apptransid + "|" + config.get("zalopay.key1")
+      appid + "|" + apptransid + "|" + config.get("zalopay.key1")
     );
   }
 
-  GetRefundStatus(params: {
-    appid: string;
-    mrefundid: string;
-    timestamp: string;
-  }) {
-    return this.Compute(
-      params.appid + "|" + params.mrefundid + "|" + params.timestamp
-    );
+  GetRefundStatus(appid: number, mrefundid: number, timestamp: number) {
+    return this.Compute(appid + "|" + mrefundid + "|" + timestamp);
   }
 
-  GetBankList(params: { appid: string; reqtime: string }) {
-    return this.Compute(params.appid + "|" + params.reqtime);
+  GetBankList(appid: number, reqtime: number) {
+    return this.Compute(appid + "|" + reqtime);
   }
 }

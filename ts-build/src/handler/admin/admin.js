@@ -1,0 +1,242 @@
+"use strict";
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result["default"] = mod;
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_1 = __importStar(require("../../plugins/database/user/user"));
+var skill_1 = __importDefault(require("../../plugins/database/skill/skill"));
+var AdminHandler = /** @class */ (function () {
+    function AdminHandler() {
+        this.userDB = new user_1.default();
+        this.skillDB = new skill_1.default();
+    }
+    AdminHandler.prototype.getListUser = function (req, res) {
+        var offset = Number(req.params.offset);
+        var limit = Number(req.params.limit);
+        if (offset < 0 || limit < 0) {
+            return res.json({
+                code: -1,
+                message: "Offset or limit is incorrect"
+            });
+        }
+        this.userDB.getListUsers(offset, limit, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
+    AdminHandler.prototype.getUserProfile = function (req, res) {
+        var userID = Number(req.params.userID);
+        if (!userID || userID < 0) {
+            return res.json({
+                code: -1,
+                message: "UserID is incorrect"
+            });
+        }
+        this.userDB.getByID(userID, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            if (data[0].skill_tags) {
+                data[0].skill_tags = JSON.parse(data[0].skill_tags);
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data[0]
+            });
+        });
+    };
+    AdminHandler.prototype.getListSkill = function (req, res) {
+        var offset = Number(req.params.offset);
+        var limit = Number(req.params.limit);
+        if (offset < 0 || limit < 0) {
+            return res.json({
+                code: -1,
+                message: "Offset or limit is incorrect"
+            });
+        }
+        this.skillDB.getSkills(offset, limit, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
+    AdminHandler.prototype.getSkill = function (req, res) {
+        var skillID = Number(req.params.skillID);
+        if (!skillID || skillID < 0) {
+            return res.json({
+                code: -1,
+                message: "Skill ID is incorrect"
+            });
+        }
+        this.skillDB.getSkill(skillID, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString().toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data[0]
+            });
+        });
+    };
+    AdminHandler.prototype.addSkill = function (req, res) {
+        var skillStr = req.body.skill;
+        if (!skillStr) {
+            return res.json({
+                code: -1,
+                message: "Skill is empty!"
+            });
+        }
+        var entity = {
+            tag: skillStr
+        };
+        this.skillDB.addSkill(entity, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
+    };
+    AdminHandler.prototype.updateSkill = function (req, res) {
+        var skillID = Number(req.body.skillID);
+        if (!skillID || skillID < 0) {
+            return res.json({
+                code: -1,
+                message: "Skill ID is incorrect"
+            });
+        }
+        var entity = {
+            id: skillID,
+            tag: req.body.skill,
+            desc: req.body.desc
+        };
+        if (!entity) {
+            return res.json({
+                code: -1,
+                message: "Skill ID or skill name is empty"
+            });
+        }
+        this.skillDB.updateSkill(skillID, entity, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
+    };
+    AdminHandler.prototype.removeSkill = function (req, res) {
+        var skillID = Number(req.params.skillID);
+        if (!skillID || skillID < 0) {
+            return res.json({
+                code: -1,
+                message: "Empty skill ID"
+            });
+        }
+        this.skillDB.removeSkill(skillID, function (err, ok) {
+            if (err || !ok) {
+                return res.json({
+                    code: -1,
+                    message: "Remove failed"
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
+    };
+    AdminHandler.prototype.lockUser = function (req, res) {
+        var userID = Number(req.params.userID);
+        if (userID < 0) {
+            return res.json({
+                cpde: -1,
+                message: "User ID is incorrect"
+            });
+        }
+        var entity = {
+            id: userID,
+            account_status: user_1.AccountStatus.Block
+        };
+        this.userDB.updateUser(entity, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
+    };
+    AdminHandler.prototype.unlockUser = function (req, res) {
+        var userID = Number(req.params.userID);
+        if (userID < 0) {
+            return res.json({
+                cpde: -1,
+                message: "User ID is incorrect"
+            });
+        }
+        var entity = {
+            id: userID,
+            account_status: user_1.AccountStatus.Active
+        };
+        this.userDB.updateUser(entity, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
+    };
+    return AdminHandler;
+}());
+exports.AdminHandler = AdminHandler;

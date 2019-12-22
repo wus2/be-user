@@ -12,6 +12,7 @@ import { AdminRoute } from "./api/admin";
 import { TutorRoute } from "./api/tutor";
 import { TuteeRoute } from "./api/tutee";
 import { SSE } from "./plugins/sse/sse";
+import { APIRoute } from "./api/api";
 
 /**
  * The server.
@@ -66,11 +67,14 @@ export class Server {
     new TutorRoute().create(tutorRoute);
     let tuteeRoute = express.Router();
     new TuteeRoute().create(tuteeRoute);
+    let apiRoute = express.Router();
+    new APIRoute().create(apiRoute);
 
     this.app.use("/user", userRouter);
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
     this.app.use("/tutee", tuteeRoute);
+    this.app.use("/api", apiRoute);
 
     this.app.use("/event/:username", (req, res, next) => {
       SSE.EventsHandler(req, res, next);

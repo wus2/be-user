@@ -1,0 +1,56 @@
+{
+  "mysql-server": {
+    "host": "112.197.2.178",
+    "port": 3306,
+    "user": "administrator",
+    "password": "5ctv@123",
+    "database": "wus2_be_user"
+  },
+  "mysql-local": {
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": "Hoangan2110",
+    "database": "wus2_be_user"
+  },
+  "key_jwt": "blasters42Haiku40amerada",
+  "http_port": 55210,
+  "mysql-dev": {
+    "connectionLimit": 10,
+    "host": "remotemysql.com",
+    "port": 3306,
+    "user": "bVEtH8m4Ur",
+    "password": "KEWYT2ZMYS",
+    "database": "bVEtH8m4Ur"
+  },
+  "domain": "http://localhost:55210",
+  "fb": {
+    "clientID": "488317645361433",
+    "clientSecret": "e666aa3808de4702091527a5b7934290",
+    "callbackURL": "http://localhost:55210/users/auth/facebook/callback"
+  },
+  "gg": {
+    "clientID": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
+    "clientSecret": "r3wapL7nrPU66EFf18cJcOSZ",
+    "callbackURL": "http://localhost:55210/users/auth/google/callback"
+  },
+  "redirect": "http://localhost:3000",
+  "zalopay": {
+    "appid": "553",
+    "key1": "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
+    "key2": "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3",
+    "ngrok": {
+      "tunnels": "http://localhost:55210/api/tunnels"
+    },
+    "api": {
+      "createorder": "https://sandbox.zalopay.com.vn/v001/tpe/createorder",
+      "gateway": "https://sbgateway.zalopay.vn/pay?order=",
+      "quickpay": "https://sandbox.zalopay.com.vn/v001/tpe/submitqrcodepay",
+      "refund": "https://sandbox.zalopay.com.vn/v001/tpe/partialrefund",
+      "getrefundstatus": "https://sandbox.zalopay.com.vn/v001/tpe/getpartialrefundstatus",
+      "getorderstatus": "https://sandbox.zalopay.com.vn/v001/tpe/getstatusbyapptransid",
+      "getbanklist": "https://sbgateway.zalopay.vn/api/getlistmerchantbanks"
+    },
+    "pass": "Hoang@n2110"
+  }
+}
