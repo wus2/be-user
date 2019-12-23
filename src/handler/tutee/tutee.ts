@@ -15,7 +15,7 @@ import {
   GetRateDescription
 } from "../../plugins/sse/notification";
 import UserDB, { IUserDB, UserModel } from "../../plugins/database/user/user";
-import { resolve } from "dns";
+import { SocketServer } from "../../plugins/socket/socket";
 
 const Pagination = 12;
 
@@ -33,11 +33,21 @@ export class TuteeHandler implements ITuteeHandler {
   contractDB: IContractDB;
   tutorDB: ITutorDB;
   userDB: IUserDB;
+  socket: any;
 
   constructor() {
     this.contractDB = new ContractDB();
     this.tutorDB = new TutorDB();
     this.userDB = new UserDB();
+
+    SocketServer.Instance()
+      .then(socket => {
+        this.socket = socket as SocketServer;
+        console.log("[TuteeHandler]Socket get instance");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   rentTutor(req: Request, res: Response) {
@@ -88,9 +98,8 @@ export class TuteeHandler implements ITuteeHandler {
           message: err.toString()
         });
       }
-      // notify to tutor
-      
       // TODO: convert to async
+      this.socket.SendData("anvh2", "OK");
       this.userDB.getByID(payload.id, (err: Error, data: any) => {
         if (err) {
           console.log("[TuteeHandler][rentTutor][err]", err);
@@ -381,6 +390,7 @@ export class TuteeHandler implements ITuteeHandler {
           });
         }
         // TODO: notify to tutor
+        this.socket.SendData("anvh2", "OK");
         return res.status(200).json({
           code: 1,
           message: "OK"

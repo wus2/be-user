@@ -1,6 +1,6 @@
 import http from "http";
 import { Server } from "../../app";
-import { SocketServer } from "./socket_ex";
+import { SocketServer } from "./socket";
 
 const httpPort = 55210;
 

@@ -9,7 +9,7 @@ app.set("port", httpPort);
 var httpServer = http.createServer(app);
 
 // start a socket server
-new SocketServer(httpServer).Start();
+SocketServer.Init(httpServer).Start();
 
 httpServer.listen(httpPort);
 

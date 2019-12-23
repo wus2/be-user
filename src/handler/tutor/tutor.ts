@@ -10,6 +10,7 @@ import {
   ContractModel,
   ContractStatus
 } from "../../plugins/database/contract/contract";
+import { SocketServer } from "../../plugins/socket/socket";
 
 const Pagination = 12;
 
@@ -31,12 +32,22 @@ export class TutorHandler implements ITutorHandler {
   skillDB: ISkillDB;
   contractDB: IContractDB;
   memCache: Map<string, any>;
+  socket: any;
 
   constructor() {
     this.tutorDB = new TutorDB();
     this.skillDB = new SkillDB();
     this.contractDB = new ContractDB();
     this.memCache = new Map<string, any>();
+
+    SocketServer.Instance()
+      .then(socket => {
+        this.socket = socket as SocketServer;
+        console.log("[TutorHandler]Socket get instance");
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   updateSkills(req: Request, res: Response) {
@@ -328,6 +339,7 @@ export class TutorHandler implements ITutorHandler {
           });
         }
         // TODO: notify to tutee and set to history
+        this.socket.SendData("anvh2", "OK");
         return res.status(200).json({
           code: 1,
           message: "OK"
