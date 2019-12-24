@@ -98,17 +98,19 @@ var TutorDB = /** @class */ (function () {
         if (offset < 0 || limit < 0) {
             return callback(new Error("Offset or limit are incorrect"));
         }
+        console.log(district);
         var sql = "select * from " + this.tableName + " where role = 1";
         if (district) {
             sql += " and district = '" + district + "'";
         }
-        if (minPrice && maxPrice && minPrice <= maxPrice) {
+        if (minPrice != NaN && maxPrice != NaN && minPrice > 0 && maxPrice > 0 && minPrice <= maxPrice) {
             sql += " and price_per_hour >= " + minPrice + " and price_per_hour <= " + maxPrice;
         }
         if (skill) {
             sql += " and skill_tags like '" + skill + "'";
         }
         sql += " limit " + offset + ", " + limit;
+        console.log(sql);
         this.db
             .load(sql)
             .then(function (data) {

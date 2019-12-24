@@ -138,8 +138,8 @@ var TutorHandler = /** @class */ (function () {
         });
     };
     TutorHandler.prototype.filterTutor = function (req, res) {
-        var page = Number(req.params.page);
-        var limit = Number(req.params.limit);
+        var page = Number(req.query.page);
+        var limit = Number(req.query.limit);
         if (page <= 0 || limit < 0) {
             return res.json({
                 code: -1,
@@ -147,10 +147,10 @@ var TutorHandler = /** @class */ (function () {
             });
         }
         var offset = (page - 1) * Pagination;
-        var district = req.body.district;
-        var minPrice = req.body.minPrice;
-        var maxPrice = req.body.maxPrice;
-        var skill = req.body.skill;
+        var district = req.query.district;
+        var minPrice = req.query.minPrice;
+        var maxPrice = req.query.maxPrice;
+        var skill = req.query.skill;
         this.tutorDB.filterTutor(district, minPrice, maxPrice, skill, offset, limit, function (err, data) {
             if (err) {
                 return res.json({

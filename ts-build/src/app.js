@@ -102,6 +102,7 @@ var Server = /** @class */ (function () {
         this.app.use(bodyParser.urlencoded({
             extended: true
         }));
+        this.app.use(express_1.default.urlencoded());
         this.app.use(cookie_parser_1.default("SECRET_GOES_HERE"));
         this.app.use(method_override_1.default());
         this.app.use(cors_1.default());
