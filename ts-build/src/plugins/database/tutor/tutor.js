@@ -102,7 +102,11 @@ var TutorDB = /** @class */ (function () {
         if (district) {
             sql += " and district = '" + district + "'";
         }
-        if (minPrice != NaN && maxPrice != NaN && minPrice > 0 && maxPrice > 0 && minPrice <= maxPrice) {
+        if (minPrice != NaN &&
+            maxPrice != NaN &&
+            minPrice > 0 &&
+            maxPrice > 0 &&
+            minPrice <= maxPrice) {
             sql += " and price_per_hour >= " + minPrice + " and price_per_hour <= " + maxPrice;
         }
         else if (minPrice != NaN && minPrice > 0) {
@@ -112,7 +116,7 @@ var TutorDB = /** @class */ (function () {
             sql += " and price_per_hour <= " + maxPrice;
         }
         if (skill) {
-            sql += " and skill_tags like '" + skill + "'";
+            sql += " and skill_tags like '%" + skill + "%'";
         }
         sql += " limit " + offset + ", " + limit;
         console.log(sql);
