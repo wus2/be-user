@@ -84,6 +84,9 @@ var UserRoute = /** @class */ (function () {
         router.get("/reclaimpassword/:secret", function (req, res) {
             _this.handler.reclaimPassword(req, res);
         });
+        router.get("/getallskill", function (req, res) {
+            _this.handler.getAllSkill(req, res);
+        });
     };
     return UserRoute;
 }());
