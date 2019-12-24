@@ -20,13 +20,13 @@ var PaymentHandler = /** @class */ (function () {
                 message: "Contract ID is empty"
             });
         }
-        var payload = res.locals.payload;
-        if (!payload) {
-            return res.json({
-                code: -1,
-                message: "User payload is empty"
-            });
-        }
+        // var payload = res.locals.payload;
+        // if (!payload) {
+        //   return res.json({
+        //     code: -1,
+        //     message: "User payload is empty"
+        //   });
+        // }
         this.contractDB.getContract(contractID, function (err, data) {
             if (err) {
                 return res.jsonp({
@@ -48,7 +48,6 @@ var PaymentHandler = /** @class */ (function () {
             var date = new Date();
             var createDate = dateFormat(date, "yyyymmddHHmmss");
             var orderId = dateFormat(date, "HHmmss");
-            var amount = req.body.amount;
             var bankCode = req.body.bankCode;
             var orderInfo = req.body.orderDescription;
             var orderType = req.body.orderType;
@@ -56,8 +55,15 @@ var PaymentHandler = /** @class */ (function () {
             if (locale === null || locale === "" || locale == undefined) {
                 locale = "vn";
             }
+            if (!contract.rent_price || !contract.rent_time) {
+                return res.json({
+                    code: -1,
+                    message: "Contract does not have rent price and time"
+                });
+            }
+            var amount = contract.rent_price * contract.rent_time;
             var order = {
-                vnp_Amount: amount * 100,
+                vnp_Amount: amount,
                 vnp_CreateDate: createDate,
                 vnp_Locale: locale,
                 vnp_IpAddr: ipAddr,
@@ -68,13 +74,12 @@ var PaymentHandler = /** @class */ (function () {
             if (bankCode !== null && bankCode !== "") {
                 order.vnp_BankCode = bankCode;
             }
-            // update to database
             var entity = {
                 id: contractID,
                 order_id: orderId,
-                order_amount: amount * 100,
+                order_amount: amount,
                 order_bank_code: bankCode,
-                order_create_date: createDate,
+                order_create_date: ~~(Date.now() / 1000),
                 status: contract_1.ContractStatus.Created
             };
             _this.contractDB.updateContract(entity, function (err, data) {

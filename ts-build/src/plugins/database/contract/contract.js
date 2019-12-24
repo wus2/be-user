@@ -37,6 +37,7 @@ var ContractDB = /** @class */ (function () {
         });
     };
     ContractDB.prototype.getContract = function (conID, callback) {
+        var sql = "";
         this.db
             .get(this.tableName, "id", conID)
             .then(function (data) {

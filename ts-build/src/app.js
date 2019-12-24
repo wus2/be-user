@@ -94,9 +94,9 @@ var Server = /** @class */ (function () {
      * @method config
      */
     Server.prototype.config = function () {
+        this.app.use(express_1.default.static(path.join(__dirname, "public")));
         this.app.set("views", path.join(__dirname, "views"));
         this.app.set("view engine", "jade");
-        this.app.use(express_1.default.static(path.join(__dirname, "public")));
         this.app.use(morgan_1.default("dev"));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({

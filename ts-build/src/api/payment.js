@@ -1,5 +1,9 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+var authen_1 = __importDefault(require("../plugins/middlewares/authen"));
 var payment_1 = require("../handler/payment/payment");
 var dateFormat = require("dateformat");
 var PaymentRoute = /** @class */ (function () {
@@ -11,18 +15,24 @@ var PaymentRoute = /** @class */ (function () {
         router.get("/", function (req, res) {
             res.render("orderlist", { title: "Danh sách hợp đồng" });
         });
-        router.get("/create", 
-        // (req, res, next) => {
-        //   Authenticate.forUser(req, res, next);
-        // },
-        function (req, res) {
+        router.get("/create/:contractID", function (req, res, next) {
+            authen_1.default.forUser(req, res, next);
+        }, function (req, res) {
+            var contractID = Number(req.params.contractID);
+            if (!contractID || contractID < 0) {
+                return res.json({
+                    code: -1,
+                    message: "Contract ID is incorrect"
+                });
+            }
             var date = new Date();
             var desc = "Thanh toan don hang thoi gian: " +
                 dateFormat(date, "yyyy-mm-dd HH:mm:ss");
             res.render("order", {
                 title: "Tạo mới đơn hàng",
                 amount: 10000,
-                description: desc
+                description: desc,
+                contractID: contractID
             });
         });
         router.post("/create/:contractID", 
@@ -32,7 +42,7 @@ var PaymentRoute = /** @class */ (function () {
         function (req, res) {
             _this.handler.CreateOrder(req, res);
         });
-        router.get("/callback/", 
+        router.get("/callback", 
         // (req, res, next) => {
         //   Authenticate.forUser(req, res, next);
         // },
