@@ -8,20 +8,9 @@ import {
 
 const Pagination = 12;
 
-/**
- * / route
- *
- * @class User
- */
 export class NotifyRoute {
   constructor() {}
-  /**
-   * Create the routes.
-   *
-   * @class UserRoute
-   * @method create
-   * @static
-   */
+
   public create(router: Router) {
     router.get(
       "/:notiID",
@@ -61,6 +50,13 @@ export class NotifyRoute {
         Authenticate.forUser(req, res, next);
       },
       (req, res) => {
+        var payload = res.locals.payload;
+        if (!payload) {
+          return res.json({
+            code: -1,
+            message: "User payload is empty"
+          });
+        }
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
         if (page <= 0 || limit <= 0) {
@@ -71,6 +67,7 @@ export class NotifyRoute {
         }
         var offset = (page - 1) * Pagination;
         new NotificationDB().getListNotification(
+          payload.id,
           offset,
           limit,
           (err: Error, data: any) => {
@@ -96,6 +93,13 @@ export class NotifyRoute {
         Authenticate.forUser(req, res, next);
       },
       (req, res) => {
+        var userID = Number(req.body.userID);
+        if (userID < 0) {
+          return res.json({
+            code: -1,
+            message: "User ID is empty"
+          });
+        }
         var desc = req.body.description;
         if (!desc) {
           return res.json({
@@ -104,6 +108,7 @@ export class NotifyRoute {
           });
         }
         var entity = {
+          user_id: userID,
           description: desc,
           create_time: ~~(Date.now() / 1000),
           status: NotificationStatus.NotSeen

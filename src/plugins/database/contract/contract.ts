@@ -5,11 +5,12 @@ export enum ContractStatus {
   Draft = 0,
   Pending = 1,
   Approved = 2,
-  Paid = 3,
-  Closed = 4,
-  Refund = 5,
-  Expired = 6,
-  Finished = 7
+  Created = 3,
+  Bought = 4,
+  Closed = 5,
+  Refund = 6,
+  Expired = 7,
+  Finished = 8
 }
 
 export interface ContractModel {
@@ -22,6 +23,10 @@ export interface ContractModel {
   rent_price?: number;
   create_time?: number;
   status?: number;
+  order_id?: number;
+  order_amount?: number;
+  order_bank_code?: string;
+  order_create_date?: number;
   stars?: number;
   comment?: string;
 }
@@ -39,6 +44,7 @@ export interface IContractDB {
     limit: number,
     callback: Function
   ): void;
+  getContractByOrderID(orderID: number, callback: Function): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -128,6 +134,22 @@ export class ContractDB implements IContractDB {
       .catch((err: Error) => {
         console.log("[ContractDB][getListContract][err]", err);
         return callback(new Error("Get list contract is incorrect"));
+      });
+  }
+
+  getContractByOrderID(orderID: number, callback: Function) {
+    var sql = `select * from ${this.tableName} where order_id = ${orderID}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (!data || data.lenght < 0) {
+          return callback(new Error("Contract is empty"));
+        }
+        return callback(null, data);
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getContractByOrderID][err]", err);
+        return callback(new Error("Get contract failed"));
       });
   }
 }

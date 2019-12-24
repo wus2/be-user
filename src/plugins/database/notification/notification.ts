@@ -7,6 +7,7 @@ export enum NotificationStatus {
 
 export interface NotificationModel {
   id?: number;
+  user_id?: number;
   description?: string;
   create_time?: number;
   status?: number;
@@ -52,8 +53,13 @@ export class NotificationDB implements INotificationDB {
       });
   }
 
-  getListNotification(offset: number, limit: number, callback: Function) {
-    var sql = `select * from ${this.tableName} limit ${offset}, ${limit}`;
+  getListNotification(
+    userID: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ) {
+    var sql = `select * from ${this.tableName} where user_id = ${userID} limit ${offset}, ${limit}`;
     this.db
       .load(sql)
       .then((data: any) => {

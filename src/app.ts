@@ -12,8 +12,8 @@ import { AdminRoute } from "./api/admin";
 import { TutorRoute } from "./api/tutor";
 import { TuteeRoute } from "./api/tutee";
 import { SSE } from "./plugins/sse/sse";
-import { APIRoute } from "./api/api";
 import { NotifyRoute } from "./api/notify";
+import { PaymentRoute } from "./api/payment";
 
 /**
  * The server.
@@ -68,17 +68,17 @@ export class Server {
     new TutorRoute().create(tutorRoute);
     let tuteeRoute = express.Router();
     new TuteeRoute().create(tuteeRoute);
-    let apiRoute = express.Router();
-    new APIRoute().create(apiRoute);
     let notiRoute = express.Router();
     new NotifyRoute().create(notiRoute);
+    let paymentRoute = express.Router();
+    new PaymentRoute().create(paymentRoute);
 
     this.app.use("/user", userRouter);
     this.app.use("/admin", adminRouter);
     this.app.use("/tutor", tutorRoute);
     this.app.use("/tutee", tuteeRoute);
-    this.app.use("/api", apiRoute);
     this.app.use("/noti", notiRoute);
+    this.app.use("/order", paymentRoute);
 
     this.app.use("/event/:username", (req, res, next) => {
       SSE.EventsHandler(req, res, next);
@@ -92,6 +92,8 @@ export class Server {
    * @method config
    */
   public config() {
+    this.app.set("views", path.join(__dirname, "views"));
+    this.app.set("view engine", "jade");
     this.app.use(express.static(path.join(__dirname, "public")));
     this.app.use(logger("dev"));
     this.app.use(bodyParser.json());

@@ -443,7 +443,7 @@ export class TuteeHandler implements ITuteeHandler {
       // check amount and pay if ok
       var entity = {
         id: contract.id,
-        status: ContractStatus.Paid
+        status: ContractStatus.Bought
       } as ContractModel;
       this.contractDB.updateContract(entity, (err: Error, data: any) => {
         if (err) {

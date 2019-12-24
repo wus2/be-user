@@ -51,5 +51,9 @@
       "getorderstatus": "https://sandbox.zalopay.com.vn/v001/tpe/getstatusbyapptransid",
       "getbanklist": "https://sbgateway.zalopay.vn/api/getlistmerchantbanks"
     }
-  }
+  },
+  "vnp_TmnCode":"1SNJ89L8",
+  "vnp_HashSecret":"ODJLXOCEWMFIEJXHJNMZUVFFVRDDXLOT",
+  "vnp_Url":"http://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
+  "vnp_ReturnUrl": "http://localhost:55210/order/callback"
 }
