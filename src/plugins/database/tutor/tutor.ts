@@ -149,15 +149,21 @@ export default class TutorDB implements ITutorDB {
     if (district) {
       sql += ` and district = '${district}'`;
     }
-    if (minPrice != NaN  && maxPrice != NaN && minPrice > 0 && maxPrice > 0 && minPrice <= maxPrice) {
+    if (
+      minPrice != NaN &&
+      maxPrice != NaN &&
+      minPrice > 0 &&
+      maxPrice > 0 &&
+      minPrice <= maxPrice
+    ) {
       sql += ` and price_per_hour >= ${minPrice} and price_per_hour <= ${maxPrice}`;
     } else if (minPrice != NaN && minPrice > 0) {
-      sql += ` and price_per_hour >= ${minPrice}`
+      sql += ` and price_per_hour >= ${minPrice}`;
     } else if (maxPrice != NaN && maxPrice > 0) {
-      sql += ` and price_per_hour <= ${maxPrice}`
+      sql += ` and price_per_hour <= ${maxPrice}`;
     }
     if (skill) {
-      sql += ` and skill_tags like '${skill}'`;
+      sql += ` and skill_tags like '%${skill}%'`;
     }
     sql += ` limit ${offset}, ${limit}`;
 
