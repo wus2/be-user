@@ -71,14 +71,16 @@ var ContractDB = /** @class */ (function () {
         if (userID < 0 || !isValidRole(role)) {
             return callback(new Error("UserID or role is invalid"));
         }
+        console.log(role);
         var sql = "select * from " + this.tableName;
         if (role == user_1.Role.Tutor) {
             sql += " where tutor_id = " + userID;
         }
-        else if (role == user_1.Role.Tutor) {
+        else if (role == user_1.Role.Tutee) {
             sql += " where tutee_id = " + userID;
         }
         sql += " limit " + offset + ", " + limit;
+        console.log(sql);
         this.db
             .load(sql)
             .then(function (data) {
