@@ -73,6 +73,16 @@ export class TuteeRoute {
     );
 
     router.post(
+      "/evaluate/:contractID",
+      (req, res, next) => {
+        Authenticate.forTutee(req, res, next);
+      },
+      (req, res) => {
+        this.handler.evaluateCommentForTutor(req, res);
+      }
+    );
+
+    router.post(
       "/paycontract/:contractID",
       (req, res, next) => {
         Authenticate.forTutee(req, res, next);

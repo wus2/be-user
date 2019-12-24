@@ -30,6 +30,7 @@ export interface ITuteeHandler {
   getDetailContractHistory(req: Request, res: Response): void;
   evaluateRateForTutor(req: Request, res: Response): void;
   evaluateCommentForTutor(req: Request, res: Response): void;
+  evaluateForTutor(req: Request, res: Response): void;
   payContract(req: Request, res: Response): void;
   complainContract(req: Request, res: Response): void;
 }
@@ -199,19 +200,23 @@ export class TuteeHandler implements ITuteeHandler {
         message: "User payload empty"
       });
     }
-    this.contractDB.getContractViaRole(contractID, payload.role, (err: Error, data: any) => {
-      if (err) {
-        return res.json({
-          code: -1,
-          message: err.toString()
+    this.contractDB.getContractViaRole(
+      contractID,
+      payload.role,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data: data[0]
         });
       }
-      return res.status(200).json({
-        code: 1,
-        message: "OK",
-        data: data[0]
-      });
-    });
+    );
   }
 
   evaluateRateForTutor(req: Request, res: Response) {
@@ -409,6 +414,126 @@ export class TuteeHandler implements ITuteeHandler {
           code: 1,
           message: "OK"
         });
+      });
+    });
+  }
+
+  evaluateForTutor(req: Request, res: Response) {
+    var contractID = Number(req.params.contractID);
+    if (contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    var stars = Number(req.body.stars);
+    if (stars < 0 || stars > 5) {
+      return res.json({
+        code: -1,
+        message: "Stars is incorrect"
+      });
+    }
+    var comment = req.body.comment;
+    if (!comment) {
+      return res.json({
+        code: -1,
+        message: "Comment is empty"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: "Get contract is incorrect"
+        });
+      }
+      var contract = data[0] as ContractModel;
+      if (!contract) {
+        return res.json({
+          code: -1,
+          message: "Contract model in database is incorrect"
+        });
+      }
+      if (!contract.tutor_id) {
+        return res.json({
+          code: -1,
+          message: "Tutor ID is empty"
+        });
+      }
+      var payload = res.locals.payload;
+      if (!payload) {
+        return res.json({
+          code: -1,
+          message: "User payload is invalid"
+        });
+      }
+      if (contract.tutee_id != payload.id) {
+        return res.json({
+          code: -1,
+          message: "Permission denied"
+        });
+      }
+      if (contract.status != ContractStatus.Finished) {
+        return res.json({
+          code: -1,
+          message: "Contract is not finished"
+        });
+      }
+      console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
+      if (contract.comment != null) {
+        return res.json({
+          code: -1,
+          message: "Contract is evaluated"
+        });
+      }
+      var entity = {
+        id: contractID,
+        stars: stars,
+        comment: comment
+      };
+      this.contractDB.updateContract(entity, (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: "Update stars to database failed"
+          });
+        }
+        if (contract.tutor_id) {
+          this.tutorDB.updateRate(
+            contract.tutor_id,
+            stars,
+            (err: Error, data: any) => {
+              if (err) {
+                return res.json({
+                  code: -1,
+                  message: err.toString()
+                });
+              }
+              // notify to tutor
+              var handle = function() {
+                return new Promise(resolve => {
+                  var notification = {
+                    contractID: contract.id,
+                    topic: RateTopic,
+                    description: GetRateDescription("")
+                  } as NotifyModel;
+                  SSE.SendMessage("", entity);
+                });
+              };
+              var notify = async function() {
+                console.log("[TuteeHandler][evaluateForTutor] start notify");
+                var result = await handle();
+                console.log("[TuteeHandler][evaluateForTutor] finish notify");
+              };
+              notify();
+
+              return res.status(200).json({
+                code: 1,
+                message: "OK"
+              });
+            }
+          );
+        }
       });
     });
   }

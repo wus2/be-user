@@ -141,6 +141,12 @@ curl-tutee-evaluaterate:
 	--data '{"stars": 4}' \
 	${DOMAIN}/tutee/evaluaterate/5
 
+curl-tutee-evaluate:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
+	--request POST \
+	--data '{"stars":4,"comment":"Thay day rat hay"}' \
+	${DOMAIN}/tutee/evaluate/6
+
 curl-tutee-evaluatecomment:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
 	--request POST \
