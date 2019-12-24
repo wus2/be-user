@@ -124,5 +124,9 @@ export class UserRoute {
     router.get("/reclaimpassword/:secret", (req, res) => {
       this.handler.reclaimPassword(req, res);
     });
+
+    router.get("/getallskill", (req, res) => {
+      this.handler.getAllSkill(req, res);
+    });
   }
 }

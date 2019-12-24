@@ -15,6 +15,7 @@ import {
 } from "./profile";
 import { ValidateUsername, ValidatePassword } from "./validate";
 import { ActivateAccount, ConfirmChange, ReclaimPassword } from "./callback";
+import SkillDB, { ISkillDB } from "../../plugins/database/skill/skill";
 
 export interface IUserHandler {
   register(req: Request, res: Response): void;
@@ -31,16 +32,19 @@ export interface IUserHandler {
   activateAccount(req: Request, res: Response): void;
   confirmChange(req: Request, res: Response): void;
   reclaimPassword(req: Request, res: Response): void;
+  getAllSkill(req: Request, res: Response): void;
 }
 
 export class UserHandler implements IUserHandler {
   userDB: IUserDB;
+  skillDB: ISkillDB;
   cache: ICache;
   mailer: IMailer;
   activePrefix: string;
 
   constructor() {
     this.userDB = new UserDB();
+    this.skillDB = new SkillDB();
     this.cache = new Cache();
     this.mailer = new Mailer();
     this.activePrefix = "active_account";
@@ -60,4 +64,20 @@ export class UserHandler implements IUserHandler {
   public activateAccount = ActivateAccount.bind(this);
   public confirmChange = ConfirmChange.bind(this);
   public reclaimPassword = ReclaimPassword.bind(this);
+
+  getAllSkill(req: Request, res: Response) {
+    this.skillDB.warmUp(Infinity, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK",
+        data
+      });
+    });
+  }
 }
