@@ -110,5 +110,35 @@ export class AdminRoute {
         this.handler.unlockUser(req, res);
       }
     );
+
+    router.put(
+      "/processcomplain/:complainID",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.processComplain(req, res);
+      }
+    );
+
+    router.get(
+      "/messagehistory",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getUserMessageHistory(req, res);
+      }
+    );
+
+    router.get(
+      "/listcomplain/page/:page/limit/:limit",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getListComplain(req, res);
+      }
+    );
   }
 }

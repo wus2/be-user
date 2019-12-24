@@ -16,6 +16,11 @@ import {
 } from "../../plugins/sse/notification";
 import UserDB, { IUserDB, UserModel } from "../../plugins/database/user/user";
 import { SocketServer } from "../../plugins/socket/socket";
+import {
+  IComplainDB,
+  ComplainDB,
+  ComplainModel
+} from "../../plugins/database/complain/complain";
 
 const Pagination = 12;
 
@@ -33,12 +38,14 @@ export class TuteeHandler implements ITuteeHandler {
   contractDB: IContractDB;
   tutorDB: ITutorDB;
   userDB: IUserDB;
+  complainDB: IComplainDB;
   socket: any;
 
   constructor() {
     this.contractDB = new ContractDB();
     this.tutorDB = new TutorDB();
     this.userDB = new UserDB();
+    this.complainDB = new ComplainDB();
 
     SocketServer.Instance()
       .then(socket => {
@@ -461,6 +468,58 @@ export class TuteeHandler implements ITuteeHandler {
   }
 
   complainContract(req: Request, res: Response) {
-    this.evaluateCommentForTutor(req, res);
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "User payload is empty"
+      });
+    }
+    var contractID = Number(req.params.contractID);
+    if (contractID == NaN || contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    var toID = Number(req.body.toID);
+    if (toID == NaN || toID < 0) {
+      return res.json({
+        code: -1,
+        message: "To ID is incorrect"
+      });
+    }
+    var desc = req.body.description;
+    if (!desc) {
+      return res.json({
+        code: -1,
+        message: "Description is empty"
+      });
+    }
+    var entity = {
+      from_uid: payload.id,
+      to_uid: toID,
+      contract_id: contractID,
+      description: desc,
+      complain_time: ~~(Date.now() / 1000)
+    } as ComplainModel;
+    if (!entity) {
+      return res.json({
+        code: -1,
+        message: "Complain model is incorrect"
+      });
+    }
+    this.complainDB.setComlain(entity, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK"
+      });
+    });
   }
 }

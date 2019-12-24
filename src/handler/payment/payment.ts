@@ -28,7 +28,7 @@ export class PaymentHandler implements IPaymentHandler {
 
   CreateOrder(req: Request, res: Response) {
     var contractID = Number(req.params.contractID);
-    if (contractID != NaN && contractID < 0) {
+    if (contractID == NaN || contractID < 0) {
       return res.json({
         code: -1,
         message: "Contract ID is empty"

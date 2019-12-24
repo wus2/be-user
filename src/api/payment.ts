@@ -16,9 +16,9 @@ export class PaymentRoute {
 
     router.get(
       "/create",
-      //   (req, res, next) => {
-      //     Authenticate.forUser(req, res, next);
-      //   },
+        (req, res, next) => {
+          Authenticate.forUser(req, res, next);
+        },
       (req, res) => {
         var date = new Date();
         var desc =
@@ -34,9 +34,9 @@ export class PaymentRoute {
 
     router.post(
       "/create/:contractID",
-      //   (req, res, next) => {
-      //     Authenticate.forUser(req, res, next);
-      //   },
+        (req, res, next) => {
+          Authenticate.forUser(req, res, next);
+        },
       (req, res) => {
         this.handler.CreateOrder(req, res);
       }
@@ -44,9 +44,9 @@ export class PaymentRoute {
 
     router.get(
       "/callback/",
-      //   (req, res, next) => {
-      //     Authenticate.forUser(req, res, next);
-      //   },
+        (req, res, next) => {
+          Authenticate.forUser(req, res, next);
+        },
       (req, res) => {
         this.handler.OrderCallback(req, res);
       }
@@ -54,9 +54,9 @@ export class PaymentRoute {
 
     router.get(
       "/ipn",
-      //   (req, res, next) => {
-      //     Authenticate.forUser(req, res, next);
-      //   },
+        (req, res, next) => {
+          Authenticate.forUser(req, res, next);
+        },
       (req, res) => {
         this.handler.InstantPaymentNotification(req, res);
       }

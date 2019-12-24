@@ -196,6 +196,17 @@ Backend User Manage
       "Authorization": "Bearer ${JWT-TOKEN}"
     + Body:
     {}
+- Complain contract:
+   + Path: /tutee/complaincontract/:contractID
+    + Method: POST
+    + Header: 
+      "Content-Type": "application/json"
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {
+      "toID:int,
+      "description:"string"
+    }
 5. API-ADMIN:
   - Get list skills:
     + Path: /admin/skills/page/:page/limit/:limit
@@ -264,3 +275,35 @@ Backend User Manage
     + Header: 
       'Accept: application/json'
       "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Process complain:
+  + Path: /admin/processcomplain/:complainID
+    + Method: PUT
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Get user message history
++ Path: /admin/messagehistory
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+- Get list complain:
++ Path: /admin/listcomplain/page/1/limit/10
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${ADMIN-JWT-TOKEN}"
+6. API-Payment:
+- Create contract order:
+  + Path: /order/create/:contractID
+    + Method: POST
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body: 
+      {
+      "amount":int,
+      "bankCode":"string",
+      "orderDescription":"string",
+      "orderType":"string"
+      }
