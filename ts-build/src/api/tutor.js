@@ -45,7 +45,6 @@ var TutorRoute = /** @class */ (function () {
             _this.handler.getAllSkill(req, res);
         });
         router.get("/filtertutor", function (req, res) {
-            console.log(req.query);
             _this.handler.filterTutor(req, res);
         });
         router.get("/contract/:contractID", function (req, res, next) {

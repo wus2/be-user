@@ -140,7 +140,7 @@ var TutorHandler = /** @class */ (function () {
     TutorHandler.prototype.filterTutor = function (req, res) {
         var page = Number(req.query.page);
         var limit = Number(req.query.limit);
-        if (page <= 0 || limit < 0) {
+        if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
             return res.json({
                 code: -1,
                 message: "Page or limit is incorrect"
@@ -180,7 +180,7 @@ var TutorHandler = /** @class */ (function () {
         }
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
-        if (page <= 0 || limit < 0) {
+        if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
             return res.json({
                 code: -1,
                 message: "Page or limit is incorrect"
