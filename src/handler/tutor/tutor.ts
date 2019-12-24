@@ -171,7 +171,7 @@ export class TutorHandler implements ITutorHandler {
   filterTutor(req: Request, res: Response) {
     var page = Number(req.query.page);
     var limit = Number(req.query.limit);
-    if (page <= 0 || limit < 0) {
+    if (page == NaN || limit == NaN ||  page <= 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Page or limit is incorrect"
@@ -220,7 +220,7 @@ export class TutorHandler implements ITutorHandler {
     }
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page <= 0 || limit < 0) {
+    if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Page or limit is incorrect"
