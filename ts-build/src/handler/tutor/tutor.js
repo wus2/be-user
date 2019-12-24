@@ -187,7 +187,7 @@ var TutorHandler = /** @class */ (function () {
             });
         }
         var offset = (page - 1) * Pagination;
-        this.contractDB.getListContract(payload.id, payload.role, offset, limit, function (err, data) {
+        this.contractDB.getListContractWithUserInfo(payload.id, payload.role, offset, limit, function (err, data) {
             if (err) {
                 return res.json({
                     code: -1,
@@ -210,7 +210,14 @@ var TutorHandler = /** @class */ (function () {
                 message: "Contract ID is incorrect"
             });
         }
-        this.contractDB.getContract(contractID, function (err, data) {
+        var payload = res.locals.payload;
+        if (!payload) {
+            return res.json({
+                code: -1,
+                message: "User payload is empty"
+            });
+        }
+        this.contractDB.getContractViaRole(contractID, payload.role, function (err, data) {
             if (err) {
                 return res.json({
                     code: -1,

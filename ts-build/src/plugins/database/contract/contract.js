@@ -37,9 +37,30 @@ var ContractDB = /** @class */ (function () {
         });
     };
     ContractDB.prototype.getContract = function (conID, callback) {
-        var sql = "";
         this.db
             .get(this.tableName, "id", conID)
+            .then(function (data) {
+            if (data) {
+                return callback(null, data);
+            }
+            return callback(new Error("Get contract failed"));
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getContract][err]", err);
+            return callback(new Error("Get Contract failed"));
+        });
+    };
+    ContractDB.prototype.getContractViaRole = function (conID, role, callback) {
+        var sql = "";
+        if (role == user_1.Role.Tutee) {
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id WHERE C.id = " + conID;
+        }
+        else if (role == user_1.Role.Tutor) {
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE C.id = " + conID;
+        }
+        console.log(sql);
+        this.db
+            .load(sql)
             .then(function (data) {
             if (data) {
                 return callback(null, data);
@@ -74,6 +95,44 @@ var ContractDB = /** @class */ (function () {
         }
         console.log(role);
         var sql = "select * from " + this.tableName;
+        if (role == user_1.Role.Tutor) {
+            sql += " where tutor_id = " + userID;
+        }
+        else if (role == user_1.Role.Tutee) {
+            sql += " where tutee_id = " + userID;
+        }
+        sql += " limit " + offset + ", " + limit;
+        console.log(sql);
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (!data) {
+                return callback(new Error("Get list contract is in correct"));
+            }
+            if (data.lenght < 0) {
+                return callback(new Error("List contract is empty"));
+            }
+            return callback(null, data);
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getListContract][err]", err);
+            return callback(new Error("Get list contract is incorrect"));
+        });
+    };
+    ContractDB.prototype.getListContractWithUserInfo = function (userID, role, offset, limit, callback) {
+        if (offset < 0 || limit < 0) {
+            return callback(new Error("Offset or limit is incorrect"));
+        }
+        if (userID < 0 || !isValidRole(role)) {
+            return callback(new Error("UserID or role is invalid"));
+        }
+        var sql = "";
+        if (role == user_1.Role.Tutee) {
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id";
+        }
+        else if (role == user_1.Role.Tutor) {
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id";
+        }
         if (role == user_1.Role.Tutor) {
             sql += " where tutor_id = " + userID;
         }
