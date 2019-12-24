@@ -73,12 +73,12 @@ curl-tutor-getallskills:
 curl-tutor-filter:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request GET \
-	--data '{"district":"Quận 8"}' \
-   ${DOMAIN}/tutor/filtertutor/offset/0/limit/2
+	--data '{"district":"Quận 8", "minPrice": null}' \
+   ${DOMAIN}/tutor/filtertutor/page/1/limit/12
 
 curl-admin-getuser:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \
-	${DOMAIN}/admin/getusers/offset/1/limit/2
+	${DOMAIN}/admin/getusers/offset/1/limit/12
 
 curl-admin-userprofile:
 	curl -H "Authorization: Bearer ${TOKEN-ADMIN}" \

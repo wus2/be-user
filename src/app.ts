@@ -102,6 +102,7 @@ export class Server {
         extended: true
       })
     );
+    this.app.use(express.urlencoded());
     this.app.use(cookieParser("SECRET_GOES_HERE"));
     this.app.use(methodOverride());
     this.app.use(cors());

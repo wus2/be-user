@@ -59,7 +59,8 @@ export class TutorRoute {
       }
     );
 
-    router.get("/filtertutor/page/:page/limit/:limit", (req, res) => {
+    router.get("/filtertutor", (req, res) => {
+      console.log(req.query);
       this.handler.filterTutor(req, res);
     });
 
