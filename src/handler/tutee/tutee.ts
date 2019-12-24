@@ -156,7 +156,7 @@ export class TuteeHandler implements ITuteeHandler {
     }
     var page = Number(req.params.page);
     var limit = Number(req.params.limit);
-    if (page <= 0 || limit < 0) {
+    if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Page or limit is incorrect"

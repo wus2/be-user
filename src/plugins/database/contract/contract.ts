@@ -113,13 +113,16 @@ export class ContractDB implements IContractDB {
     if (userID < 0 || !isValidRole(role)) {
       return callback(new Error("UserID or role is invalid"));
     }
+    console.log(role)
     var sql = `select * from ${this.tableName}`;
     if (role == Role.Tutor) {
       sql += ` where tutor_id = ${userID}`;
-    } else if (role == Role.Tutor) {
+    } else if (role == Role.Tutee) {
       sql += ` where tutee_id = ${userID}`;
     }
     sql += ` limit ${offset}, ${limit}`;
+
+    console.log(sql);
     this.db
       .load(sql)
       .then((data: any) => {

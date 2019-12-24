@@ -128,7 +128,7 @@ curl-tutee-renttutor:
 curl-tutee-contracthistory:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
 	--request GET \
-	${DOMAIN}/tutee/contracthistory/offset/0/limit/3
+	${DOMAIN}/tutee/contracthistory/page/1/limit/12
 
 curl-tutee-contract:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
