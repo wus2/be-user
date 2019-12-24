@@ -16,9 +16,9 @@ export class PaymentRoute {
 
     router.get(
       "/create/:contractID",
-      (req, res, next) => {
-        Authenticate.forUser(req, res, next);
-      },
+      // (req, res, next) => {
+      //   Authenticate.forUser(req, res, next);
+      // },
       (req, res) => {
         var contractID = Number(req.params.contractID);
         if (!contractID || contractID < 0) {
