@@ -71,6 +71,7 @@ export class ContractDB implements IContractDB {
   }
 
   getContract(conID: number, callback: Function) {
+    var sql = ``
     this.db
       .get(this.tableName, "id", conID)
       .then(data => {

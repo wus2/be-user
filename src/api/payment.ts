@@ -15,11 +15,18 @@ export class PaymentRoute {
     });
 
     router.get(
-      "/create",
-        // (req, res, next) => {
-        //   Authenticate.forUser(req, res, next);
-        // },
+      "/create/:contractID",
+      (req, res, next) => {
+        Authenticate.forUser(req, res, next);
+      },
       (req, res) => {
+        var contractID = Number(req.params.contractID);
+        if (!contractID || contractID < 0) {
+          return res.json({
+            code: -1,
+            message: "Contract ID is incorrect"
+          });
+        }
         var date = new Date();
         var desc =
           "Thanh toan don hang thoi gian: " +
@@ -27,26 +34,27 @@ export class PaymentRoute {
         res.render("order", {
           title: "Tạo mới đơn hàng",
           amount: 10000,
-          description: desc
+          description: desc,
+          contractID: contractID
         });
       }
     );
 
     router.post(
       "/create/:contractID",
-        // (req, res, next) => {
-        //   Authenticate.forUser(req, res, next);
-        // },
+      // (req, res, next) => {
+      //   Authenticate.forUser(req, res, next);
+      // },
       (req, res) => {
         this.handler.CreateOrder(req, res);
       }
     );
 
     router.get(
-      "/callback/",
-        // (req, res, next) => {
-        //   Authenticate.forUser(req, res, next);
-        // },
+      "/callback",
+      // (req, res, next) => {
+      //   Authenticate.forUser(req, res, next);
+      // },
       (req, res) => {
         this.handler.OrderCallback(req, res);
       }
@@ -54,9 +62,9 @@ export class PaymentRoute {
 
     router.get(
       "/ipn",
-        // (req, res, next) => {
-        //   Authenticate.forUser(req, res, next);
-        // },
+      // (req, res, next) => {
+      //   Authenticate.forUser(req, res, next);
+      // },
       (req, res) => {
         this.handler.InstantPaymentNotification(req, res);
       }

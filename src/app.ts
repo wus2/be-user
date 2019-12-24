@@ -92,9 +92,9 @@ export class Server {
    * @method config
    */
   public config() {
+    this.app.use(express.static(path.join(__dirname, "public")));
     this.app.set("views", path.join(__dirname, "views"));
     this.app.set("view engine", "jade");
-    this.app.use(express.static(path.join(__dirname, "public")));
     this.app.use(logger("dev"));
     this.app.use(bodyParser.json());
     this.app.use(
