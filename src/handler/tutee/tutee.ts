@@ -163,7 +163,7 @@ export class TuteeHandler implements ITuteeHandler {
       });
     }
     var offset = (page - 1) * Pagination;
-    this.contractDB.getListContract(
+    this.contractDB.getListContractWithUserInfo(
       payload.id,
       payload.role,
       offset,
@@ -192,7 +192,14 @@ export class TuteeHandler implements ITuteeHandler {
         message: "Contract ID is incorrect"
       });
     }
-    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "User payload empty"
+      });
+    }
+    this.contractDB.getContractViaRole(contractID, payload.role, (err: Error, data: any) => {
       if (err) {
         return res.json({
           code: -1,

@@ -1,8 +1,8 @@
 TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzUsInVzZXJuYW1lIjoiYW52aDIiLCJyb2xlIjoxLCJpYXQiOjE1NzYzMzk2Mjl9.xP4iB5gMxGuUWIxfaSEt6glzytIFxeGPqUk7SPJy3e4"
 TOKEN-ADMIN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhbnZoIiwicm9sZSI6MjExMCwiaWF0IjoxNTc1OTY1Njg3fQ.bjxBgf7oTIc3-RBWA8K9KKj_HuTajYzmB1s9O_1FftU"
 TOKEN-TUTEE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDksInVzZXJuYW1lIjoiYW52aDMiLCJyb2xlIjoyLCJpYXQiOjE1NzY5MzY0Nzd9.N8U-cmlUW2B7ccLQVYvLocxAoPy1hmyfmtaB9xJkklw"
-DOMAIN = https://wusbeuser.herokuapp.com
-DOMAIN-x = http://localhost:55210
+DOMAIN-x = https://wusbeuser.herokuapp.com
+DOMAIN = http://localhost:55210
 	
 curl-register:
 	curl --header "Content-Type: application/json" \
@@ -133,7 +133,7 @@ curl-tutee-contracthistory:
 curl-tutee-contract:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
 	--request GET \
-	${DOMAIN}/tutee/contract/1
+	${DOMAIN}/tutee/contract/7
 
 curl-tutee-evaluaterate:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
@@ -160,7 +160,7 @@ curl-tutor-contract:
 curl-tutor-contracthistory:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN}" \
 	--request GET \
-	${DOMAIN}/tutor/contracthistory/offset/0/limit/2
+	${DOMAIN}/tutor/contracthistory/page/1/limit/12
 
 curl-validate-username:
 	curl -H 'Content-Type: application/json' \

@@ -171,7 +171,7 @@ export class TutorHandler implements ITutorHandler {
   filterTutor(req: Request, res: Response) {
     var page = Number(req.query.page);
     var limit = Number(req.query.limit);
-    if (page == NaN || limit == NaN ||  page <= 0 || limit < 0) {
+    if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
       return res.json({
         code: -1,
         message: "Page or limit is incorrect"
@@ -227,7 +227,7 @@ export class TutorHandler implements ITutorHandler {
       });
     }
     var offset = (page - 1) * Pagination;
-    this.contractDB.getListContract(
+    this.contractDB.getListContractWithUserInfo(
       payload.id,
       payload.role,
       offset,
@@ -258,7 +258,14 @@ export class TutorHandler implements ITutorHandler {
         message: "Contract ID is incorrect"
       });
     }
-    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+    var payload = res.locals.payload;
+    if (!payload) {
+      return res.json({
+        code: -1,
+        message: "User payload is empty"
+      });
+    }
+    this.contractDB.getContractViaRole(contractID, payload.role, (err: Error, data: any) => {
       if (err) {
         return res.json({
           code: -1,
