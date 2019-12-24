@@ -307,3 +307,32 @@ Backend User Manage
       "orderDescription":"string",
       "orderType":"string"
       }
+7. API-Notification:
+  - Get notification:
+    + Path: /noti/:notiID
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${JWT-TOKEN}"
+  - Get list notification:
+  + Path: /noti/list/page/1/limit/12
+    + Method: GET
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${JWT-TOKEN}"
+  - Add notification:
+    + Path: /noti/add
+    + Method: POST
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${JWT-TOKEN}"
+    + Body:
+    {
+      "description":"string",
+    }
+  - Set notification as seen:
+    + Path: /noti/seen/:notiID
+    + Method: POST
+    + Header: 
+      'Accept: application/json'
+      "Authorization": "Bearer ${JWT-TOKEN}"
