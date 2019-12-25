@@ -66,12 +66,7 @@ export interface IContractDB {
     callback: Function
   ): void;
   revenueForSystem(start: number, end: number, callback: Function): void;
-  revenueForTopTutor(
-    tutorID: number,
-    start: number,
-    end: number,
-    callback: Function
-  ): void;
+  revenueForTopTutor(start: number, end: number, callback: Function): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -292,7 +287,7 @@ export class ContractDB implements IContractDB {
     end: number,
     callback: Function
   ) {
-    var sql = `SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE tutor_id = ${tutorID} AND order_create_date >= ${start} AND order_create_date <= ${end}`;
+    var sql = `SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE status=${ContractStatus.Finished} AND tutor_id = ${tutorID} AND order_create_date >= ${start} AND order_create_date <= ${end}`;
     this.db
       .load(sql)
       .then((data: any) => {
@@ -308,7 +303,7 @@ export class ContractDB implements IContractDB {
   }
 
   revenueForSystem(start: number, end: number, callback: Function) {
-    var sql = `SELECT SUM(order_amount)*0.25 from contract where status=8 and create_time>=${start} and create_time<=${end}`;
+    var sql = `SELECT SUM(order_amount)*0.25 as money from contract where status=${ContractStatus.Finished} and create_time>=${start} and create_time<=${end}`;
     this.db
       .load(sql)
       .then((data: any) => {
@@ -323,16 +318,8 @@ export class ContractDB implements IContractDB {
       });
   }
 
-  revenueForTopTutor(
-    tutorID: number,
-    start: number,
-    end: number,
-    callback: Function
-  ) {
-    var sql = `select tutor_id, SUM(order_amount) as money from contract where create_time>=${start} and create_time<=${end}
-    GROUP by ${tutorID}
-    ORDER by money desc
-    LIMIT 5`;
+  revenueForTopTutor(start: number, end: number, callback: Function) {
+    var sql = `select c.tutor_id, u.name, SUM(order_amount) as money from contract as c join user as u on c.tutor_id = u.id where status=${ContractStatus.Finished} and create_time>=${start} and create_time<=${end} GROUP by c.tutor_id ORDER by money desc LIMIT 5`;
     this.db
       .load(sql)
       .then((data: any) => {

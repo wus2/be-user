@@ -221,6 +221,11 @@ curl-tutor-top:
 	--request GET \
 	${DOMAIN}/tutor/top?page=1&limit=12
 
+curl-admin-top:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request GET \
+	${DOMAIN}/admin/revenuetoptutor?start_time=1572800400&end_time=1572800400
+
 build:
 	tsc
 

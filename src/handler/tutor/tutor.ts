@@ -406,7 +406,8 @@ export class TutorHandler implements ITutorHandler {
             user_id: contract.tutee_id,
             from_name: tutor.name,
             contract_id: contractID,
-            description: GetApproveContractDesc(tutor.name)
+            description: GetApproveContractDesc(tutor.name),
+            create_time: ~~(Date.now() / 1000)
           } as NotificationModel;
 
           this.notiDB.setNotification(entity, (err: Error, data: any) => {

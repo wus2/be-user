@@ -3,9 +3,9 @@ import mysql, { IMysql } from "../mysql";
 export interface MessageModel {
   id?: number;
   room?: string;
-  sender_id?: number;
+  sender?: string;
   sender_name?: string;
-  receiver_id?: number;
+  receiver?: string;
   receiver_name?: string;
   message?: string;
   send_time?: number;

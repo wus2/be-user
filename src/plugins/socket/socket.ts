@@ -10,6 +10,7 @@ import {
 
 export enum Event {
   CHAT = "chat",
+  INIT = "init",
   DISCONNECT = "disconnect"
 }
 
@@ -19,11 +20,10 @@ export interface SocketConn {
 }
 
 interface ChatData {
-  senderID?: number;
+  tutor?: string;
+  tutee?: string;
   sender?: string;
-  receiverID?: number;
   receiver?: string;
-  room?: string;
   message?: string;
 }
 
@@ -82,7 +82,7 @@ export class SocketServer implements ISocketServer {
     this.io.on("connection", socket => {
       console.log("Client connecting", socket.id);
 
-      socket.on("init", (username: string) => {
+      socket.on(Event.INIT, (username: string) => {
         if (!username) {
           return;
         }
@@ -94,9 +94,9 @@ export class SocketServer implements ISocketServer {
         console.log("Client connected", socket.id);
       });
 
-      socket.on("chat", (data: any) => {
-        console.log(data);
-      });
+      socket.emit(Event.INIT, socket.id);
+
+      this.onChat(socket);
 
       this.onDisconnect(socket);
     });
@@ -105,26 +105,41 @@ export class SocketServer implements ISocketServer {
   private onChat(socket: io.Socket) {
     socket.on(Event.CHAT, (payload: any) => {
       var data = payload as ChatData;
-      if (!data.sender || !data.receiver || !data.room) {
+      if (
+        !data.tutor ||
+        !data.tutee ||
+        !data.sender ||
+        !data.receiver ||
+        !data.message ||
+        data.message.length <= 0
+      ) {
+        console.log("Data is incorrect");
         return;
       }
-      console.log(data);
+      console.log("[SocketServer][SendMessage][data]", data);
 
       // send message
       this.clients.forEach(conn => {
-        if (conn.id === data.receiver) {
-          console.log("[SocketServer][SendMessage][data]", data);
-          conn.socket.emit("chat", JSON.stringify(data)); // to room
+        if (conn.id === data.receiver || conn.id == data.sender) {
+          console.log("============send message================");
+          conn.socket.emit("chat", {
+            id: socket.id,
+            sender: data.sender,
+            message: data.message
+          });
           return;
         }
       });
 
+      var room = data.tutee + ":" + data.tutor;
+
       // storage message
       var entity = {
-        room: data.room,
-        sender_id: data.senderID,
-        receiver_id: data.receiverID,
-        message: data.message
+        room: room,
+        sender: data.sender,
+        receiver: data.receiver,
+        message: data.message,
+        send_time: ~~(Date.now() / 1000)
       } as MessageModel;
       this.messageDB.setMessage(entity, (err: Error, data: any) => {
         if (err) {
