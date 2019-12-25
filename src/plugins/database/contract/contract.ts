@@ -96,9 +96,9 @@ export class ContractDB implements IContractDB {
   getContractViaRole(conID: number, role: number, callback: Function) {
     var sql = "";
     if (role == Role.Tutee) {
-      sql = `SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id WHERE C.id = ${conID}`;
+      sql = `SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id WHERE C.cid = ${conID}`;
     } else if (role == Role.Tutor) {
-      sql = `SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE C.id = ${conID}`;
+      sql = `SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE C.cid = ${conID}`;
     }
     console.log(sql);
     this.db
