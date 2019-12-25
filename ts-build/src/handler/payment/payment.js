@@ -11,6 +11,33 @@ var PaymentHandler = /** @class */ (function () {
         this.payment = new vnpay_1.default();
         this.contractDB = new contract_1.ContractDB();
     }
+    PaymentHandler.prototype.GetOrder = function (req, res) {
+        var contractID = Number(req.params.contractID);
+        if (!contractID || contractID < 0) {
+            return res.json({
+                code: -1,
+                message: "Contract ID is incorrect"
+            });
+        }
+        this.contractDB.getContract(contractID, function (err, data) {
+            if (err) {
+                return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
+            }
+            var contract = data[0];
+            if (!contract || !contract.rent_time || !contract.rent_price) {
+                return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
+            }
+            var date = new Date();
+            var desc = "Thanh toan don hang thoi gian: " +
+                dateFormat(date, "yyyy-mm-dd HH:mm:ss");
+            res.render("order", {
+                title: "Tạo mới đơn hàng",
+                amount: contract.rent_price * contract.rent_time,
+                description: desc,
+                contractID: contractID
+            });
+        });
+    };
     PaymentHandler.prototype.CreateOrder = function (req, res) {
         var _this = this;
         var contractID = Number(req.params.contractID);
@@ -21,13 +48,6 @@ var PaymentHandler = /** @class */ (function () {
                 message: "Contract ID is empty"
             });
         }
-        // var payload = res.locals.payload;
-        // if (!payload) {
-        //   return res.json({
-        //     code: -1,
-        //     message: "User payload is empty"
-        //   });
-        // }
         this.contractDB.getContract(contractID, function (err, data) {
             if (err) {
                 return res.jsonp({
