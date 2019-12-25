@@ -194,6 +194,12 @@ var TutorHandler = /** @class */ (function () {
                     message: err.toString()
                 });
             }
+            data.forEach(function (element) {
+                if (element.skill_tags) {
+                    element.skill_tags = JSON.parse(element.skill_tags);
+                }
+                console.log(element.skill_tags);
+            });
             return res.status(200).json({
                 code: 1,
                 message: "OK",
@@ -237,6 +243,9 @@ var TutorHandler = /** @class */ (function () {
                     code: -1,
                     message: "Permission denied"
                 });
+            }
+            if (data[0].skill_tags) {
+                data[0].skill_tags = JSON.parse(data[0].skill_tags);
             }
             return res.status(200).json({
                 code: 1,

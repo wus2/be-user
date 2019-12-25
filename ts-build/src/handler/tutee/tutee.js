@@ -170,6 +170,12 @@ var TuteeHandler = /** @class */ (function () {
                     message: err.toString()
                 });
             }
+            data.forEach(function (element) {
+                if (element.skill_tags) {
+                    element.skill_tags = JSON.parse(element.skill_tags);
+                }
+                console.log(element.skill_tags);
+            });
             return res.status(200).json({
                 code: 1,
                 message: "OK",
@@ -198,6 +204,9 @@ var TuteeHandler = /** @class */ (function () {
                     code: -1,
                     message: err.toString()
                 });
+            }
+            if (data[0].skill_tags) {
+                data[0].skill_tags = JSON.parse(data[0].skill_tags);
             }
             return res.status(200).json({
                 code: 1,
@@ -470,7 +479,8 @@ var TuteeHandler = /** @class */ (function () {
                 });
             }
             console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
-            if ((contract.comment && contract.comment.length > 0) || (contract.stars && contract.stars > 0)) {
+            if ((contract.comment && contract.comment.length > 0) ||
+                (contract.stars && contract.stars > 0)) {
                 return res.json({
                     code: -1,
                     message: "Contract is evaluated"

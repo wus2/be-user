@@ -137,10 +137,12 @@ var PaymentHandler = /** @class */ (function () {
                         message: "Contract does not create"
                     });
                 }
+                console.log(contract);
                 var entity = {
                     id: contract.cid,
                     status: contract_1.ContractStatus.Bought
                 };
+                console.log(entity);
                 _this.contractDB.updateContract(entity, function (err, data) {
                     if (err) {
                         return res.json({
