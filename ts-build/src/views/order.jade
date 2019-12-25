@@ -1,21 +1,19 @@
-//Created by vinhnt on 6/16/2017.
-
 extends layout
 
 block content
     h3=title
     div.table-responsive
-        form#createOrder(action='create', method='POST')
+        form#createOrder(action='create' method='POST')
             div.form-group
                 label Loại hàng hóa
                 select.form-control#orderType(name='orderType')
                     option(value='billpayment') Thanh toán hóa đơn
             div.form-group
                 label Số tiền
-                input.form-control#amount(name='amount', placeholder='Số tiền', value=amount)
+                input.form-control#amount(name='amount' placeholder='Số tiền', value=amount)
             div.form-group
                 label Nội dung thanh toán
-                textarea.form-control#orderDescription(name='orderDescription', placeholder='Nội dung thanh toán')=description
+                textarea.form-control#orderDescription(name='orderDescription' placeholder='Nội dung thanh toán')=description
             div.form-group
                 label Ngân hàng
                 select.form-control#bankCode(name='bankCode')
@@ -51,19 +49,23 @@ block content
                     option(value='en') English
             button.btn.btn-default#btnPopup(type='submit') Thanh toán
     p&nbsp;
-    //Neu dung Redirect thi khong can cac thu vien ben duoi
-    link(rel='stylesheet', href='https://pay.vnpay.vn/lib/vnpay/vnpay.css')
+    link(rel='stylesheet' href='https://pay.vnpay.vn/lib/vnpay/vnpay.css')
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js')
     script(src='https://pay.vnpay.vn/lib/vnpay/vnpay.js')
     script(type='text/javascript').
         $("#btnPopup").click(function () {
             var postData = $("#createOrder").serialize();
-            var submitUrl = $("#createOrder").attr("action");
+            var contractID = "#{contractID}"
+            var submitUrl = `/order/create/${contractID}`;
+            console.log(submitUrl)
             $.ajax({
                 type: "POST",
                 url: submitUrl,
                 data: postData,
                 dataType: 'JSON',
+                //- beforeSend: function (request) {
+                //-     request.setRequestHeader("Authorization", "Bearer " + "#{token}");
+                //- },
                 success: function (x) {
                     if (x.code === '1') {
                         if(window.vnpay)
@@ -75,7 +77,7 @@ block content
                                 location.href=x.data;
                             }
                             return false;
-                        
+
                     } else {
                         alert(x.Message);
                     }
