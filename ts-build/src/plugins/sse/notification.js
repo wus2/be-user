@@ -15,6 +15,10 @@ function GetRateDescription(tuteeName) {
 }
 exports.GetRateDescription = GetRateDescription;
 function GetApproveContractDesc(tutorName) {
-    return tutorName + " \u0111\u00E3 ch\u1EA5p nh\u1EADn h\u1EE3p \u0111\u1ED3ng c\u1EE7a b\u1EA1n";
+    return tutorName + " \u0111\u00E3 \u0111\u1ED3ng \u00FD h\u1EE3p \u0111\u1ED3ng c\u1EE7a b\u1EA1n";
 }
 exports.GetApproveContractDesc = GetApproveContractDesc;
+function GetPaidDesciption(tuteeName) {
+    return tuteeName + " \u0111\u00E3 thanh to\u00E1n h\u1EE3p \u0111\u1ED3ng c\u1EE7a b\u1EA1n";
+}
+exports.GetPaidDesciption = GetPaidDesciption;

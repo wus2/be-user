@@ -6,10 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dateFormat = require("dateformat");
 var vnpay_1 = __importDefault(require("../../plugins/payment/vnpay/vnpay"));
 var contract_1 = require("../../plugins/database/contract/contract");
+var notification_1 = require("../../plugins/database/notification/notification");
+var notification_2 = require("../../plugins/sse/notification");
+var user_1 = __importDefault(require("../../plugins/database/user/user"));
 var PaymentHandler = /** @class */ (function () {
     function PaymentHandler() {
         this.payment = new vnpay_1.default();
         this.contractDB = new contract_1.ContractDB();
+        this.userDB = new user_1.default();
+        this.notiDB = new notification_1.NotificationDB();
     }
     PaymentHandler.prototype.GetOrder = function (req, res) {
         var contractID = Number(req.params.contractID);
@@ -124,7 +129,7 @@ var PaymentHandler = /** @class */ (function () {
             });
         });
     };
-    // if error occures here, must refund for user
+    // if error occures here, we must be refund for user :(
     PaymentHandler.prototype.OrderCallback = function (req, res) {
         var _this = this;
         var params = req.query;
@@ -168,12 +173,39 @@ var PaymentHandler = /** @class */ (function () {
                             message: err.toString()
                         });
                     }
-                    res.render("success", { code: "00" });
+                    if (!contract.tutee_id) {
+                        return res.render("success", { code: "97" });
+                    }
+                    _this.userDB.getByID(contract.tutee_id, function (err, data) {
+                        if (err) {
+                            console.log("[PaymentHandler][OrderCallback][err]", err);
+                            return res.render("success", { code: "97" });
+                        }
+                    });
+                    var tutee = data[0];
+                    if (!tutee) {
+                        console.log("[PaymentHandler][OrderCallback][err] tutee model is incorrect");
+                        return res.render("success", { code: "97" });
+                    }
+                    var noti = {
+                        user_id: contract.tutor_id,
+                        from_name: tutee.name,
+                        contract_id: contract.cid,
+                        description: notification_2.GetPaidDesciption(tutee.name),
+                        create_time: ~~(Date.now() / 1000)
+                    };
+                    _this.notiDB.setNotification(noti, function (err, data) {
+                        if (err) {
+                            console.log("[PaymentHandler][OrderCallback][err]", err);
+                            return res.render("success", { code: "97" });
+                        }
+                        return res.render("success", { code: "00" });
+                    });
                 });
             });
         }
         else {
-            res.render("success", { code: "97" });
+            return res.render("success", { code: "97" });
         }
     };
     PaymentHandler.prototype.InstantPaymentNotification = function (req, res) {
