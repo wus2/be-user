@@ -407,6 +407,132 @@ var TuteeHandler = /** @class */ (function () {
             });
         });
     };
+    TuteeHandler.prototype.evaluateForTutor = function (req, res) {
+        var _this = this;
+        var contractID = Number(req.params.contractID);
+        if (contractID < 0) {
+            return res.json({
+                code: -1,
+                message: "Contract ID is incorrect"
+            });
+        }
+        var stars = Number(req.body.stars);
+        if (stars == NaN || stars < 0 || stars > 5) {
+            return res.json({
+                code: -1,
+                message: "Stars is incorrect"
+            });
+        }
+        var comment = req.body.comment;
+        if (!comment) {
+            return res.json({
+                code: -1,
+                message: "Comment is empty"
+            });
+        }
+        this.contractDB.getContract(contractID, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            var contract = data[0];
+            if (!contract) {
+                return res.json({
+                    code: -1,
+                    message: "Contract model in database is incorrect"
+                });
+            }
+            if (!contract.tutor_id) {
+                return res.json({
+                    code: -1,
+                    message: "Tutor ID is empty"
+                });
+            }
+            var payload = res.locals.payload;
+            if (!payload) {
+                return res.json({
+                    code: -1,
+                    message: "User payload is invalid"
+                });
+            }
+            if (contract.tutee_id != payload.id) {
+                return res.json({
+                    code: -1,
+                    message: "Permission denied"
+                });
+            }
+            if (contract.status != contract_1.ContractStatus.Finished) {
+                return res.json({
+                    code: -1,
+                    message: "Contract is not finished"
+                });
+            }
+            console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
+            if ((contract.comment && contract.comment.length > 0) || (contract.stars && contract.stars > 0)) {
+                return res.json({
+                    code: -1,
+                    message: "Contract is evaluated"
+                });
+            }
+            var entity = {
+                id: contractID,
+                stars: stars,
+                comment: comment
+            };
+            _this.contractDB.updateContract(entity, function (err, data) {
+                if (err) {
+                    return res.json({
+                        code: -1,
+                        message: "Update stars to database failed"
+                    });
+                }
+                if (contract.tutor_id) {
+                    _this.tutorDB.updateRate(contract.tutor_id, stars, function (err, data) {
+                        if (err) {
+                            return res.json({
+                                code: -1,
+                                message: err.toString()
+                            });
+                        }
+                        // notify to tutor
+                        var handle = function () {
+                            return new Promise(function (resolve) {
+                                var notification = {
+                                    contractID: contract.id,
+                                    topic: notification_1.RateTopic,
+                                    description: notification_1.GetRateDescription("")
+                                };
+                                sse_1.SSE.SendMessage("", entity);
+                            });
+                        };
+                        var notify = function () {
+                            return __awaiter(this, void 0, void 0, function () {
+                                var result;
+                                return __generator(this, function (_a) {
+                                    switch (_a.label) {
+                                        case 0:
+                                            console.log("[TuteeHandler][evaluateForTutor] start notify");
+                                            return [4 /*yield*/, handle()];
+                                        case 1:
+                                            result = _a.sent();
+                                            console.log("[TuteeHandler][evaluateForTutor] finish notify");
+                                            return [2 /*return*/];
+                                    }
+                                });
+                            });
+                        };
+                        notify();
+                        return res.status(200).json({
+                            code: 1,
+                            message: "OK"
+                        });
+                    });
+                }
+            });
+        });
+    };
     TuteeHandler.prototype.payContract = function (req, res) {
         var _this = this;
         var contractID = Number(req.params.contractID);

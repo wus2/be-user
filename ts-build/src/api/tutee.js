@@ -48,6 +48,11 @@ var TuteeRoute = /** @class */ (function () {
         }, function (req, res) {
             _this.handler.evaluateCommentForTutor(req, res);
         });
+        router.post("/evaluate/:contractID", function (req, res, next) {
+            authen_1.default.forTutee(req, res, next);
+        }, function (req, res) {
+            _this.handler.evaluateForTutor(req, res);
+        });
         router.post("/paycontract/:contractID", function (req, res, next) {
             authen_1.default.forTutee(req, res, next);
         }, function (req, res) {
