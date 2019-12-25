@@ -11,6 +11,13 @@ import {
   ContractStatus
 } from "../../plugins/database/contract/contract";
 import { create } from "domain";
+import {
+  INotificationDB,
+  NotificationDB,
+  NotificationModel
+} from "../../plugins/database/notification/notification";
+import { GetPaidDesciption } from "../../plugins/sse/notification";
+import UserDB, { IUserDB, UserModel } from "../../plugins/database/user/user";
 
 export interface IPaymentHandler {
   GetOrder(req: Request, res: Response): void;
@@ -22,9 +29,14 @@ export interface IPaymentHandler {
 export class PaymentHandler implements IPaymentHandler {
   payment: IPayment;
   contractDB: IContractDB;
+  userDB: IUserDB;
+  notiDB: INotificationDB;
+
   constructor() {
     this.payment = new Payment();
     this.contractDB = new ContractDB();
+    this.userDB = new UserDB();
+    this.notiDB = new NotificationDB();
   }
 
   GetOrder(req: Request, res: Response) {
@@ -151,7 +163,7 @@ export class PaymentHandler implements IPaymentHandler {
     });
   }
 
-  // if error occures here, must refund for user
+  // if error occures here, we must be refund for user :(
   OrderCallback(req: Request, res: Response) {
     var params = req.query;
     var resPay = this.payment.OrderCallback(params);
@@ -195,11 +207,41 @@ export class PaymentHandler implements IPaymentHandler {
               message: err.toString()
             });
           }
-          res.render("success", { code: "00" });
+
+          if (!contract.tutee_id) {
+            return res.render("success", { code: "97" });
+          }
+          this.userDB.getByID(contract.tutee_id, (err: Error, data: any) => {
+            if (err) {
+              console.log("[PaymentHandler][OrderCallback][err]", err);
+              return res.render("success", { code: "97" });
+            }
+          });
+          var tutee = data[0] as UserModel;
+          if (!tutee) {
+            console.log(
+              "[PaymentHandler][OrderCallback][err] tutee model is incorrect"
+            );
+            return res.render("success", { code: "97" });
+          }
+          var noti = {
+            user_id: contract.tutor_id,
+            from_name: tutee.name,
+            contract_id: contract.cid,
+            description: GetPaidDesciption(tutee.name),
+            create_time: ~~(Date.now() / 1000)
+          } as NotificationModel;
+          this.notiDB.setNotification(noti, (err: Error, data: any) => {
+            if (err) {
+              console.log("[PaymentHandler][OrderCallback][err]", err);
+              return res.render("success", { code: "97" });
+            }
+            return res.render("success", { code: "00" });
+          });
         });
       });
     } else {
-      res.render("success", { code: "97" });
+      return res.render("success", { code: "97" });
     }
   }
 

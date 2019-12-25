@@ -19,5 +19,9 @@ export function GetRateDescription(tuteeName: string) {
 }
 
 export function GetApproveContractDesc(tutorName: string | undefined) {
-  return `${tutorName} đã chấp nhận hợp đồng của bạn`;
+  return `${tutorName} đã đồng ý hợp đồng của bạn`;
+}
+
+export function GetPaidDesciption(tuteeName: string | undefined) {
+  return `${tuteeName} đã thanh toán hợp đồng của bạn`;
 }
