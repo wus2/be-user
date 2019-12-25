@@ -487,7 +487,7 @@ var TuteeHandler = /** @class */ (function () {
                 });
             }
             var entity = {
-                id: contractID,
+                cid: contractID,
                 stars: stars,
                 comment: comment
             };
