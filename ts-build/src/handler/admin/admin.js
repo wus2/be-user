@@ -294,6 +294,24 @@ var AdminHandler = /** @class */ (function () {
             });
         });
     };
+    AdminHandler.prototype.updateContract = function (req, res) {
+        var contractID = Number(req.body.contractID);
+        if (!contractID || contractID < 0) {
+            return res.json({
+                code: -1,
+                message: "Skill ID is incorrect"
+            });
+        }
+        var entity = {
+            cid: contractID
+        };
+        if (!entity) {
+            return res.json({
+                code: -1,
+                message: "Contract model is incorrect"
+            });
+        }
+    };
     return AdminHandler;
 }());
 exports.AdminHandler = AdminHandler;

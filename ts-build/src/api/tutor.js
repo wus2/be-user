@@ -62,6 +62,9 @@ var TutorRoute = /** @class */ (function () {
         }, function (req, res) {
             _this.handler.approveContract(req, res);
         });
+        router.get("/rateresults", function (req, res) {
+            _this.handler.getRateResults(req, res);
+        });
     };
     return TutorRoute;
 }());

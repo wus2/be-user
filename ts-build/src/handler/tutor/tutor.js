@@ -312,6 +312,37 @@ var TutorHandler = /** @class */ (function () {
             });
         });
     };
+    TutorHandler.prototype.getRateResults = function (req, res) {
+        var tutorID = Number(req.query.tutor_id);
+        if (!tutorID || tutorID < 0) {
+            return res.json({
+                code: -1,
+                message: "Tutor ID is incorrect"
+            });
+        }
+        var page = Number(req.query.page);
+        var limit = Number(req.query.limit);
+        if (!page || !limit || page <= 0 || limit < 0) {
+            return res.json({
+                code: -1,
+                message: "Page or limit is incorrect"
+            });
+        }
+        var offset = (page - 1) * Pagination;
+        this.contractDB.getRateResultInContract(tutorID, offset, limit, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
     return TutorHandler;
 }());
 exports.TutorHandler = TutorHandler;

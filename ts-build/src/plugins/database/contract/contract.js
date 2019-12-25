@@ -187,6 +187,21 @@ var ContractDB = /** @class */ (function () {
             return callback(new Error("Get list contract failed"));
         });
     };
+    ContractDB.prototype.getRateResultInContract = function (tutorID, offset, limit, callback) {
+        var sql = "SELECT U.name, C.stars, C.comment FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE tutor_id = " + tutorID + " AND C.stars IS NOT NULL AND C.comment IS NOT NULL LIMIT " + offset + ", " + limit;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (data && data.length > 0) {
+                return callback(null, data);
+            }
+            return callback(new Error("List rate results is empty"));
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getRateResultInContract][err]", err);
+            return callback(new Error("List rate results is empty"));
+        });
+    };
     return ContractDB;
 }());
 exports.ContractDB = ContractDB;
