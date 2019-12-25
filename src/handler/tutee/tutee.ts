@@ -21,6 +21,11 @@ import {
   ComplainDB,
   ComplainModel
 } from "../../plugins/database/complain/complain";
+import {
+  NotificationModel,
+  INotificationDB,
+  NotificationDB
+} from "../../plugins/database/notification/notification";
 
 const Pagination = 12;
 
@@ -40,6 +45,7 @@ export class TuteeHandler implements ITuteeHandler {
   tutorDB: ITutorDB;
   userDB: IUserDB;
   complainDB: IComplainDB;
+  notiDB: INotificationDB;
   socket: any;
 
   constructor() {
@@ -47,6 +53,7 @@ export class TuteeHandler implements ITuteeHandler {
     this.tutorDB = new TutorDB();
     this.userDB = new UserDB();
     this.complainDB = new ComplainDB();
+    this.notiDB = new NotificationDB();
 
     SocketServer.Instance()
       .then(socket => {
@@ -107,7 +114,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       // TODO: convert to async
-      this.socket.SendData("anvh2", "OK");
+      // this.socket.SendData("anvh2", "OK");
       this.userDB.getByID(payload.id, (err: Error, data: any) => {
         if (err) {
           console.log("[TuteeHandler][rentTutor][err]", err);
@@ -131,18 +138,26 @@ export class TuteeHandler implements ITuteeHandler {
           console.log(
             "[TuteeHandler][rentTutor][notify[err] Tutee name invalid"
           );
-          return;
-        }
+        }        
         var notification = {
-          contractID: contractID,
-          topic: ContractTopic,
-          description: GetContractDescription(tutee.name)
-        } as NotifyModel;
-        SSE.SendMessage(tutorUsername, notification);
-      });
-      return res.status(200).json({
-        code: 1,
-        meesage: "OK"
+          user_id: tutorID,
+          from_name: tutee.name,
+          contract_id: contractID,
+          description: GetContractDescription(tutee.name),
+          create_time: ~~(Date.now() / 1000)
+        } as NotificationModel;
+        this.notiDB.setNotification(notification, (err: Error, data: any) => {
+          if (err) {
+            return res.json({
+              code: -1,
+              message: err.toString()
+            });
+          }
+          return res.status(200).json({
+            code: 1,
+            meesage: "OK"
+          });
+        });
       });
     });
   }

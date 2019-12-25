@@ -6,6 +6,7 @@ const Role_Tutor = 1;
 export interface TutorModel {
   id?: number;
   username?: string;
+  name?: string;
   intro_desc?: string;
   skill_tags?: string;
   role?: number;

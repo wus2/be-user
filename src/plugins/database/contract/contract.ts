@@ -300,6 +300,26 @@ export class ContractDB implements IContractDB {
         return callback(new Error("Get data error"));
       });
   }
+
+  reveneuSystem(
+    start: number,
+    end: number,
+    callback: Function
+  ) {
+    var sql = `SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE   order_create_date >= ${start} AND order_create_date <= ${end}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data && data.length > 0) {
+          return callback(null, data);
+        }
+        return callback(new Error("Data is empty"));
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getRateResultInContract][err]", err);
+        return callback(new Error("Get data error"));
+      });
+  }
 }
 
 function isValidRole(role: number) {

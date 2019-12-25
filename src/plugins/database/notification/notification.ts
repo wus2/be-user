@@ -8,12 +8,24 @@ export enum NotificationStatus {
 export interface NotificationModel {
   id?: number;
   user_id?: number;
+  from_name?: string;
+  contract_id?: number;
   description?: string;
   create_time?: number;
   status?: number;
 }
 
-export interface INotificationDB {}
+export interface INotificationDB {
+  setNotification(notification: NotificationModel, callback: Function): void;
+  getNotification(notiID: number, callback: Function): void;
+  getListNotification(
+    userID: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ): void;
+  setSeen(notiID: number, callback: Function): void;
+}
 
 export class NotificationDB implements INotificationDB {
   db: IMysql;

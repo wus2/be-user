@@ -11,6 +11,12 @@ import {
   ContractStatus
 } from "../../plugins/database/contract/contract";
 import { SocketServer } from "../../plugins/socket/socket";
+import {
+  INotificationDB,
+  NotificationDB,
+  NotificationModel
+} from "../../plugins/database/notification/notification";
+import { GetApproveContractDesc } from "../../plugins/sse/notification";
 
 const Pagination = 12;
 
@@ -34,6 +40,7 @@ export class TutorHandler implements ITutorHandler {
   tutorDB: ITutorDB;
   skillDB: ISkillDB;
   contractDB: IContractDB;
+  notiDB: INotificationDB;
   memCache: Map<string, any>;
   socket: any;
 
@@ -41,6 +48,7 @@ export class TutorHandler implements ITutorHandler {
     this.tutorDB = new TutorDB();
     this.skillDB = new SkillDB();
     this.contractDB = new ContractDB();
+    this.notiDB = new NotificationDB();
     this.memCache = new Map<string, any>();
 
     SocketServer.Instance()
@@ -361,11 +369,45 @@ export class TutorHandler implements ITutorHandler {
             message: err.toString()
           });
         }
-        // TODO: notify to tutee and set to history
-        this.socket.SendData("anvh2", "OK");
-        return res.status(200).json({
-          code: 1,
-          message: "OK"
+        if (!contract.tutor_id) {
+          return res.json({
+            code: -1,
+            message: "Tutor of contract is empty"
+          });
+        }
+        this.tutorDB.getProfile(contract.tutor_id, (err: Error, data: any) => {
+          if (err) {
+            return res.json({
+              code: -1,
+              message: "Get Tutor profile failed"
+            });
+          }
+          var tutor = data[0] as TutorModel;
+          if (!tutor) {
+            return res.json({
+              code: -1,
+              message: "Tutor model is not correct"
+            });
+          }
+          var entity = {
+            user_id: contract.tutee_id,
+            from_name: tutor.name,
+            contract_id: contract.cid,
+            description: GetApproveContractDesc(tutor.name)
+          } as NotificationModel;
+
+          this.notiDB.setNotification(entity, (err: Error, data: any) => {
+            if (err) {
+              return res.json({
+                code: -1,
+                message: err.toString()
+              });
+            }
+            return res.status(200).json({
+              code: 1,
+              message: "OK"
+            });
+          });
         });
       });
     });
