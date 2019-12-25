@@ -76,7 +76,7 @@ var PaymentHandler = /** @class */ (function () {
                 order.vnp_BankCode = bankCode;
             }
             var entity = {
-                id: contractID,
+                cid: contractID,
                 order_id: orderId,
                 order_amount: amount,
                 order_bank_code: bankCode,
@@ -138,7 +138,7 @@ var PaymentHandler = /** @class */ (function () {
                     });
                 }
                 var entity = {
-                    id: contract.id,
+                    id: contract.cid,
                     status: contract_1.ContractStatus.Bought
                 };
                 _this.contractDB.updateContract(entity, function (err, data) {

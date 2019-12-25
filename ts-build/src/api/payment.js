@@ -17,6 +17,7 @@ var PaymentRoute = /** @class */ (function () {
         // },
         function (req, res) {
             var contractID = Number(req.params.contractID);
+            console.log("======", req.params.contractID);
             if (!contractID || contractID < 0) {
                 return res.json({
                     code: -1,
@@ -38,6 +39,7 @@ var PaymentRoute = /** @class */ (function () {
         //   Authenticate.forUser(req, res, next);
         // },
         function (req, res) {
+            console.log("======", req.params.contractID);
             _this.handler.CreateOrder(req, res);
         });
         router.get("/callback", 

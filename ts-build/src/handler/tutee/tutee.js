@@ -292,7 +292,7 @@ var TuteeHandler = /** @class */ (function () {
                         var handle = function () {
                             return new Promise(function (resolve) {
                                 var notification = {
-                                    contractID: contract.id,
+                                    contractID: contract.cid,
                                     topic: notification_1.RateTopic,
                                     description: notification_1.GetRateDescription("")
                                 };
@@ -500,7 +500,7 @@ var TuteeHandler = /** @class */ (function () {
                         var handle = function () {
                             return new Promise(function (resolve) {
                                 var notification = {
-                                    contractID: contract.id,
+                                    contractID: contract.cid,
                                     topic: notification_1.RateTopic,
                                     description: notification_1.GetRateDescription("")
                                 };
@@ -577,7 +577,7 @@ var TuteeHandler = /** @class */ (function () {
             }
             // check amount and pay if ok
             var entity = {
-                id: contract.id,
+                id: contract.cid,
                 status: contract_1.ContractStatus.Bought
             };
             _this.contractDB.updateContract(entity, function (err, data) {
