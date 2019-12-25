@@ -148,10 +148,7 @@ var PaymentHandler = /** @class */ (function () {
                             message: err.toString()
                         });
                     }
-                    return res.json({
-                        code: 1,
-                        message: "OK"
-                    });
+                    res.render("success", { code: "00" });
                 });
             });
         }
