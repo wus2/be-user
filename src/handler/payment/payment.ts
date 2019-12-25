@@ -13,6 +13,7 @@ import {
 import { create } from "domain";
 
 export interface IPaymentHandler {
+  GetOrder(req: Request, res: Response): void;
   CreateOrder(req: Request, res: Response): void;
   OrderCallback(req: Request, res: Response): void;
   InstantPaymentNotification(req: Request, res: Response): void;
@@ -26,6 +27,35 @@ export class PaymentHandler implements IPaymentHandler {
     this.contractDB = new ContractDB();
   }
 
+  GetOrder(req: Request, res: Response) {
+    var contractID = Number(req.params.contractID);
+    if (!contractID || contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Contract ID is incorrect"
+      });
+    }
+    this.contractDB.getContract(contractID, (err: Error, data: any) => {
+      if (err) {
+        return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
+      }
+      var contract = data[0] as ContractModel
+      if (!contract || !contract.rent_time || !contract.rent_price) {
+        return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
+      }
+      var date = new Date();
+      var desc =
+        "Thanh toan don hang thoi gian: " +
+        dateFormat(date, "yyyy-mm-dd HH:mm:ss");
+      res.render("order", {
+        title: "Tạo mới đơn hàng",
+        amount: contract.rent_price*contract.rent_time,
+        description: desc,
+        contractID: contractID
+      });
+    });
+  }
+
   CreateOrder(req: Request, res: Response) {
     var contractID = Number(req.params.contractID);
     console.log(contractID);
@@ -35,14 +65,6 @@ export class PaymentHandler implements IPaymentHandler {
         message: "Contract ID is empty"
       });
     }
-    // var payload = res.locals.payload;
-    // if (!payload) {
-    //   return res.json({
-    //     code: -1,
-    //     message: "User payload is empty"
-    //   });
-    // }
-
     this.contractDB.getContract(contractID, (err: Error, data: any) => {
       if (err) {
         return res.jsonp({
