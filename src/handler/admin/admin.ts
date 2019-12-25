@@ -12,7 +12,8 @@ import {
 } from "../../plugins/database/complain/complain";
 import {
   IContractDB,
-  ContractDB
+  ContractDB,
+  ContractModel
 } from "../../plugins/database/contract/contract";
 
 const Pagination = 12;
@@ -31,6 +32,7 @@ export interface IAdminHandler {
   getUserMessageHistory(req: Request, res: Response): void;
   getListComplain(req: Request, res: Response): void;
   getListContract(req: Request, res: Response): void;
+  updateContract(req: Request, res: Response): void;
 }
 
 export class AdminHandler implements IAdminHandler {
@@ -333,5 +335,24 @@ export class AdminHandler implements IAdminHandler {
         });
       }
     );
+  }
+
+  updateContract(req: Request, res: Response) {
+    var contractID = Number(req.body.contractID);
+    if (!contractID || contractID < 0) {
+      return res.json({
+        code: -1,
+        message: "Skill ID is incorrect"
+      });
+    }
+    var entity = {
+      cid: contractID
+    } as ContractModel;
+    if (!entity) {
+      return res.json({
+        code: -1,
+        message: "Contract model is incorrect"
+      });
+    }
   }
 }

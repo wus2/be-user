@@ -54,6 +54,12 @@ export interface IContractDB {
   ): void;
   getContractByOrderID(orderID: number, callback: Function): void;
   getListUserContract(offset: number, limit: number, callback: Function): void;
+  getRateResultInContract(
+    tutorID: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -244,6 +250,27 @@ export class ContractDB implements IContractDB {
       .catch((err: Error) => {
         console.log("[ContractDB][getContractByOrderID][err]", err);
         return callback(new Error("Get list contract failed"));
+      });
+  }
+
+  getRateResultInContract(
+    tutorID: number,
+    offset: number,
+    limit: number,
+    callback: Function
+  ) {
+    var sql = `SELECT U.name, C.stars, C.comment FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE tutor_id = ${tutorID} AND C.stars IS NOT NULL AND C.comment IS NOT NULL LIMIT ${offset}, ${limit}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data && data.length > 0) {
+          return callback(null, data);
+        }
+        return callback(new Error("List rate results is empty"));
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getRateResultInContract][err]", err);
+        return callback(new Error("List rate results is empty"));
       });
   }
 }

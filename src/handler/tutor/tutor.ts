@@ -25,6 +25,7 @@ export interface ITutorHandler {
   getDetailContract(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
   approveContract(req: Request, res: Response): void;
+  getRateResults(req: Request, res: Response): void;
 }
 
 export class TutorHandler implements ITutorHandler {
@@ -366,5 +367,42 @@ export class TutorHandler implements ITutorHandler {
         });
       });
     });
+  }
+
+  getRateResults(req: Request, res: Response) {
+    var tutorID = Number(req.query.tutor_id);
+    if (!tutorID || tutorID < 0) {
+      return res.json({
+        code: -1,
+        message: "Tutor ID is incorrect"
+      });
+    }
+    var page = Number(req.query.page);
+    var limit = Number(req.query.limit);
+    if (!page || !limit || page <= 0 || limit < 0) {
+      return res.json({
+        code: -1,
+        message: "Page or limit is incorrect"
+      });
+    }
+    var offset = (page - 1) * Pagination;
+    this.contractDB.getRateResultInContract(
+      tutorID,
+      offset,
+      limit,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data
+        });
+      }
+    );
   }
 }

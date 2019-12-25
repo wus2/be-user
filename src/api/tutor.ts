@@ -92,5 +92,9 @@ export class TutorRoute {
         this.handler.approveContract(req, res);
       }
     );
+
+    router.get("/rateresults", (req, res) => {
+      this.handler.getRateResults(req, res);
+    });
   }
 }

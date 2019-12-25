@@ -147,7 +147,17 @@ export class AdminRoute {
         Authenticate.forAdmin(req, res, next);
       },
       (req, res) => {
-        this.handler.getListContract(req, res)
+        this.handler.getListContract(req, res);
+      }
+    );
+
+    router.put(
+      "/updatecontract",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.updateContract(req, res);
       }
     );
   }
