@@ -23,16 +23,16 @@
     "password": "KEWYT2ZMYS",
     "database": "bVEtH8m4Ur"
   },
-  "domain": "http://localhost:55210",
+  "domain": "https://wusbeuser.herokuapp.com",
   "fb": {
     "clientID": "488317645361433",
     "clientSecret": "e666aa3808de4702091527a5b7934290",
-    "callbackURL": "http://localhost:55210/users/auth/facebook/callback"
+    "callbackURL": "https://wusbeuser.herokuapp.com/user/auth/facebook/callback"
   },
   "gg": {
     "clientID": "45250323496-ulg65ebaq32uuoh51eqrjivlm54ot7t8.apps.googleusercontent.com",
     "clientSecret": "r3wapL7nrPU66EFf18cJcOSZ",
-    "callbackURL": "http://localhost:55210/users/auth/google/callback"
+    "callbackURL": "https://wusbeuser.herokuapp.com/user/auth/google/callback"
   },
   "redirect": "http://localhost:3000",
   "zalopay": {
@@ -40,7 +40,7 @@
     "key1": "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
     "key2": "Iyz2habzyr7AG8SgvoBCbKwKi3UzlLi3",
     "ngrok": {
-      "tunnels": "http://localhost:55210/api/tunnels"
+      "tunnels": "https://wusbeuser.herokuapp.com/api/tunnels"
     },
     "api": {
       "createorder": "https://sandbox.zalopay.com.vn/v001/tpe/createorder",
@@ -55,5 +55,5 @@
   "vnp_TmnCode":"1SNJ89L8",
   "vnp_HashSecret":"ODJLXOCEWMFIEJXHJNMZUVFFVRDDXLOT",
   "vnp_Url":"https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
-  "vnp_ReturnUrl": "localhost:55210/order/callback"
+  "vnp_ReturnUrl": "https://wusbeuser.herokuapp.com/order/callback"
 }
