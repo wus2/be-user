@@ -342,11 +342,14 @@ export class AdminHandler implements IAdminHandler {
     if (!contractID || contractID < 0) {
       return res.json({
         code: -1,
-        message: "Skill ID is incorrect"
+        message: "Contract ID is incorrect"
       });
     }
     var entity = {
-      cid: contractID
+      cid: contractID,
+      start_time: req.body.start_time,
+      status: req.body.status,
+      comment: req.body.comment
     } as ContractModel;
     if (!entity) {
       return res.json({
@@ -354,5 +357,17 @@ export class AdminHandler implements IAdminHandler {
         message: "Contract model is incorrect"
       });
     }
+    this.contractDB.updateContract(entity, (err: Error, data: any) => {
+      if (err) {
+        return res.json({
+          code: -1,
+          message: err.toString()
+        });
+      }
+      return res.status(200).json({
+        code: 1,
+        message: "OK"
+      });
+    });
   }
 }

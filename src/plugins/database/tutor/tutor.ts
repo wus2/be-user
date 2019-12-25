@@ -32,6 +32,7 @@ export interface ITutorDB {
     callback: Function
   ): void;
   updateRate(tutorID: number, stars: number, callback: Function): void;
+  getToptutor(offset: number, limit: number, callback: Function): void;
 }
 
 export default class TutorDB implements ITutorDB {
@@ -223,6 +224,22 @@ export default class TutorDB implements ITutorDB {
       .catch((err: Error) => {
         console.log("[TutorDB][updateRate][err]", err);
         return callback(new Error("Get rate from database failed"));
+      });
+  }
+
+  getToptutor(offset: number, limit: number, callback: Function) {
+    var sql = `SELECT * FROM user WHERE role=1 ORDER BY num_stars/num_rate DESC LIMIT ${offset}, ${limit}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data && data.length > 0) {
+          return callback(null, data);
+        }
+        return callback(new Error("Top tutor is empty"));
+      })
+      .catch((err: Error) => {
+        console.log("[UserDB][validateUsername][err]", err);
+        return callback(new Error("Get top tutor  failed"));
       });
   }
 }

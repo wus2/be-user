@@ -96,5 +96,9 @@ export class TutorRoute {
     router.get("/rateresults", (req, res) => {
       this.handler.getRateResults(req, res);
     });
+
+    router.get("/top", (req, res) => {
+      this.handler.getTopTutor(req, res);
+    });
   }
 }

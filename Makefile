@@ -210,6 +210,17 @@ curl-tutor-getrate:
 	--request GET \
 	${DOMAIN}/tutor/rateresults?tutor_id=35&page=1&limit=12
 
+curl-admin-updatecontract:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request PUT \
+	--data '{"contractID":"5", "status":"2"}' \
+	${DOMAIN}/admin/updatecontract
+
+curl-tutor-top:
+	curl -H 'Content-Type: application/json' \
+	--request GET \
+	${DOMAIN}/tutor/top?page=1&limit=12
+
 build:
 	tsc
 
