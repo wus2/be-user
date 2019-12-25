@@ -53,10 +53,10 @@ var ContractDB = /** @class */ (function () {
     ContractDB.prototype.getContractViaRole = function (conID, role, callback) {
         var sql = "";
         if (role == user_1.Role.Tutee) {
-            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id WHERE C.id = " + conID;
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutor_id = U.id WHERE C.cid = " + conID;
         }
         else if (role == user_1.Role.Tutor) {
-            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE C.id = " + conID;
+            sql = "SELECT * FROM contract AS C JOIN user AS U ON C.tutee_id = U.id WHERE C.cid = " + conID;
         }
         console.log(sql);
         this.db
