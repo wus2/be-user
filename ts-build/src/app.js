@@ -18,7 +18,6 @@ var path = __importStar(require("path"));
 var errorHandler = require("errorhandler");
 var method_override_1 = __importDefault(require("method-override"));
 var cors_1 = __importDefault(require("cors"));
-var sslRedirect = require("heroku-ssl-redirect");
 var user_1 = require("./api/user");
 var admin_1 = require("./api/admin");
 var tutor_1 = require("./api/tutor");
@@ -107,7 +106,12 @@ var Server = /** @class */ (function () {
         this.app.use(cookie_parser_1.default("SECRET_GOES_HERE"));
         this.app.use(method_override_1.default());
         this.app.use(cors_1.default());
-        this.app.use(sslRedirect());
+        this.app.use(function (req, res, next) {
+            if (req.headers["x-forwarded-proto"] !== "https") {
+                return res.redirect(["https://", req.get("Host"), req.url].join(""));
+            }
+            return next();
+        });
         require("./plugins/middlewares/passport");
         //catch 404 and forward to error handler
         this.app.use(function (err, req, res, next) {
