@@ -14,7 +14,7 @@ var mysql = __importStar(require("mysql"));
 var config_1 = __importDefault(require("config"));
 var Mysql = /** @class */ (function () {
     function Mysql() {
-        this.pool = mysql.createPool(config_1.default.get("mysql-dev"));
+        this.pool = mysql.createPool(config_1.default.get("mysql-server"));
     }
     Mysql.prototype.ping = function () {
         return "Success";

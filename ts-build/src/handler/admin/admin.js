@@ -327,7 +327,30 @@ var AdminHandler = /** @class */ (function () {
             });
         });
     };
-    AdminHandler.prototype.revenue = function (req, res) {
+    AdminHandler.prototype.revenueSystem = function (req, res) {
+        var start = Number(req.query.start_time);
+        var end = Number(req.query.end_time);
+        if (!start || !end || start < 0 || end < 0 || start > end) {
+            return res.json({
+                code: -1,
+                message: "Start time or end time is incorrect"
+            });
+        }
+        this.contractDB.revenueForSystem(start, end, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
+    AdminHandler.prototype.revenueTopTutor = function (req, res) {
         var tutorID = Number(req.query.tutor_id);
         if (!tutorID || tutorID < 0) {
             return res.json({
@@ -343,6 +366,19 @@ var AdminHandler = /** @class */ (function () {
                 message: "Start time or end time is incorrect"
             });
         }
+        this.contractDB.revenueForTopTutor(tutorID, start, end, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK",
+                data: data
+            });
+        });
     };
     return AdminHandler;
 }());

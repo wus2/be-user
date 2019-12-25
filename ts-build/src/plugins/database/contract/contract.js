@@ -11,11 +11,10 @@ var ContractStatus;
     ContractStatus[ContractStatus["Pending"] = 1] = "Pending";
     ContractStatus[ContractStatus["Approved"] = 2] = "Approved";
     ContractStatus[ContractStatus["Created"] = 3] = "Created";
-    ContractStatus[ContractStatus["Bought"] = 4] = "Bought";
+    ContractStatus[ContractStatus["Finished"] = 4] = "Finished";
     ContractStatus[ContractStatus["Closed"] = 5] = "Closed";
-    ContractStatus[ContractStatus["Refund"] = 6] = "Refund";
+    ContractStatus[ContractStatus["Reject"] = 6] = "Reject";
     ContractStatus[ContractStatus["Expired"] = 7] = "Expired";
-    ContractStatus[ContractStatus["Finished"] = 8] = "Finished";
 })(ContractStatus = exports.ContractStatus || (exports.ContractStatus = {}));
 var ContractDB = /** @class */ (function () {
     function ContractDB() {
@@ -217,8 +216,23 @@ var ContractDB = /** @class */ (function () {
             return callback(new Error("Get data error"));
         });
     };
-    ContractDB.prototype.reveneuSystem = function (start, end, callback) {
-        var sql = "SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE   order_create_date >= " + start + " AND order_create_date <= " + end;
+    ContractDB.prototype.revenueForSystem = function (start, end, callback) {
+        var sql = "SELECT SUM(order_amount)*0.25 from contract where status=8 and create_time>=" + start + " and create_time<=" + end;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (data && data.length > 0) {
+                return callback(null, data);
+            }
+            return callback(new Error("Data is empty"));
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getRateResultInContract][err]", err);
+            return callback(new Error("Get data error"));
+        });
+    };
+    ContractDB.prototype.revenueForTopTutor = function (tutorID, start, end, callback) {
+        var sql = "select tutor_id, SUM(order_amount) as money from contract where create_time>=" + start + " and create_time<=" + end + "\n    GROUP by " + tutorID + "\n    ORDER by money desc\n    LIMIT 5";
         this.db
             .load(sql)
             .then(function (data) {

@@ -57,10 +57,10 @@ var TutorRoute = /** @class */ (function () {
         }, function (req, res) {
             _this.handler.getListContracttHistory(req, res);
         });
-        router.post("/approvecontract/:contractID", function (req, res, next) {
+        router.post("/handlecontract/:contractID", function (req, res, next) {
             authen_1.default.forTutor(req, res, next);
         }, function (req, res) {
-            _this.handler.approveContract(req, res);
+            _this.handler.handleContract(req, res);
         });
         router.get("/rateresults", function (req, res) {
             _this.handler.getRateResults(req, res);

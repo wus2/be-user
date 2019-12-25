@@ -241,6 +241,7 @@ var TutorHandler = /** @class */ (function () {
                 });
             }
             var contract = data[0];
+            console.log(contract.tutor_id, payload.id);
             if (contract.tutor_id != payload.id) {
                 return res.json({
                     code: -1,
@@ -250,6 +251,7 @@ var TutorHandler = /** @class */ (function () {
             if (data[0].skill_tags) {
                 data[0].skill_tags = JSON.parse(data[0].skill_tags);
             }
+            console.log(data[0]);
             return res.status(200).json({
                 code: 1,
                 message: "OK",
@@ -257,7 +259,7 @@ var TutorHandler = /** @class */ (function () {
             });
         });
     };
-    TutorHandler.prototype.approveContract = function (req, res) {
+    TutorHandler.prototype.handleContract = function (req, res) {
         var _this = this;
         var contractID = Number(req.params.contractID);
         if (contractID < 0) {
@@ -274,6 +276,7 @@ var TutorHandler = /** @class */ (function () {
                 });
             }
             var contract = data[0];
+            console.log(contract);
             var payload = res.locals.payload;
             if (!payload) {
                 return res.json({
@@ -298,7 +301,15 @@ var TutorHandler = /** @class */ (function () {
                 });
             }
             console.log("[TutorHandler][approveContract][contract]", contract);
-            contract.status = contract_1.ContractStatus.Approved;
+            var status = Number(req.body.status);
+            if (!status ||
+                (status != contract_1.ContractStatus.Reject && status != contract_1.ContractStatus.Approved)) {
+                return res.json({
+                    code: -1,
+                    message: "Approve or reject online"
+                });
+            }
+            contract.status = status;
             _this.contractDB.updateContract(contract, function (err, data) {
                 if (err) {
                     return res.json({
@@ -329,7 +340,7 @@ var TutorHandler = /** @class */ (function () {
                     var entity = {
                         user_id: contract.tutee_id,
                         from_name: tutor.name,
-                        contract_id: contract.cid,
+                        contract_id: contractID,
                         description: notification_2.GetApproveContractDesc(tutor.name)
                     };
                     _this.notiDB.setNotification(entity, function (err, data) {
