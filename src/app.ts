@@ -6,7 +6,6 @@ import * as path from "path";
 import errorHandler = require("errorhandler");
 import methodOverride from "method-override";
 import cors from "cors";
-var sslRedirect = require("heroku-ssl-redirect");
 
 import { UserRoute } from "./api/user";
 import { AdminRoute } from "./api/admin";
@@ -107,7 +106,13 @@ export class Server {
     this.app.use(cookieParser("SECRET_GOES_HERE"));
     this.app.use(methodOverride());
     this.app.use(cors());
-    this.app.use(sslRedirect());
+    this.app.use(function(req, res, next) {
+      if (req.headers["x-forwarded-proto"] !== "https") {
+        return res.redirect(["https://", req.get("Host"), req.url].join(""));
+      }
+      return next();
+    });
+
     require("./plugins/middlewares/passport");
 
     //catch 404 and forward to error handler
