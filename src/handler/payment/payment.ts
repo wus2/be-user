@@ -162,10 +162,12 @@ export class PaymentHandler implements IPaymentHandler {
             message: "Contract does not create"
           });
         }
+        console.log(contract);
         var entity = {
           id: contract.cid,
           status: ContractStatus.Bought
         } as ContractModel;
+        console.log(entity);
         this.contractDB.updateContract(entity, (err: Error, data: any) => {
           if (err) {
             return res.json({

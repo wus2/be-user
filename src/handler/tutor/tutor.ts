@@ -239,6 +239,12 @@ export class TutorHandler implements ITutorHandler {
             message: err.toString()
           });
         }
+        data.forEach((element: any) => {
+          if (element.skill_tags) {
+            element.skill_tags = JSON.parse(element.skill_tags);
+          }
+          console.log(element.skill_tags);
+        });
         return res.status(200).json({
           code: 1,
           message: "OK",
@@ -265,33 +271,40 @@ export class TutorHandler implements ITutorHandler {
         message: "User payload is empty"
       });
     }
-    this.contractDB.getContractViaRole(contractID, payload.role, (err: Error, data: any) => {
-      if (err) {
-        return res.json({
-          code: -1,
-          message: err.toString()
+    this.contractDB.getContractViaRole(
+      contractID,
+      payload.role,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        var payload = res.locals.payload;
+        if (!payload) {
+          return res.json({
+            code: -1,
+            message: "User payload is empty"
+          });
+        }
+        var contract = data[0] as ContractModel;
+        if (contract.tutor_id != payload.id) {
+          return res.json({
+            code: -1,
+            message: "Permission denied"
+          });
+        }
+        if (data[0].skill_tags) {
+          data[0].skill_tags = JSON.parse(data[0].skill_tags);
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data: data[0]
         });
       }
-      var payload = res.locals.payload;
-      if (!payload) {
-        return res.json({
-          code: -1,
-          message: "User payload is empty"
-        });
-      }
-      var contract = data[0] as ContractModel;
-      if (contract.tutor_id != payload.id) {
-        return res.json({
-          code: -1,
-          message: "Permission denied"
-        });
-      }
-      return res.status(200).json({
-        code: 1,
-        message: "OK",
-        data: data[0]
-      });
-    });
+    );
   }
 
   approveContract(req: Request, res: Response) {
