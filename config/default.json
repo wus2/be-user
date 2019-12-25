@@ -3,8 +3,8 @@
     "host": "112.197.2.178",
     "port": 3306,
     "user": "administrator",
-    "password": "5ctv@123",
-    "database": "wus2_be_user"
+    "password": "P8Cv1lDlHTCtJW5u",
+    "database": "advancedwebdb"
   },
   "mysql-local": {
     "host": "localhost",

@@ -162,12 +162,22 @@ export class AdminRoute {
     );
 
     router.get(
-      "/revenue",
+      "/revenuesystem",
       (req, res, next) => {
         Authenticate.forAdmin(req, res, next);
       },
       (req, res) => {
-        this.handler.revenue(req, res);
+        this.handler.revenueSystem(req, res);
+      }
+    );
+
+    router.get(
+      "/revenuetoptutor",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.revenueTopTutor(req, res);
       }
     );
   }

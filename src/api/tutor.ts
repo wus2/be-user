@@ -84,12 +84,12 @@ export class TutorRoute {
     );
 
     router.post(
-      "/approvecontract/:contractID",
+      "/handlecontract/:contractID",
       (req, res, next) => {
         Authenticate.forTutor(req, res, next);
       },
       (req, res) => {
-        this.handler.approveContract(req, res);
+        this.handler.handleContract(req, res);
       }
     );
 

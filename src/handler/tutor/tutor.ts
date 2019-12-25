@@ -30,7 +30,7 @@ export interface ITutorHandler {
   getListContracttHistory(req: Request, res: Response): void;
   getDetailContract(req: Request, res: Response): void;
   renevueStatics(req: Request, res: Response): void;
-  approveContract(req: Request, res: Response): void;
+  handleContract(req: Request, res: Response): void;
   getRateResults(req: Request, res: Response): void;
   getTopTutor(req: Request, res: Response): void;
   revenue(req: Request, res: Response): void;
@@ -300,6 +300,7 @@ export class TutorHandler implements ITutorHandler {
           });
         }
         var contract = data[0] as ContractModel;
+        console.log(contract.tutor_id, payload.id);
         if (contract.tutor_id != payload.id) {
           return res.json({
             code: -1,
@@ -309,6 +310,7 @@ export class TutorHandler implements ITutorHandler {
         if (data[0].skill_tags) {
           data[0].skill_tags = JSON.parse(data[0].skill_tags);
         }
+        console.log(data[0]);
         return res.status(200).json({
           code: 1,
           message: "OK",
@@ -318,7 +320,7 @@ export class TutorHandler implements ITutorHandler {
     );
   }
 
-  approveContract(req: Request, res: Response) {
+  handleContract(req: Request, res: Response) {
     var contractID = Number(req.params.contractID);
     if (contractID < 0) {
       return res.json({
@@ -334,6 +336,7 @@ export class TutorHandler implements ITutorHandler {
         });
       }
       var contract = data[0] as ContractModel;
+      console.log(contract);
       var payload = res.locals.payload;
       if (!payload) {
         return res.json({
@@ -361,7 +364,17 @@ export class TutorHandler implements ITutorHandler {
         });
       }
       console.log("[TutorHandler][approveContract][contract]", contract);
-      contract.status = ContractStatus.Approved;
+      var status = Number(req.body.status);
+      if (
+        !status ||
+        (status != ContractStatus.Reject && status != ContractStatus.Approved)
+      ) {
+        return res.json({
+          code: -1,
+          message: "Approve or reject online"
+        });
+      }
+      contract.status = status;
       this.contractDB.updateContract(contract, (err: Error, data: any) => {
         if (err) {
           return res.json({
@@ -392,7 +405,7 @@ export class TutorHandler implements ITutorHandler {
           var entity = {
             user_id: contract.tutee_id,
             from_name: tutor.name,
-            contract_id: contract.cid,
+            contract_id: contractID,
             description: GetApproveContractDesc(tutor.name)
           } as NotificationModel;
 

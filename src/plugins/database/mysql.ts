@@ -21,7 +21,7 @@ class Mysql implements IMysql {
   pool: mysql.Pool;
 
   constructor() {
-    this.pool = mysql.createPool(config.get("mysql-dev"));
+    this.pool = mysql.createPool(config.get("mysql-server"));
   }
 
   ping(): string {

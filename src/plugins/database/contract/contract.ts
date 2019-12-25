@@ -6,11 +6,10 @@ export enum ContractStatus {
   Pending = 1,
   Approved = 2,
   Created = 3,
-  Bought = 4,
+  Finished = 4,
   Closed = 5,
-  Refund = 6,
-  Expired = 7,
-  Finished = 8
+  Reject = 6,
+  Expired = 7
 }
 
 export interface ContractModel {
@@ -61,6 +60,13 @@ export interface IContractDB {
     callback: Function
   ): void;
   reveneuForTutor(
+    tutorID: number,
+    start: number,
+    end: number,
+    callback: Function
+  ): void;
+  revenueForSystem(start: number, end: number, callback: Function): void;
+  revenueForTopTutor(
     tutorID: number,
     start: number,
     end: number,
@@ -301,12 +307,32 @@ export class ContractDB implements IContractDB {
       });
   }
 
-  reveneuSystem(
+  revenueForSystem(start: number, end: number, callback: Function) {
+    var sql = `SELECT SUM(order_amount)*0.25 from contract where status=8 and create_time>=${start} and create_time<=${end}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data && data.length > 0) {
+          return callback(null, data);
+        }
+        return callback(new Error("Data is empty"));
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getRateResultInContract][err]", err);
+        return callback(new Error("Get data error"));
+      });
+  }
+
+  revenueForTopTutor(
+    tutorID: number,
     start: number,
     end: number,
     callback: Function
   ) {
-    var sql = `SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE   order_create_date >= ${start} AND order_create_date <= ${end}`;
+    var sql = `select tutor_id, SUM(order_amount) as money from contract where create_time>=${start} and create_time<=${end}
+    GROUP by ${tutorID}
+    ORDER by money desc
+    LIMIT 5`;
     this.db
       .load(sql)
       .then((data: any) => {

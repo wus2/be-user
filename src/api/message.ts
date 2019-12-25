@@ -25,7 +25,7 @@ export class MessageRoute {
       (req, res) => {
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
-        if (page <= 0 || limit < 0) {
+        if (!page || !limit || page <= 0 || limit < 0) {
           return res.json({
             code: -1,
             message: "Page or limit is incorrect"

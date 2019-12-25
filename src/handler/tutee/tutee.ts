@@ -81,7 +81,6 @@ export class TuteeHandler implements ITuteeHandler {
       });
     }
     var tutorID = Number(req.body.tutorID);
-    var tutorUsername = req.body.tutor;
     var rentTime = Number(req.body.rentTime);
     var rentPrice = Number(req.body.rentPrice);
     if (tutorID < 0 || rentTime < 0 || rentPrice < 0) {
@@ -113,32 +112,44 @@ export class TuteeHandler implements ITuteeHandler {
           message: err.toString()
         });
       }
+
+      var contractID = Number(data.insertId);
+      if (!contractID || contractID < 0) {
+        return res.json({
+          code: -1,
+          message: "Contract ID is invalid"
+        });
+      }
       // TODO: convert to async
       // this.socket.SendData("anvh2", "OK");
       this.userDB.getByID(payload.id, (err: Error, data: any) => {
         if (err) {
           console.log("[TuteeHandler][rentTutor][err]", err);
-          return;
+          return res.json({
+            code: -1,
+            mesage: err.toString()
+          });
         }
         var tutee = data[0] as UserModel;
         if (!tutee) {
           console.log(
             "[TuteeHandler][rentTutor][notify][err] Data is not user model"
           );
-          return;
-        }
-        var contractID = data[0].id;
-        if (!contractID) {
-          console.log(
-            "[TuteeHandler][rentTutor][notify[err] ContractID is not found"
-          );
-          return;
+          return res.json({
+            code: -1,
+            mesage: "Data is not user model"
+          });
         }
         if (!tutee.name) {
           console.log(
             "[TuteeHandler][rentTutor][notify[err] Tutee name invalid"
           );
-        }        
+          return res.json({
+            code: -1,
+            mesage: "Tutee name invalid"
+          });
+        }
+        console.log("=========", contractID);
         var notification = {
           user_id: tutorID,
           from_name: tutee.name,
@@ -208,7 +219,7 @@ export class TuteeHandler implements ITuteeHandler {
 
   getDetailContractHistory(req: Request, res: Response) {
     var contractID = Number(req.params.contractID);
-    if (contractID < 0) {
+    if (!contractID || contractID < 0) {
       return res.json({
         code: -1,
         message: "Contract ID is incorrect"
@@ -609,7 +620,7 @@ export class TuteeHandler implements ITuteeHandler {
       // check amount and pay if ok
       var entity = {
         id: contract.cid,
-        status: ContractStatus.Bought
+        status: ContractStatus.Finished
       } as ContractModel;
       this.contractDB.updateContract(entity, (err: Error, data: any) => {
         if (err) {
