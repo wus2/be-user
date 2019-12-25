@@ -160,5 +160,15 @@ export class AdminRoute {
         this.handler.updateContract(req, res);
       }
     );
+
+    router.get(
+      "/revenue",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.revenue(req, res);
+      }
+    );
   }
 }

@@ -33,6 +33,7 @@ export interface IAdminHandler {
   getListComplain(req: Request, res: Response): void;
   getListContract(req: Request, res: Response): void;
   updateContract(req: Request, res: Response): void;
+  revenue(req: Request, res: Response): void;
 }
 
 export class AdminHandler implements IAdminHandler {
@@ -369,5 +370,42 @@ export class AdminHandler implements IAdminHandler {
         message: "OK"
       });
     });
+  }
+
+  revenue(req: Request, res: Response) {
+    var tutorID = Number(req.query.tutor_id);
+    if (!tutorID || tutorID < 0) {
+      return res.json({
+        code: -1,
+        message: "Tutor ID is incorrect"
+      });
+    }
+    var start = Number(req.query.start_time);
+    var end = Number(req.query.end_time);
+    if (!start || !end || start < 0 || end < 0 || start > end) {
+      return res.json({
+        code: -1,
+        message: "Start time or end time is incorrect"
+      });
+    }
+
+    this.contractDB.reveneuForTutor(
+      tutorID,
+      start,
+      end,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data
+        });
+      }
+    );
   }
 }

@@ -100,5 +100,11 @@ export class TutorRoute {
     router.get("/top", (req, res) => {
       this.handler.getTopTutor(req, res);
     });
+
+    router.get("/revenue", (req, res, next) => {
+      Authenticate.forTutor(req, res, next)
+    }, (req, res) => {
+      this.handler.revenue(req, res)
+    })
   }
 }

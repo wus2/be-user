@@ -60,6 +60,12 @@ export interface IContractDB {
     limit: number,
     callback: Function
   ): void;
+  reveneuForTutor(
+    tutorID: number,
+    start: number,
+    end: number,
+    callback: Function
+  ): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -166,7 +172,7 @@ export class ContractDB implements IContractDB {
         if (!data) {
           return callback(new Error("Get list contract is in correct"));
         }
-        if (data.lenght < 0) {
+        if (data.length < 0) {
           return callback(new Error("List contract is empty"));
         }
         return callback(null, data);
@@ -210,7 +216,7 @@ export class ContractDB implements IContractDB {
         if (!data) {
           return callback(new Error("Get list contract is in correct"));
         }
-        if (data.lenght < 0) {
+        if (data.length < 0) {
           return callback(new Error("List contract is empty"));
         }
         return callback(null, data);
@@ -226,7 +232,7 @@ export class ContractDB implements IContractDB {
     this.db
       .load(sql)
       .then((data: any) => {
-        if (!data || data.lenght < 0) {
+        if (!data || data.length < 0) {
           return callback(new Error("Contract is empty"));
         }
         return callback(null, data);
@@ -242,7 +248,7 @@ export class ContractDB implements IContractDB {
     this.db
       .load(sql)
       .then((data: any) => {
-        if (!data || data.lenght < 0) {
+        if (!data || data.length < 0) {
           return callback(new Error("Contract list is empty"));
         }
         return callback(null, data);
@@ -271,6 +277,27 @@ export class ContractDB implements IContractDB {
       .catch((err: Error) => {
         console.log("[ContractDB][getRateResultInContract][err]", err);
         return callback(new Error("List rate results is empty"));
+      });
+  }
+
+  reveneuForTutor(
+    tutorID: number,
+    start: number,
+    end: number,
+    callback: Function
+  ) {
+    var sql = `SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE tutor_id = ${tutorID} AND order_create_date >= ${start} AND order_create_date <= ${end}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (data && data.length > 0) {
+          return callback(null, data);
+        }
+        return callback(new Error("Data is empty"));
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getRateResultInContract][err]", err);
+        return callback(new Error("Get data error"));
       });
   }
 }
