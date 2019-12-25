@@ -80,7 +80,7 @@ export class ContractDB implements IContractDB {
 
   getContract(conID: number, callback: Function) {
     this.db
-      .get(this.tableName, "id", conID)
+      .get(this.tableName, "cid", conID)
       .then(data => {
         if (data) {
           return callback(null, data);
@@ -117,7 +117,7 @@ export class ContractDB implements IContractDB {
 
   updateContract(contract: ContractModel, callback: Function) {
     this.db
-      .update(this.tableName, "id", contract)
+      .update(this.tableName, "cid", contract)
       .then((data: any) => {
         if (data < 0) {
           return callback(new Error("Update database failed"));
