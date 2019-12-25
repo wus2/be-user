@@ -140,5 +140,15 @@ export class AdminRoute {
         this.handler.getListComplain(req, res);
       }
     );
+
+    router.get(
+      "/listcontract/page/:page/limit/:limit",
+      (req, res, next) => {
+        Authenticate.forAdmin(req, res, next);
+      },
+      (req, res) => {
+        this.handler.getListContract(req, res)
+      }
+    );
   }
 }

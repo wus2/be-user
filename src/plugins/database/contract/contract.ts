@@ -53,6 +53,7 @@ export interface IContractDB {
     callback: Function
   ): void;
   getContractByOrderID(orderID: number, callback: Function): void;
+  getListUserContract(offset: number, limit: number, callback: Function): void;
 }
 
 export class ContractDB implements IContractDB {
@@ -227,6 +228,22 @@ export class ContractDB implements IContractDB {
       .catch((err: Error) => {
         console.log("[ContractDB][getContractByOrderID][err]", err);
         return callback(new Error("Get contract failed"));
+      });
+  }
+
+  getListUserContract(offset: number, limit: number, callback: Function) {
+    var sql = `select * from ${this.tableName} limit ${offset}, ${limit}`;
+    this.db
+      .load(sql)
+      .then((data: any) => {
+        if (!data || data.lenght < 0) {
+          return callback(new Error("Contract list is empty"));
+        }
+        return callback(null, data);
+      })
+      .catch((err: Error) => {
+        console.log("[ContractDB][getContractByOrderID][err]", err);
+        return callback(new Error("Get list contract failed"));
       });
   }
 }

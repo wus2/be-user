@@ -10,6 +10,10 @@ import {
   IComplainDB,
   ComplainDB
 } from "../../plugins/database/complain/complain";
+import {
+  IContractDB,
+  ContractDB
+} from "../../plugins/database/contract/contract";
 
 const Pagination = 12;
 
@@ -26,17 +30,20 @@ export interface IAdminHandler {
   processComplain(req: Request, res: Response): void;
   getUserMessageHistory(req: Request, res: Response): void;
   getListComplain(req: Request, res: Response): void;
+  getListContract(req: Request, res: Response): void;
 }
 
 export class AdminHandler implements IAdminHandler {
   userDB: IUserDB;
   skillDB: ISkillDB;
   complainDB: IComplainDB;
+  contractDB: IContractDB;
 
   constructor() {
     this.userDB = new UserDB();
     this.skillDB = new SkillDB();
     this.complainDB = new ComplainDB();
+    this.contractDB = new ContractDB();
   }
 
   getListUser(req: Request, res: Response) {
@@ -272,9 +279,7 @@ export class AdminHandler implements IAdminHandler {
 
   processComplain(req: Request, res: Response) {}
 
-  getUserMessageHistory(req: Request, res: Response) {
-    
-  }
+  getUserMessageHistory(req: Request, res: Response) {}
 
   getListComplain(req: Request, res: Response) {
     var page = Number(req.params.page);
@@ -299,5 +304,34 @@ export class AdminHandler implements IAdminHandler {
         data
       });
     });
+  }
+
+  getListContract(req: Request, res: Response) {
+    var page = Number(req.params.page);
+    var limit = Number(req.params.limit);
+    if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
+      return res.json({
+        code: -1,
+        message: "Page or limit is incorrect"
+      });
+    }
+    var offset = (page - 1) * Pagination;
+    this.contractDB.getListUserContract(
+      offset,
+      limit,
+      (err: Error, data: any) => {
+        if (err) {
+          return res.json({
+            code: -1,
+            message: err.toString()
+          });
+        }
+        return res.status(200).json({
+          code: 1,
+          message: "OK",
+          data
+        });
+      }
+    );
   }
 }

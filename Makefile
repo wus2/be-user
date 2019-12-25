@@ -119,6 +119,11 @@ curl-admin-unlock:
 	--request PUT \
 	${DOMAIN}/admin/unblockuser/35
 
+curl-admin-listcontract:
+	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-ADMIN}" \
+	--request GET \
+	${DOMAIN}/admin/listcontract/page/1/limit/12
+
 curl-tutee-renttutor:
 	curl -H 'Content-Type: application/json' -H "Authorization: Bearer ${TOKEN-TUTEE}" \
 	--request POST \

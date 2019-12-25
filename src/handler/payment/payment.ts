@@ -66,7 +66,7 @@ export class PaymentHandler implements IPaymentHandler {
 
       var date = new Date();
       var createDate = dateFormat(date, "yyyymmddHHmmss");
-      var orderId = dateFormat(date, "HHmmss");
+      var orderId = ~~(Date.now() / 1000);
       var bankCode = req.body.bankCode;
 
       var orderInfo = req.body.orderDescription;
@@ -162,12 +162,10 @@ export class PaymentHandler implements IPaymentHandler {
             message: "Contract does not create"
           });
         }
-        console.log(contract);
         var entity = {
-          id: contract.cid,
+          cid: contract.cid,
           status: ContractStatus.Bought
         } as ContractModel;
-        console.log(entity);
         this.contractDB.updateContract(entity, (err: Error, data: any) => {
           if (err) {
             return res.json({
