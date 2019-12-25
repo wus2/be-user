@@ -106,12 +106,6 @@ var Server = /** @class */ (function () {
         this.app.use(cookie_parser_1.default("SECRET_GOES_HERE"));
         this.app.use(method_override_1.default());
         this.app.use(cors_1.default());
-        this.app.use(function (req, res, next) {
-            if (req.headers["x-forwarded-proto"] !== "https") {
-                return res.redirect(["https://", req.get("Host"), req.url].join(""));
-            }
-            return next();
-        });
         require("./plugins/middlewares/passport");
         //catch 404 and forward to error handler
         this.app.use(function (err, req, res, next) {
