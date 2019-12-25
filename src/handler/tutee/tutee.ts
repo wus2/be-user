@@ -427,7 +427,7 @@ export class TuteeHandler implements ITuteeHandler {
       });
     }
     var stars = Number(req.body.stars);
-    if (stars < 0 || stars > 5) {
+    if (stars == NaN || stars < 0 || stars > 5) {
       return res.json({
         code: -1,
         message: "Stars is incorrect"
@@ -444,7 +444,7 @@ export class TuteeHandler implements ITuteeHandler {
       if (err) {
         return res.json({
           code: -1,
-          message: "Get contract is incorrect"
+          message: err.toString()
         });
       }
       var contract = data[0] as ContractModel;
@@ -480,7 +480,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       console.log("[Tutee][evaluateCommentContract][data]", contract.comment);
-      if (contract.comment != null) {
+      if ((contract.comment && contract.comment.length > 0) || (contract.stars && contract.stars > 0)) {
         return res.json({
           code: -1,
           message: "Contract is evaluated"

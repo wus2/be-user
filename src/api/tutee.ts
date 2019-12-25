@@ -78,7 +78,7 @@ export class TuteeRoute {
         Authenticate.forTutee(req, res, next);
       },
       (req, res) => {
-        this.handler.evaluateCommentForTutor(req, res);
+        this.handler.evaluateForTutor(req, res);
       }
     );
 
