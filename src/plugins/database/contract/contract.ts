@@ -14,7 +14,7 @@ export enum ContractStatus {
 }
 
 export interface ContractModel {
-  id?: number;
+  cid?: number;
   tutor_id?: number;
   tutee_id?: number;
   desc?: string;

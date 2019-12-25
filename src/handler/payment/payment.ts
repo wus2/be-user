@@ -99,7 +99,7 @@ export class PaymentHandler implements IPaymentHandler {
       }
 
       var entity = {
-        id: contractID,
+        cid: contractID,
         order_id: orderId,
         order_amount: amount,
         order_bank_code: bankCode,
@@ -163,7 +163,7 @@ export class PaymentHandler implements IPaymentHandler {
           });
         }
         var entity = {
-          id: contract.id,
+          id: contract.cid,
           status: ContractStatus.Bought
         } as ContractModel;
         this.contractDB.updateContract(entity, (err: Error, data: any) => {

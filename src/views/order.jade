@@ -57,6 +57,7 @@ block content
             var postData = $("#createOrder").serialize();
             var contractID = "#{contractID}"
             var submitUrl = `/order/create/${contractID}`;
+            console.log(submitUrl)
             $.ajax({
                 type: "POST",
                 url: submitUrl,

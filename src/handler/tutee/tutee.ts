@@ -307,7 +307,7 @@ export class TuteeHandler implements ITuteeHandler {
               var handle = function() {
                 return new Promise(resolve => {
                   var notification = {
-                    contractID: contract.id,
+                    contractID: contract.cid,
                     topic: RateTopic,
                     description: GetRateDescription("")
                   } as NotifyModel;
@@ -513,7 +513,7 @@ export class TuteeHandler implements ITuteeHandler {
               var handle = function() {
                 return new Promise(resolve => {
                   var notification = {
-                    contractID: contract.id,
+                    contractID: contract.cid,
                     topic: RateTopic,
                     description: GetRateDescription("")
                   } as NotifyModel;
@@ -581,7 +581,7 @@ export class TuteeHandler implements ITuteeHandler {
       }
       // check amount and pay if ok
       var entity = {
-        id: contract.id,
+        id: contract.cid,
         status: ContractStatus.Bought
       } as ContractModel;
       this.contractDB.updateContract(entity, (err: Error, data: any) => {
