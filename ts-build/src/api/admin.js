@@ -93,6 +93,11 @@ var AdminRoute = /** @class */ (function () {
         }, function (req, res) {
             _this.handler.updateContract(req, res);
         });
+        router.get("/revenue", function (req, res, next) {
+            authen_1.default.forAdmin(req, res, next);
+        }, function (req, res) {
+            _this.handler.revenue(req, res);
+        });
     };
     return AdminRoute;
 }());

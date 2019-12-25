@@ -68,6 +68,11 @@ var TutorRoute = /** @class */ (function () {
         router.get("/top", function (req, res) {
             _this.handler.getTopTutor(req, res);
         });
+        router.get("/revenue", function (req, res, next) {
+            authen_1.default.forTutor(req, res, next);
+        }, function (req, res) {
+            _this.handler.revenue(req, res);
+        });
     };
     return TutorRoute;
 }());

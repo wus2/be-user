@@ -109,7 +109,7 @@ var ContractDB = /** @class */ (function () {
             if (!data) {
                 return callback(new Error("Get list contract is in correct"));
             }
-            if (data.lenght < 0) {
+            if (data.length < 0) {
                 return callback(new Error("List contract is empty"));
             }
             return callback(null, data);
@@ -147,7 +147,7 @@ var ContractDB = /** @class */ (function () {
             if (!data) {
                 return callback(new Error("Get list contract is in correct"));
             }
-            if (data.lenght < 0) {
+            if (data.length < 0) {
                 return callback(new Error("List contract is empty"));
             }
             return callback(null, data);
@@ -162,7 +162,7 @@ var ContractDB = /** @class */ (function () {
         this.db
             .load(sql)
             .then(function (data) {
-            if (!data || data.lenght < 0) {
+            if (!data || data.length < 0) {
                 return callback(new Error("Contract is empty"));
             }
             return callback(null, data);
@@ -177,7 +177,7 @@ var ContractDB = /** @class */ (function () {
         this.db
             .load(sql)
             .then(function (data) {
-            if (!data || data.lenght < 0) {
+            if (!data || data.length < 0) {
                 return callback(new Error("Contract list is empty"));
             }
             return callback(null, data);
@@ -200,6 +200,21 @@ var ContractDB = /** @class */ (function () {
             .catch(function (err) {
             console.log("[ContractDB][getRateResultInContract][err]", err);
             return callback(new Error("List rate results is empty"));
+        });
+    };
+    ContractDB.prototype.reveneuForTutor = function (tutorID, start, end, callback) {
+        var sql = "SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE tutor_id = " + tutorID + " AND order_create_date >= " + start + " AND order_create_date <= " + end;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (data && data.length > 0) {
+                return callback(null, data);
+            }
+            return callback(new Error("Data is empty"));
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getRateResultInContract][err]", err);
+            return callback(new Error("Get data error"));
         });
     };
     return ContractDB;
