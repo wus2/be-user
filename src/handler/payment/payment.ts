@@ -39,7 +39,7 @@ export class PaymentHandler implements IPaymentHandler {
       if (err) {
         return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
       }
-      var contract = data[0] as ContractModel
+      var contract = data[0] as ContractModel;
       if (!contract || !contract.rent_time || !contract.rent_price) {
         return res.render("error", { message: "Lấy hợp đồng bị lỗi" });
       }
@@ -49,7 +49,7 @@ export class PaymentHandler implements IPaymentHandler {
         dateFormat(date, "yyyy-mm-dd HH:mm:ss");
       res.render("order", {
         title: "Tạo mới đơn hàng",
-        amount: contract.rent_price*contract.rent_time,
+        amount: contract.rent_price * contract.rent_time,
         description: desc,
         contractID: contractID
       });
