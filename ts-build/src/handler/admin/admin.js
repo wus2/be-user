@@ -351,13 +351,6 @@ var AdminHandler = /** @class */ (function () {
         });
     };
     AdminHandler.prototype.revenueTopTutor = function (req, res) {
-        var tutorID = Number(req.query.tutor_id);
-        if (!tutorID || tutorID < 0) {
-            return res.json({
-                code: -1,
-                message: "Tutor ID is incorrect"
-            });
-        }
         var start = Number(req.query.start_time);
         var end = Number(req.query.end_time);
         if (!start || !end || start < 0 || end < 0 || start > end) {
@@ -366,7 +359,7 @@ var AdminHandler = /** @class */ (function () {
                 message: "Start time or end time is incorrect"
             });
         }
-        this.contractDB.revenueForTopTutor(tutorID, start, end, function (err, data) {
+        this.contractDB.revenueForTopTutor(start, end, function (err, data) {
             if (err) {
                 return res.json({
                     code: -1,
@@ -383,6 +376,3 @@ var AdminHandler = /** @class */ (function () {
     return AdminHandler;
 }());
 exports.AdminHandler = AdminHandler;
-// tong doanh thu he thong
-// doanh thu 5 thang cao nhat
-// doanh thu 5 skill cao nhat

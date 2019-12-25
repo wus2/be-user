@@ -341,7 +341,8 @@ var TutorHandler = /** @class */ (function () {
                         user_id: contract.tutee_id,
                         from_name: tutor.name,
                         contract_id: contractID,
-                        description: notification_2.GetApproveContractDesc(tutor.name)
+                        description: notification_2.GetApproveContractDesc(tutor.name),
+                        create_time: ~~(Date.now() / 1000)
                     };
                     _this.notiDB.setNotification(entity, function (err, data) {
                         if (err) {

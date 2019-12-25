@@ -45,6 +45,7 @@ var message_1 = require("../database/message/message");
 var Event;
 (function (Event) {
     Event["CHAT"] = "chat";
+    Event["INIT"] = "init";
     Event["DISCONNECT"] = "disconnect";
 })(Event = exports.Event || (exports.Event = {}));
 var SocketServer = /** @class */ (function () {
@@ -94,7 +95,7 @@ var SocketServer = /** @class */ (function () {
         var _this = this;
         this.io.on("connection", function (socket) {
             console.log("Client connecting", socket.id);
-            socket.on("init", function (username) {
+            socket.on(Event.INIT, function (username) {
                 if (!username) {
                     return;
                 }
@@ -105,9 +106,8 @@ var SocketServer = /** @class */ (function () {
                 _this.clients.set(socket.id, conn);
                 console.log("Client connected", socket.id);
             });
-            socket.on("chat", function (data) {
-                console.log(data);
-            });
+            socket.emit(Event.INIT, socket.id);
+            _this.onChat(socket);
             _this.onDisconnect(socket);
         });
     };
@@ -115,24 +115,36 @@ var SocketServer = /** @class */ (function () {
         var _this = this;
         socket.on(Event.CHAT, function (payload) {
             var data = payload;
-            if (!data.sender || !data.receiver || !data.room) {
+            if (!data.tutor ||
+                !data.tutee ||
+                !data.sender ||
+                !data.receiver ||
+                !data.message ||
+                data.message.length <= 0) {
+                console.log("Data is incorrect");
                 return;
             }
-            console.log(data);
+            console.log("[SocketServer][SendMessage][data]", data);
             // send message
             _this.clients.forEach(function (conn) {
-                if (conn.id === data.receiver) {
-                    console.log("[SocketServer][SendMessage][data]", data);
-                    conn.socket.emit("chat", JSON.stringify(data)); // to room
+                if (conn.id === data.receiver || conn.id == data.sender) {
+                    console.log("============send message================");
+                    conn.socket.emit("chat", {
+                        id: socket.id,
+                        sender: data.sender,
+                        message: data.message
+                    });
                     return;
                 }
             });
+            var room = data.tutee + ":" + data.tutor;
             // storage message
             var entity = {
-                room: data.room,
-                sender_id: data.senderID,
-                receiver_id: data.receiverID,
-                message: data.message
+                room: room,
+                sender: data.sender,
+                receiver: data.receiver,
+                message: data.message,
+                send_time: ~~(Date.now() / 1000)
             };
             _this.messageDB.setMessage(entity, function (err, data) {
                 if (err) {
