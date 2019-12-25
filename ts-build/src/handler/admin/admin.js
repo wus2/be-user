@@ -299,11 +299,14 @@ var AdminHandler = /** @class */ (function () {
         if (!contractID || contractID < 0) {
             return res.json({
                 code: -1,
-                message: "Skill ID is incorrect"
+                message: "Contract ID is incorrect"
             });
         }
         var entity = {
-            cid: contractID
+            cid: contractID,
+            start_time: req.body.start_time,
+            status: req.body.status,
+            comment: req.body.comment
         };
         if (!entity) {
             return res.json({
@@ -311,6 +314,18 @@ var AdminHandler = /** @class */ (function () {
                 message: "Contract model is incorrect"
             });
         }
+        this.contractDB.updateContract(entity, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
+                message: "OK"
+            });
+        });
     };
     return AdminHandler;
 }());

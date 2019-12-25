@@ -175,6 +175,21 @@ var TutorDB = /** @class */ (function () {
             return callback(new Error("Get rate from database failed"));
         });
     };
+    TutorDB.prototype.getToptutor = function (offset, limit, callback) {
+        var sql = "SELECT * FROM user WHERE role=1 ORDER BY num_stars/num_rate DESC LIMIT " + offset + ", " + limit;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (data && data.length > 0) {
+                return callback(null, data);
+            }
+            return callback(new Error("Top tutor is empty"));
+        })
+            .catch(function (err) {
+            console.log("[UserDB][validateUsername][err]", err);
+            return callback(new Error("Get top tutor  failed"));
+        });
+    };
     return TutorDB;
 }());
 exports.default = TutorDB;

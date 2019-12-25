@@ -65,6 +65,9 @@ var TutorRoute = /** @class */ (function () {
         router.get("/rateresults", function (req, res) {
             _this.handler.getRateResults(req, res);
         });
+        router.get("/top", function (req, res) {
+            _this.handler.getTopTutor(req, res);
+        });
     };
     return TutorRoute;
 }());
