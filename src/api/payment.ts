@@ -21,7 +21,6 @@ export class PaymentRoute {
       // },
       (req, res) => {
         var contractID = Number(req.params.contractID);
-        console.log("======", req.params.contractID)
         if (!contractID || contractID < 0) {
           return res.json({
             code: -1,
@@ -47,7 +46,6 @@ export class PaymentRoute {
       //   Authenticate.forUser(req, res, next);
       // },
       (req, res) => {
-        console.log("======", req.params.contractID)
         this.handler.CreateOrder(req, res);
       }
     );
