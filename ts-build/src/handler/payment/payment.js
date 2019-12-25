@@ -14,6 +14,7 @@ var PaymentHandler = /** @class */ (function () {
     PaymentHandler.prototype.CreateOrder = function (req, res) {
         var _this = this;
         var contractID = Number(req.params.contractID);
+        console.log(contractID);
         if (contractID == NaN || contractID < 0) {
             return res.json({
                 code: -1,
@@ -63,7 +64,7 @@ var PaymentHandler = /** @class */ (function () {
             }
             var amount = contract.rent_price * contract.rent_time;
             var order = {
-                vnp_Amount: amount,
+                vnp_Amount: amount * 100,
                 vnp_CreateDate: createDate,
                 vnp_Locale: locale,
                 vnp_IpAddr: ipAddr,
