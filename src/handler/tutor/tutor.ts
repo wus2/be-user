@@ -467,6 +467,12 @@ export class TutorHandler implements ITutorHandler {
           message: err.toString()
         });
       }
+      data.forEach((element: any) => {
+        if (element.skill_tags) {
+          element.skill_tags = JSON.parse(element.skill_tags);
+        }
+        console.log(element.skill_tags);
+      });
       return res.status(200).json({
         code: 1,
         message: "OK",
