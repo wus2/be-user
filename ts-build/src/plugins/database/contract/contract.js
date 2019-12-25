@@ -38,7 +38,7 @@ var ContractDB = /** @class */ (function () {
     };
     ContractDB.prototype.getContract = function (conID, callback) {
         this.db
-            .get(this.tableName, "id", conID)
+            .get(this.tableName, "cid", conID)
             .then(function (data) {
             if (data) {
                 return callback(null, data);
@@ -74,7 +74,7 @@ var ContractDB = /** @class */ (function () {
     };
     ContractDB.prototype.updateContract = function (contract, callback) {
         this.db
-            .update(this.tableName, "id", contract)
+            .update(this.tableName, "cid", contract)
             .then(function (data) {
             if (data < 0) {
                 return callback(new Error("Update database failed"));
