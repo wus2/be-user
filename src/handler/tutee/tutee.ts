@@ -499,7 +499,7 @@ export class TuteeHandler implements ITuteeHandler {
         });
       }
       var entity = {
-        id: contractID,
+        cid: contractID,
         stars: stars,
         comment: comment
       };
