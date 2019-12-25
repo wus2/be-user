@@ -173,10 +173,7 @@ export class PaymentHandler implements IPaymentHandler {
               message: err.toString()
             });
           }
-          return res.json({
-            code: 1,
-            message: "OK"
-          });
+          res.render("success", { code: "00" });
         });
       });
     } else {
