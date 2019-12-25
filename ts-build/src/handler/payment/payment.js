@@ -164,7 +164,7 @@ var PaymentHandler = /** @class */ (function () {
                 }
                 var entity = {
                     cid: contract.cid,
-                    status: contract_1.ContractStatus.Bought
+                    status: contract_1.ContractStatus.Finished
                 };
                 _this.contractDB.updateContract(entity, function (err, data) {
                     if (err) {
