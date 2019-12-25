@@ -198,7 +198,7 @@ export class PaymentHandler implements IPaymentHandler {
         }
         var entity = {
           cid: contract.cid,
-          status: ContractStatus.Bought
+          status: ContractStatus.Finished
         } as ContractModel;
         this.contractDB.updateContract(entity, (err: Error, data: any) => {
           if (err) {
