@@ -343,20 +343,10 @@ var AdminHandler = /** @class */ (function () {
                 message: "Start time or end time is incorrect"
             });
         }
-        this.contractDB.reveneuForTutor(tutorID, start, end, function (err, data) {
-            if (err) {
-                return res.json({
-                    code: -1,
-                    message: err.toString()
-                });
-            }
-            return res.status(200).json({
-                code: 1,
-                message: "OK",
-                data: data
-            });
-        });
     };
     return AdminHandler;
 }());
 exports.AdminHandler = AdminHandler;
+// tong doanh thu he thong
+// doanh thu 5 thang cao nhat
+// doanh thu 5 skill cao nhat

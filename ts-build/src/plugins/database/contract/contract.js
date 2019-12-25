@@ -217,6 +217,21 @@ var ContractDB = /** @class */ (function () {
             return callback(new Error("Get data error"));
         });
     };
+    ContractDB.prototype.reveneuSystem = function (start, end, callback) {
+        var sql = "SELECT order_create_date as create_time, order_amount as amount FROM contract WHERE   order_create_date >= " + start + " AND order_create_date <= " + end;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (data && data.length > 0) {
+                return callback(null, data);
+            }
+            return callback(new Error("Data is empty"));
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getRateResultInContract][err]", err);
+            return callback(new Error("Get data error"));
+        });
+    };
     return ContractDB;
 }());
 exports.ContractDB = ContractDB;

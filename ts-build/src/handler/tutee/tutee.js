@@ -46,6 +46,7 @@ var notification_1 = require("../../plugins/sse/notification");
 var user_1 = __importDefault(require("../../plugins/database/user/user"));
 var socket_1 = require("../../plugins/socket/socket");
 var complain_1 = require("../../plugins/database/complain/complain");
+var notification_2 = require("../../plugins/database/notification/notification");
 var Pagination = 12;
 var TuteeHandler = /** @class */ (function () {
     function TuteeHandler() {
@@ -54,6 +55,7 @@ var TuteeHandler = /** @class */ (function () {
         this.tutorDB = new tutor_1.default();
         this.userDB = new user_1.default();
         this.complainDB = new complain_1.ComplainDB();
+        this.notiDB = new notification_2.NotificationDB();
         socket_1.SocketServer.Instance()
             .then(function (socket) {
             _this.socket = socket;
@@ -113,7 +115,7 @@ var TuteeHandler = /** @class */ (function () {
                 });
             }
             // TODO: convert to async
-            _this.socket.SendData("anvh2", "OK");
+            // this.socket.SendData("anvh2", "OK");
             _this.userDB.getByID(payload.id, function (err, data) {
                 if (err) {
                     console.log("[TuteeHandler][rentTutor][err]", err);
@@ -131,18 +133,26 @@ var TuteeHandler = /** @class */ (function () {
                 }
                 if (!tutee.name) {
                     console.log("[TuteeHandler][rentTutor][notify[err] Tutee name invalid");
-                    return;
                 }
                 var notification = {
-                    contractID: contractID,
-                    topic: notification_1.ContractTopic,
-                    description: notification_1.GetContractDescription(tutee.name)
+                    user_id: tutorID,
+                    from_name: tutee.name,
+                    contract_id: contractID,
+                    description: notification_1.GetContractDescription(tutee.name),
+                    create_time: ~~(Date.now() / 1000)
                 };
-                sse_1.SSE.SendMessage(tutorUsername, notification);
-            });
-            return res.status(200).json({
-                code: 1,
-                meesage: "OK"
+                _this.notiDB.setNotification(notification, function (err, data) {
+                    if (err) {
+                        return res.json({
+                            code: -1,
+                            message: err.toString()
+                        });
+                    }
+                    return res.status(200).json({
+                        code: 1,
+                        meesage: "OK"
+                    });
+                });
             });
         });
     };

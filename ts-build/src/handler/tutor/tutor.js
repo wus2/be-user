@@ -7,6 +7,8 @@ var tutor_1 = __importDefault(require("../../plugins/database/tutor/tutor"));
 var skill_1 = __importDefault(require("../../plugins/database/skill/skill"));
 var contract_1 = require("../../plugins/database/contract/contract");
 var socket_1 = require("../../plugins/socket/socket");
+var notification_1 = require("../../plugins/database/notification/notification");
+var notification_2 = require("../../plugins/sse/notification");
 var Pagination = 12;
 var TutorHandler = /** @class */ (function () {
     function TutorHandler() {
@@ -14,6 +16,7 @@ var TutorHandler = /** @class */ (function () {
         this.tutorDB = new tutor_1.default();
         this.skillDB = new skill_1.default();
         this.contractDB = new contract_1.ContractDB();
+        this.notiDB = new notification_1.NotificationDB();
         this.memCache = new Map();
         socket_1.SocketServer.Instance()
             .then(function (socket) {
@@ -303,11 +306,44 @@ var TutorHandler = /** @class */ (function () {
                         message: err.toString()
                     });
                 }
-                // TODO: notify to tutee and set to history
-                _this.socket.SendData("anvh2", "OK");
-                return res.status(200).json({
-                    code: 1,
-                    message: "OK"
+                if (!contract.tutor_id) {
+                    return res.json({
+                        code: -1,
+                        message: "Tutor of contract is empty"
+                    });
+                }
+                _this.tutorDB.getProfile(contract.tutor_id, function (err, data) {
+                    if (err) {
+                        return res.json({
+                            code: -1,
+                            message: "Get Tutor profile failed"
+                        });
+                    }
+                    var tutor = data[0];
+                    if (!tutor) {
+                        return res.json({
+                            code: -1,
+                            message: "Tutor model is not correct"
+                        });
+                    }
+                    var entity = {
+                        user_id: contract.tutee_id,
+                        from_name: tutor.name,
+                        contract_id: contract.cid,
+                        description: notification_2.GetApproveContractDesc(tutor.name)
+                    };
+                    _this.notiDB.setNotification(entity, function (err, data) {
+                        if (err) {
+                            return res.json({
+                                code: -1,
+                                message: err.toString()
+                            });
+                        }
+                        return res.status(200).json({
+                            code: 1,
+                            message: "OK"
+                        });
+                    });
                 });
             });
         });
