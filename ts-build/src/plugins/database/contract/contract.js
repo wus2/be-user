@@ -172,6 +172,21 @@ var ContractDB = /** @class */ (function () {
             return callback(new Error("Get contract failed"));
         });
     };
+    ContractDB.prototype.getListUserContract = function (offset, limit, callback) {
+        var sql = "select * from " + this.tableName + " limit " + offset + ", " + limit;
+        this.db
+            .load(sql)
+            .then(function (data) {
+            if (!data || data.lenght < 0) {
+                return callback(new Error("Contract list is empty"));
+            }
+            return callback(null, data);
+        })
+            .catch(function (err) {
+            console.log("[ContractDB][getContractByOrderID][err]", err);
+            return callback(new Error("Get list contract failed"));
+        });
+    };
     return ContractDB;
 }());
 exports.ContractDB = ContractDB;

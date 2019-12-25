@@ -83,6 +83,11 @@ var AdminRoute = /** @class */ (function () {
         }, function (req, res) {
             _this.handler.getListComplain(req, res);
         });
+        router.get("/listcontract/page/:page/limit/:limit", function (req, res, next) {
+            authen_1.default.forAdmin(req, res, next);
+        }, function (req, res) {
+            _this.handler.getListContract(req, res);
+        });
     };
     return AdminRoute;
 }());

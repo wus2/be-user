@@ -48,7 +48,7 @@ var PaymentHandler = /** @class */ (function () {
                 req.connection.remoteAddress;
             var date = new Date();
             var createDate = dateFormat(date, "yyyymmddHHmmss");
-            var orderId = dateFormat(date, "HHmmss");
+            var orderId = ~~(Date.now() / 1000);
             var bankCode = req.body.bankCode;
             var orderInfo = req.body.orderDescription;
             var orderType = req.body.orderType;
@@ -137,12 +137,10 @@ var PaymentHandler = /** @class */ (function () {
                         message: "Contract does not create"
                     });
                 }
-                console.log(contract);
                 var entity = {
-                    id: contract.cid,
+                    cid: contract.cid,
                     status: contract_1.ContractStatus.Bought
                 };
-                console.log(entity);
                 _this.contractDB.updateContract(entity, function (err, data) {
                     if (err) {
                         return res.json({

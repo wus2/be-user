@@ -13,12 +13,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var user_1 = __importStar(require("../../plugins/database/user/user"));
 var skill_1 = __importDefault(require("../../plugins/database/skill/skill"));
 var complain_1 = require("../../plugins/database/complain/complain");
+var contract_1 = require("../../plugins/database/contract/contract");
 var Pagination = 12;
 var AdminHandler = /** @class */ (function () {
     function AdminHandler() {
         this.userDB = new user_1.default();
         this.skillDB = new skill_1.default();
         this.complainDB = new complain_1.ComplainDB();
+        this.contractDB = new contract_1.ContractDB();
     }
     AdminHandler.prototype.getListUser = function (req, res) {
         var page = Number(req.params.page);
@@ -243,8 +245,7 @@ var AdminHandler = /** @class */ (function () {
         });
     };
     AdminHandler.prototype.processComplain = function (req, res) { };
-    AdminHandler.prototype.getUserMessageHistory = function (req, res) {
-    };
+    AdminHandler.prototype.getUserMessageHistory = function (req, res) { };
     AdminHandler.prototype.getListComplain = function (req, res) {
         var page = Number(req.params.page);
         var limit = Number(req.params.limit);
@@ -264,6 +265,30 @@ var AdminHandler = /** @class */ (function () {
             }
             return res.status(200).json({
                 code: -1,
+                message: "OK",
+                data: data
+            });
+        });
+    };
+    AdminHandler.prototype.getListContract = function (req, res) {
+        var page = Number(req.params.page);
+        var limit = Number(req.params.limit);
+        if (page == NaN || limit == NaN || page <= 0 || limit < 0) {
+            return res.json({
+                code: -1,
+                message: "Page or limit is incorrect"
+            });
+        }
+        var offset = (page - 1) * Pagination;
+        this.contractDB.getListUserContract(offset, limit, function (err, data) {
+            if (err) {
+                return res.json({
+                    code: -1,
+                    message: err.toString()
+                });
+            }
+            return res.status(200).json({
+                code: 1,
                 message: "OK",
                 data: data
             });
