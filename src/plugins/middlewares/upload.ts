@@ -10,7 +10,7 @@ export default function UploadImage(
   next: NextFunction
 ) {
   var filename = avatar_prefix + uuidv1();
-  var des = "./public/images/avatar";
+  var des = "public/images/avatar";
   var storage = multer.diskStorage({
     destination: (req: any, file: any, callback: any) => {
       callback(null, des);
