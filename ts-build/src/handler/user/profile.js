@@ -129,6 +129,7 @@ function ForgotPassword(req, res) {
 exports.ForgotPassword = ForgotPassword;
 function UpdateAvatar(req, res) {
     var payload = res.locals.payload;
+    console.log(payload);
     var uri = res.locals.uri;
     console.log("[UpdateAvatar][uri]", uri);
     if (!uri) {
