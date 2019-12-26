@@ -12,9 +12,7 @@ function UploadImage(req, res, next) {
     var des = "./src/public/images/avatar/";
     var storage = multer_1.default.diskStorage({
         destination: function (req, file, callback) {
-            mkdirp(des, function (err) {
-                callback(err, des);
-            });
+            callback(null, des);
         },
         filename: function (req, file, callback) {
             filename += file.originalname;

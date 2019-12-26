@@ -14,9 +14,7 @@ export default function UploadImage(
   var des = "./src/public/images/avatar/";
   var storage = multer.diskStorage({
     destination: (req: any, file: any, callback: any) => {
-      mkdirp(des, (err: NodeJS.ErrnoException) => {
-        callback(err, des);
-      });
+      callback(null, des);
     },
     filename: (req: any, file: any, callback: any) => {
       filename += file.originalname;
