@@ -50,8 +50,17 @@ var Event;
 })(Event = exports.Event || (exports.Event = {}));
 var SocketServer = /** @class */ (function () {
     function SocketServer(server) {
-        this.io = socket_io_1.default(server);
-        this.io.origins("*:*");
+        this.io = socket_io_1.default(server, {
+            handlePreflightRequest: function (req, res) {
+                var headers = {
+                    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+                    "Access-Control-Allow-Origin": req.headers.origin,
+                    "Access-Control-Allow-Credentials": true
+                };
+                res.writeHead(200, headers);
+                res.end();
+            }
+        });
         this.clients = new Map();
         this.messageDB = new message_1.MessageDB();
         this.secretKey = config_1.default.get("key_jwt");

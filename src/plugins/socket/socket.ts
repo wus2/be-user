@@ -38,8 +38,17 @@ export class SocketServer implements ISocketServer {
   secretKey: string;
 
   private constructor(server: http.Server) {
-    this.io = io(server);
-    this.io.origins("*:*")
+    this.io = io(server, {
+      handlePreflightRequest: (req, res) => {
+        const headers = {
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+          "Access-Control-Allow-Credentials": true
+        };
+        res.writeHead(200, headers);
+        res.end();
+      }
+    });
     this.clients = new Map<string, SocketConn>();
     this.messageDB = new MessageDB();
     this.secretKey = config.get("key_jwt");
