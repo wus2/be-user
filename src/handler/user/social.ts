@@ -140,6 +140,6 @@ function login(req: Request, res: Response, data: any) {
       },
       token
     })
-    return res.redirect(`http://112.197.2.178:8004?params=${params}`)
+    return res.redirect(`http://112.197.2.178:8004/params/${params}`)
   });
 }

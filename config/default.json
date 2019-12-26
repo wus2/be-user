@@ -34,7 +34,7 @@
     "clientSecret": "r3wapL7nrPU66EFf18cJcOSZ",
     "callbackURL": "https://wusbeuser.herokuapp.com/user/auth/google/callback"
   },
-  "redirect": "http://localhost:3000",
+  "redirect": "http://112.197.2.178:8004",
   "zalopay": {
     "appid": "553",
     "key1": "9phuAOYhan4urywHTh0ndEXiV3pKHr5Q",
