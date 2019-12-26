@@ -21,6 +21,7 @@ export default function UploadImage(
       // store uri to update database
       var uri = "images/avatar/" + filename;
       res.locals.uri = uri;
+      console.log("===========================URI",uri)
       callback(null, filename);
     }
   });
