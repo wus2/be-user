@@ -11,12 +11,11 @@ export default function UploadImage(
   next: NextFunction
 ) {
   var filename = avatar_prefix + uuidv1();
-  var des = "./public/images/avatar/";
+  var des = "./src/public/images/avatar/";
   var storage = multer.diskStorage({
     destination: (req: any, file: any, callback: any) => {
-      const dir = "./src/public/images/avatar/";
-      mkdirp(dir, (err: NodeJS.ErrnoException) => {
-        callback(err, dir);
+      mkdirp(des, (err: NodeJS.ErrnoException) => {
+        callback(err, des);
       });
     },
     filename: (req: any, file: any, callback: any) => {

@@ -96,6 +96,7 @@ export class UserRoute {
         setTimeout(() => {
           this.handler.updateAvatar(req, res);
         }, 500);
+        return res.send("OK")
       }
     );
 

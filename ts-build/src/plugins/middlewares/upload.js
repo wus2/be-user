@@ -9,12 +9,11 @@ var mkdirp = require("mkdirp");
 var avatar_prefix = "user_avatar_";
 function UploadImage(req, res, next) {
     var filename = avatar_prefix + v1_1.default();
-    var des = "./public/images/avatar/";
+    var des = "./src/public/images/avatar/";
     var storage = multer_1.default.diskStorage({
         destination: function (req, file, callback) {
-            var dir = "./src/public/images/avatar/";
-            mkdirp(dir, function (err) {
-                callback(err, dir);
+            mkdirp(des, function (err) {
+                callback(err, des);
             });
         },
         filename: function (req, file, callback) {

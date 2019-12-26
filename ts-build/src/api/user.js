@@ -66,6 +66,7 @@ var UserRoute = /** @class */ (function () {
             setTimeout(function () {
                 _this.handler.updateAvatar(req, res);
             }, 500);
+            return res.send("OK");
         });
         router.post("/validateusername/:username", function (req, res) {
             _this.handler.validateUsername(req, res);
