@@ -95,7 +95,7 @@ export class UserRoute {
         // sleep to ensure filename is forwarded
         setTimeout(() => {
           this.handler.updateAvatar(req, res);
-        }, 500);
+        }, 2000);
         return res.send("OK")
       }
     );

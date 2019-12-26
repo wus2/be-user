@@ -65,7 +65,7 @@ var UserRoute = /** @class */ (function () {
             // sleep to ensure filename is forwarded
             setTimeout(function () {
                 _this.handler.updateAvatar(req, res);
-            }, 500);
+            }, 2000);
             return res.send("OK");
         });
         router.post("/validateusername/:username", function (req, res) {
