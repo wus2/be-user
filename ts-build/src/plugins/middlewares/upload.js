@@ -5,13 +5,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var multer_1 = __importDefault(require("multer"));
 var v1_1 = __importDefault(require("uuid/v1"));
+var mkdirp = require("mkdirp");
 var avatar_prefix = "user_avatar_";
 function UploadImage(req, res, next) {
     var filename = avatar_prefix + v1_1.default();
-    var des = "public/images/avatar";
+    var des = "./public/images/avatar/";
     var storage = multer_1.default.diskStorage({
         destination: function (req, file, callback) {
-            callback(null, des);
+            var dir = "./src/public/images/avatar/";
+            mkdirp(dir, function (err) {
+                callback(err, dir);
+            });
         },
         filename: function (req, file, callback) {
             filename += file.originalname;

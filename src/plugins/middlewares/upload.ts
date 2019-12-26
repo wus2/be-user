@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import multer from "multer";
 import uuidv1 from "uuid/v1";
+var mkdirp = require("mkdirp");
 
 const avatar_prefix = "user_avatar_";
 
@@ -10,10 +11,13 @@ export default function UploadImage(
   next: NextFunction
 ) {
   var filename = avatar_prefix + uuidv1();
-  var des = "public/images/avatar";
+  var des = "./public/images/avatar/";
   var storage = multer.diskStorage({
     destination: (req: any, file: any, callback: any) => {
-      callback(null, des);
+      const dir = "./src/public/images/avatar/";
+      mkdirp(dir, (err: NodeJS.ErrnoException) => {
+        callback(err, dir);
+      });
     },
     filename: (req: any, file: any, callback: any) => {
       filename += file.originalname;
