@@ -142,6 +142,7 @@ export function UpdateAvatar(this: UserHandler, req: Request, res: Response) {
       message: "Update database failed"
     });
   }
+  console.log("========================")
   var entity = {
     id: payload.id,
     avatar: uri

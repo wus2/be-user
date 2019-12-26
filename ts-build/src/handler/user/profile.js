@@ -139,6 +139,7 @@ function UpdateAvatar(req, res) {
             message: "Update database failed"
         });
     }
+    console.log("========================");
     var entity = {
         id: payload.id,
         avatar: uri
