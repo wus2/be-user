@@ -39,7 +39,7 @@ export class SocketServer implements ISocketServer {
 
   private constructor(server: http.Server) {
     this.io = io(server, {
-      origins: "http://112.197.2.178:8004:*"
+      origins: "*"
     });
     this.clients = new Map<string, SocketConn>();
     this.messageDB = new MessageDB();
