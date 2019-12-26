@@ -38,7 +38,9 @@ export class SocketServer implements ISocketServer {
   secretKey: string;
 
   private constructor(server: http.Server) {
-    this.io = io(server);
+    this.io = io(server, {
+      origins: "*"
+    });
     this.clients = new Map<string, SocketConn>();
     this.messageDB = new MessageDB();
     this.secretKey = config.get("key_jwt");
