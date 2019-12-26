@@ -50,7 +50,8 @@ var Event;
 })(Event = exports.Event || (exports.Event = {}));
 var SocketServer = /** @class */ (function () {
     function SocketServer(server) {
-        this.io = socket_io_1.default(server, { origins: "*:*" });
+        this.io = socket_io_1.default(server);
+        this.io.origins("*:*");
         this.clients = new Map();
         this.messageDB = new message_1.MessageDB();
         this.secretKey = config_1.default.get("key_jwt");
