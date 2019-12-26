@@ -8,7 +8,7 @@ var v1_1 = __importDefault(require("uuid/v1"));
 var avatar_prefix = "user_avatar_";
 function UploadImage(req, res, next) {
     var filename = avatar_prefix + v1_1.default();
-    var des = "../public/images/avatar/";
+    var des = "public/images/avatar/";
     var storage = multer_1.default.diskStorage({
         destination: function (req, file, callback) {
             callback(null, des);
