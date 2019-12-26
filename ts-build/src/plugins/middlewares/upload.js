@@ -25,15 +25,6 @@ function UploadImage(req, res, next) {
     });
     var upload = multer_1.default({
         storage: storage,
-        fileFilter: function (req, file, callback) {
-            if (file.mimetype !== "image/png" &&
-                file.mimetype !== "image/jpeg" &&
-                file.mimetype !== "image/jpg" &&
-                file.mimetype !== "image/bmp") {
-                return callback(null, false);
-            }
-            callback(null, true);
-        }
     });
     upload.single("avatar")(req, res, function (err) {
         if (err) {

@@ -27,17 +27,17 @@ export default function UploadImage(
   });
   var upload = multer({
     storage: storage,
-    fileFilter: function(req, file, callback) {
-      if (
-        file.mimetype !== "image/png" &&
-        file.mimetype !== "image/jpeg" &&
-        file.mimetype !== "image/jpg" &&
-        file.mimetype !== "image/bmp"
-      ) {
-        return callback(null, false);
-      }
-      callback(null, true);
-    }
+    // fileFilter: function(req, file, callback) {
+    //   if (
+    //     file.mimetype !== "image/png" &&
+    //     file.mimetype !== "image/jpeg" &&
+    //     file.mimetype !== "image/jpg" &&
+    //     file.mimetype !== "image/bmp"
+    //   ) {
+    //     return callback(null, false);
+    //   }
+    //   callback(null, true);
+    // }
   });
 
   upload.single("avatar")(req, res, err => {
