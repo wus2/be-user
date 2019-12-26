@@ -125,11 +125,12 @@ function login(req, res, data) {
                 message: "Can't sign token"
             });
         }
-        return res.json({
+        var params = JSON.stringify({
             code: 1,
             message: "OK",
             user: __assign(__assign({}, payload), { avatar: data.avatar, name: data.name, role: data.role }),
             token: token
         });
+        return res.redirect("http://112.197.2.178:8004?params=" + params);
     });
 }
