@@ -131,6 +131,6 @@ function login(req, res, data) {
             user: __assign(__assign({}, payload), { avatar: data.avatar, name: data.name, role: data.role }),
             token: token
         });
-        return res.redirect("http://112.197.2.178:8004?params=" + params);
+        return res.redirect("http://112.197.2.178:8004/params/" + params);
     });
 }
