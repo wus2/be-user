@@ -51,7 +51,7 @@ var Event;
 var SocketServer = /** @class */ (function () {
     function SocketServer(server) {
         this.io = socket_io_1.default(server, {
-            origins: "*"
+            origins: "http://112.197.2.178:8004:*"
         });
         this.clients = new Map();
         this.messageDB = new message_1.MessageDB();
