@@ -144,7 +144,13 @@ export function UpdateAvatar(this: UserHandler, req: Request, res: Response) {
   var entity = {
     id: payload.id,
     avatar: uri
-  };
+  } as UserModel;
+  if (!entity) {
+    return res.json({
+      code: -1,
+      message: "User model is incorrect"
+    });
+  }
   this.userDB.updateUser(entity, (err: Error, data: any) => {
     if (err) {
       return res.json({
