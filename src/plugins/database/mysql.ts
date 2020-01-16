@@ -1,31 +1,12 @@
 import * as mysql from "mysql";
+import { IORM } from "./orm";
 import config from "config";
 
-export interface IMysql {
-  pool: mysql.Pool;
-
-  ping(): string;
-  load(sql: string): Promise<Function>;
-  add(tableName: string, entity: any): Promise<Function>;
-  addMultiple(
-    tableName: string,
-    entities: Array<any>,
-    fields: string
-  ): Promise<Function>;
-  get(tableName: string, idField: string, id: number): Promise<Function>;
-  update(tableName: string, idField: string, entity: any): Promise<Function>;
-  delete(tableName: string, idField: string, id: number): Promise<Function>;
-}
-
-class Mysql implements IMysql {
+class Mysql implements IORM {
   pool: mysql.Pool;
 
   constructor() {
     this.pool = mysql.createPool(config.get("mysql-server"));
-  }
-
-  ping(): string {
-    return "Success";
   }
 
   load(sql: string): Promise<Function> {
@@ -185,4 +166,6 @@ class Mysql implements IMysql {
   }
 }
 
-export default new Mysql();
+const instance = new Mysql();
+
+export default instance;

@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 
 export enum NotificationStatus {
   NotSeen = 1,
@@ -28,7 +29,7 @@ export interface INotificationDB {
 }
 
 export class NotificationDB implements INotificationDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   constructor() {
     this.db = mysql;

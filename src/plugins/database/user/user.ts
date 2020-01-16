@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 
 export enum Role {
   User = 0,
@@ -30,7 +31,7 @@ export interface UserModel {
 }
 
 export interface IUserDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   setUser(user: UserModel, callback: Function): void;
   getByID(userID: number, callback: Function): void;
@@ -43,7 +44,7 @@ export interface IUserDB {
 }
 
 export default class UserDB implements IUserDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   constructor() {
     this.db = mysql;

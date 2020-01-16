@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 import { Role } from "../user/user";
 
 export enum ContractStatus {
@@ -31,7 +32,7 @@ export interface ContractModel {
 }
 
 export interface IContractDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   setContract(Contract: ContractModel, callback: Function): void;
   getContract(conID: number, callback: Function): void;
@@ -70,7 +71,7 @@ export interface IContractDB {
 }
 
 export class ContractDB implements IContractDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   constructor() {
     this.db = mysql;

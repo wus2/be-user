@@ -547,6 +547,7 @@ export class TuteeHandler implements ITuteeHandler {
                   message: err.toString()
                 });
               }
+
               // notify to tutor
               var handle = function() {
                 return new Promise(resolve => {

@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 
 export interface MessageModel {
   id?: number;
@@ -25,7 +26,7 @@ export interface IMessageDB {
 }
 
 export class MessageDB implements IMessageDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   constructor() {
     this.db = mysql;

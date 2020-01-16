@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 
 export interface Model {
   id?: number;
@@ -19,7 +20,7 @@ export interface ISkillDB {
 }
 
 export default class SkillDB implements ISkillDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
 
   constructor() {

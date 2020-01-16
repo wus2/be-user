@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 
 export interface ComplainModel {
   id?: number;
@@ -16,7 +17,7 @@ export interface IComplainDB {
 }
 
 export class ComplainDB implements IComplainDB {
-  db: IMysql;
+  db: IORM;
   tableName: string;
   constructor() {
     this.db = mysql;

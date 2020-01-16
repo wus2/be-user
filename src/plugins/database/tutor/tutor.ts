@@ -1,4 +1,5 @@
-import mysql, { IMysql } from "../mysql";
+import mysql from "../mysql";
+import { IORM } from "../orm";
 import SkillDB, { ISkillDB } from "../skill/skill";
 
 const Role_Tutor = 1;
@@ -37,7 +38,7 @@ export interface ITutorDB {
 }
 
 export default class TutorDB implements ITutorDB {
-  db: IMysql;
+  db: IORM;
   userDB: ISkillDB;
   tableName: string;
   constructor() {
